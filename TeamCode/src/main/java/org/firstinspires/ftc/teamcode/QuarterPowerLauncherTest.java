@@ -27,8 +27,8 @@ public class QuarterPowerLauncherTest extends LinearOpMode {
             telemetry.addData("Status", "Running");
             telemetry.update();
 
-            BR.setPower(1);
-            BL.setPower(-1);
+            BR.setPower(.25);
+            BL.setPower(-.25);
         }
     }
 }

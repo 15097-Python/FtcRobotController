@@ -27,8 +27,8 @@ public class TenthPowerLauncherTest extends LinearOpMode {
             telemetry.addData("Status", "Running");
             telemetry.update();
 
-            BR.setPower(1);
-            BL.setPower(-1);
+            BR.setPower(.1);
+            BL.setPower(-.1);
         }
     }
 }
