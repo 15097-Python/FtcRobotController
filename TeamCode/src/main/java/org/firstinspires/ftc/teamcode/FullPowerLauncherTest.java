@@ -7,9 +7,9 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Gyroscope;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@Autonomous(name="RobotOpModeUploadTest")
+@Autonomous(name="FullPowerLauncherTest")
 
-public class RobotOpModeUploadTest extends LinearOpMode {
+public class FullPowerLauncherTest extends LinearOpMode {
     private DcMotor BR;
     private DcMotor BL;
 
@@ -30,6 +30,9 @@ public class RobotOpModeUploadTest extends LinearOpMode {
         while (opModeIsActive()) {
             telemetry.addData("Status", "Running");
             telemetry.update();
+
+            BR.setPower(1);
+            BL.setPower(-1);
         }
     }
 }
