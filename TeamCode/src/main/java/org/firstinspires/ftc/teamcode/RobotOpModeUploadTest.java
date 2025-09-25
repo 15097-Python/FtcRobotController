@@ -10,16 +10,12 @@ import com.qualcomm.robotcore.hardware.Servo;
 @Autonomous(name="RobotOpModeUploadTest")
 
 public class RobotOpModeUploadTest extends LinearOpMode {
-    private DcMotor BR;
-    private DcMotor BL;
-
 
 
     @Override
     public void runOpMode() {
 
-        BR = hardwareMap.get(DcMotor.class, "BR");
-        BL = hardwareMap.get(DcMotor.class, "BL");
+
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
