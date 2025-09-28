@@ -3,7 +3,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-@Autonomous(name="TenthPowerLauncherTest")
+@Autonomous(name="TenthPowerLauncherTest", group="launcherTesting")
 
 public class TenthPowerLauncherTest extends LinearOpMode {
     private DcMotor BR;

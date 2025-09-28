@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Gyroscope;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@Autonomous(name="FullPowerLauncherTest")
+@Autonomous(name="FullPowerLauncherTest", group="launcherTesting")
 
 public class FullPowerLauncherTest extends LinearOpMode {
     private DcMotor BR;
