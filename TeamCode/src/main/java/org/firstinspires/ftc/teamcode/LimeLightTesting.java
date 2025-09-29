@@ -1,4 +1,5 @@
 package org.firstinspires.ftc.teamcode;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.hardware.limelightvision.LLResult;
@@ -10,11 +11,14 @@ import java.util.List;
 
 @Autonomous(name="LimeLightTesting", group="limelight")
 //@Disabled
-// the disabled will make it not show up under the driver station opmode list
+// the disabled will make it not show up under the driver station OPmode list
 // useful to prevent cluttering after testing
 public class LimeLightTesting extends LinearOpMode {
+
     @Override
+
     public void runOpMode() {
+
         Limelight3A limelight = hardwareMap.get(Limelight3A.class, "limelight");
         limelight.setPollRateHz(100);
         limelight.pipelineSwitch(0);
@@ -23,8 +27,9 @@ public class LimeLightTesting extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) { // keeps the code running so it doesn't only run once
-            // what the robot does while the loop is running
+
             LLResult result = limelight.getLatestResult(); //so don't forget LLResult is a variable type
+
             if (result != null && result.isValid()){ // checks if there is a target and if the target is an actual target
                 double tx = result.getTx();  // Horizontal angle to target
                 double ty = result.getTy();  // Vertical angle to target
@@ -45,10 +50,10 @@ public class LimeLightTesting extends LinearOpMode {
                     telemetry.addData("Tag Pose", tagPose);
                     }
                 }
+
             else {
                 telemetry.addLine("no current target");
                 }
-
 
             telemetry.update();
 
