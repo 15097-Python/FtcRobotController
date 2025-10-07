@@ -1,12 +1,15 @@
 package org.firstinspires.ftc.teamcode;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+
 
 @TeleOp(name="DirectionalMekaniumTestOpModeCrosby")
 
-public class DirectionalMekaniumTestOpModeCrosby extends LinearOpMode {
+public abstract class PIDCrosby extends LinearOpMode {
 
     private DcMotor BR;
     private DcMotor BL;
@@ -29,6 +32,17 @@ public class DirectionalMekaniumTestOpModeCrosby extends LinearOpMode {
         BR.setDirection(DcMotor.Direction.FORWARD);
 
 
+        //defining variables for pid
+        double outputMotorPower = 0;
+        double timeBetweenLoops = 0;
+        final double proportionalConstant = 0;
+        double currentError = 0;
+        double totalError = 0;
+        double lastError = 0;
+        final double integralConstant = 0;
+        final double derivativeConstant = 0;
+
+
         telemetry.addData("Status", "Initialized");
         telemetry.update();
         // Wait for the game to start (driver presses PLAY)
@@ -47,6 +61,8 @@ public class DirectionalMekaniumTestOpModeCrosby extends LinearOpMode {
             telemetry.addData("Back Left Motor Power is", BLmotorpower);
             telemetry.addData("Front Right Motor Power is", FRmotorpower);
             telemetry.addData("Front Left Motor Power is", FLmotorpower);
+
+            outputMotorPower = (proportionalConstant * currentError) + (integralConstant * totalError) + (derivativeConstant * (currentError - lastError)/timeBetweenLoops);
 
             //assigns power to each motor based on gamepad inputs
             BR.setPower(BRmotorpower);

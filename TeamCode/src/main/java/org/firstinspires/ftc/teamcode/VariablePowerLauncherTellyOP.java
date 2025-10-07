@@ -18,9 +18,9 @@ public class VariablePowerLauncherTellyOP extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        DcMotorEx FL = hardwareMap.get(DcMotorImplEx.class, "FL");
+        DcMotorEx FL = hardwareMap.get(DcMotorEx.class, "FL");
 
-        DcMotorEx FR = hardwareMap.get(DcMotorImplEx.class, "FR");
+        DcMotorEx FR = hardwareMap.get(DcMotorEx.class, "FR");
 
         double motortargetspeedradians = 0;
 
@@ -55,12 +55,7 @@ public class VariablePowerLauncherTellyOP extends LinearOpMode {
 
             currentrightmotorvelocity = FR.getVelocity(AngleUnit.RADIANS);
 
-            if (currentleftmotorvelocity == 0){
-                telemetry.addLine("returning 0 left ");
-            }
-            if (currentrightmotorvelocity == 0){
-                telemetry.addLine("returning 0 right ");
-            }
+
 
             telemetry.addLine("All Speeds are in Radians Per Second");
             telemetry.addData("Motors' Target Rate of Rotation ", motortargetspeedradians);
@@ -68,8 +63,8 @@ public class VariablePowerLauncherTellyOP extends LinearOpMode {
             telemetry.addData("Right Motor Actual Rate of Rotation", currentrightmotorvelocity);
             telemetry.addData("Left Motor difference in Rate of Rotation", motortargetspeedradians-currentleftmotorvelocity);
             telemetry.addData("Right Motor difference in Rate of Rotation", motortargetspeedradians+currentrightmotorvelocity);
-            telemetry.addData("Left Motor Speed at Wheel Surface",currentleftmotorvelocity*launcherwheelradiusm);
-            telemetry.addData("Right Motor Speed at Wheel Surface",currentrightmotorvelocity*launcherwheelradiusm);
+            telemetry.addData("Left Motor Speed at Wheel Surface meters per second",currentleftmotorvelocity*launcherwheelradiusm);
+            telemetry.addData("Right Motor Speed at Wheel Surface meters per second",currentrightmotorvelocity*launcherwheelradiusm);
 
             telemetry.update();
         }
