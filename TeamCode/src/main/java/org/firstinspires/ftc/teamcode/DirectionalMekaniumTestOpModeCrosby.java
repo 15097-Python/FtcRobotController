@@ -37,7 +37,7 @@ public class DirectionalMekaniumTestOpModeCrosby extends LinearOpMode {
         while (opModeIsActive()) {
             double targetdrivey = -gamepad1.left_stick_y; // Forward/backward negative because it's naturally inverted
             double targetdrivex = gamepad1.left_stick_x; // side to side
-            double targetturn  = gamepad1.right_stick_x; // Turning
+            double targetturn  = gamepad1.right_stick_x/2; // Turning
             double BRmotorpower = targetdrivey+targetdrivex-targetturn;
             double BLmotorpower = targetdrivey-targetdrivex+targetturn;
             double FRmotorpower = -((targetdrivey-targetdrivex)-targetturn);
