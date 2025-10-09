@@ -4,7 +4,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
-public class TargetSizeEstimator {
+public class autoTargetSizeEstimator {
 
     // Default Limelight parameters
     private static final double DEFAULT_HORIZONTAL_FOV_DEGREES = 59.6;  // Limelight 3A
@@ -63,8 +63,8 @@ public class TargetSizeEstimator {
             return 1.0;  // Default/fallback value (1 meter)
         }
 
-        // This constant would depend on real-world calibration with your target.
-        double calibratedConstant = 2.0; // Tune this based on your setup
+        // This constant would depend on real-world calibration with target.
+        double calibratedConstant = 2.0; // Tune this based on setup
         return calibratedConstant / Math.sqrt(targetArea);
     }
 }
