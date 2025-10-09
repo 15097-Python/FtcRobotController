@@ -4,7 +4,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
-public class autoTargetSizeEstimator {
+public class autoSizeEstimator {
 
     // Default Limelight parameters
     private static final double DEFAULT_HORIZONTAL_FOV_DEGREES = 59.6;  // Limelight 3A
