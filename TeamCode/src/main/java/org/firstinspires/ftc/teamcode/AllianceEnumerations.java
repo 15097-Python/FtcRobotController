@@ -8,7 +8,7 @@ public enum AllianceEnumerations {
     public static final double FIELD_LENGTH = 3.6576;
     public static final double FIELD_WIDTH = 3.6576;
 
-    // Flip a Pose2d based on the alliance
+    // Flip a Pose2d based on the alliance color
     public Pose2d flipPose(Pose2d pose) {
 
         if (this == BLUE) {
