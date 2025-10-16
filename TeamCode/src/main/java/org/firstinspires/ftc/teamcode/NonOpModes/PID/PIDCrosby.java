@@ -43,6 +43,13 @@ public abstract class PIDCrosby {
      * @return output x, y, and turn motor power values
      */
         public static double[] settingMotorPIDPower(Double xTargetCoordinate, Double xCurrentCoordinate, Double yTargetCoordinate, Double yCurrentCoordinate, Double turnCurrentRadian, Double turnTargetRadian, Double timeBetweenLoops){
+        if (xTargetCoordinate == null) xTargetCoordinate = 0.0;
+        if (xCurrentCoordinate == null) xCurrentCoordinate = 0.0;
+        if (yTargetCoordinate == null) yTargetCoordinate = 0.0;
+        if (yCurrentCoordinate == null) yCurrentCoordinate = 0.0;
+        if (turnTargetRadian == null) turnTargetRadian = 0.0;
+        if (turnCurrentRadian == null) turnCurrentRadian = 0.0;
+
         xcurrentError = xTargetCoordinate-xCurrentCoordinate;
         ycurrentError = yTargetCoordinate-yCurrentCoordinate;
         turncurrentError = turnTargetRadian-turnCurrentRadian;
