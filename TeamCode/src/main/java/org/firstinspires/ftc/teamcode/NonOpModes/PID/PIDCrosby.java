@@ -1,74 +1,63 @@
 package org.firstinspires.ftc.teamcode.NonOpModes.PID;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 
-@TeleOp(name="DirectionalMekaniumTestOpModeCrosby")
-
-public abstract class PIDCrosby extends LinearOpMode {
-
-    private DcMotor BR;
-    private DcMotor BL;
-    private DcMotor FL;
-    private DcMotor FR;
-
-    private double V;
-    private double H;
-    private double R;
-    @Override
-    public void runOpMode() {
-
-        BR = hardwareMap.get(DcMotor.class, "BR");
-        BL = hardwareMap.get(DcMotor.class, "BL");
-        FL = hardwareMap.get(DcMotor.class, "FL");
-        FR = hardwareMap.get(DcMotor.class, "FR");
-        FL.setDirection(DcMotor.Direction.REVERSE); //so I don't have to think about
-        BL.setDirection(DcMotor.Direction.REVERSE); //inverting later
-        FR.setDirection(DcMotor.Direction.FORWARD); //should generally do whenever motors
-        BR.setDirection(DcMotor.Direction.FORWARD);
+public abstract class PIDCrosby {
 
 
-        //defining variables for pid
-        double outputMotorPower = 0;
-        double timeBetweenLoops = 0;
-        final double proportionalConstant = 0;
-        double currentError = 0;
-        double totalError = 0;
-        double lastError = 0;
-        final double integralConstant = 0;
-        final double derivativeConstant = 0;
+    //defining variables for pid
+    static double xoutputMotorPower = 0;
+    static final double xproportionalConstant = 0;
+    static double xcurrentError = 0;
+    static double xtotalError = 0;
+    static double xlastError = 0;
+    static final double xintegralConstant = 0;
+    static final double xderivativeConstant = 0;
+    static double youtputMotorPower = 0;
+    static final double yproportionalConstant = 0;
+    static double ycurrentError = 0;
+    static double ytotalError = 0;
+    static double ylastError = 0;
+    static final double yintegralConstant = 0;
+    static final double yderivativeConstant = 0;
+    static double turnoutputMotorPower = 0;
+    static final double turnproportionalConstant = 0;
+    static double turncurrentError = 0;
+    static double turntotalError = 0;
+    static double turnlastError = 0;
+    static final double turnintegralConstant = 0;
+    static final double turnderivativeConstant = 0;
+    /**
+     * Estimates the real-world width of an object using pixel width, camera FOV, resolution, and distance.
+     *
+     * @param xTargetCoordinate   Target coordinate in meters
+     * @param xCurrentCoordinate   Current coordinate in meters
+     * @param yTargetCoordinate Target coordinate in meters
+     * @param yCurrentCoordinate    Current Coordinate in meters
+     * @param turnTargetRadian Target angle in radians
+     * @param turnCurrentRadian Current angle in radians
+     * @param timeBetweenLoops Time between opmodeloops
+     * @return output x, y, and turn motor power values
+     */
+        public static double[] settingMotorPIDPower(Double xTargetCoordinate, Double xCurrentCoordinate, Double yTargetCoordinate, Double yCurrentCoordinate, Double turnCurrentRadian, Double turnTargetRadian, Double timeBetweenLoops){
+        xcurrentError = xTargetCoordinate-xCurrentCoordinate;
+        ycurrentError = yTargetCoordinate-yCurrentCoordinate;
+        turncurrentError = turnTargetRadian-turnCurrentRadian;
+        xtotalError+=xcurrentError;
+        ytotalError+=ycurrentError;
+        turntotalError+=turncurrentError;
 
-
-        telemetry.addData("Status", "Initialized");
-        telemetry.update();
-        // Wait for the game to start (driver presses PLAY)
-        waitForStart();
-        // run until the end of the match (driver presses STOP)
-        while (opModeIsActive()) {
-            double targetdrivey = -gamepad1.left_stick_y; // Forward/backward negative because it's naturally inverted
-            double targetdrivex = gamepad1.left_stick_x; // side to side
-            double targetturn  = gamepad1.right_stick_x/2; // Turning
-            double BRmotorpower = targetdrivey+targetdrivex-targetturn;
-            double BLmotorpower = targetdrivey-targetdrivex+targetturn;
-            double FRmotorpower = -((targetdrivey-targetdrivex)-targetturn);
-            double FLmotorpower = -(targetdrivey+targetdrivex+targetturn);
-            telemetry.addData("targetdrivex",targetdrivex);
-            telemetry.addData("Back Right Motor Power is", BRmotorpower);
-            telemetry.addData("Back Left Motor Power is", BLmotorpower);
-            telemetry.addData("Front Right Motor Power is", FRmotorpower);
-            telemetry.addData("Front Left Motor Power is", FLmotorpower);
-
-            outputMotorPower = (proportionalConstant * currentError) + (integralConstant * totalError) + (derivativeConstant * (currentError - lastError)/timeBetweenLoops);
-
-            //assigns power to each motor based on gamepad inputs
-            BR.setPower(BRmotorpower);
-            BL.setPower(BLmotorpower);
-            FR.setPower(FRmotorpower);
-            FL.setPower(FLmotorpower);
-
-            telemetry.addData(  "Status", "Running");
-            telemetry.update();
-        }
+        xoutputMotorPower = (xproportionalConstant * xcurrentError) + (xintegralConstant * xtotalError) + (xderivativeConstant * (xcurrentError - xlastError)/timeBetweenLoops);
+        youtputMotorPower = (yproportionalConstant * ycurrentError) + (yintegralConstant * ytotalError) + (yderivativeConstant * (ycurrentError - ylastError)/timeBetweenLoops);
+        turnoutputMotorPower = (turnproportionalConstant * turncurrentError) + (turnintegralConstant * turntotalError) + (turnderivativeConstant * (turncurrentError - turnlastError)/timeBetweenLoops);
+        xlastError=xcurrentError;
+        ylastError=ycurrentError;
+        turnlastError=turncurrentError;
+        double[] outputarray = {xoutputMotorPower,youtputMotorPower,turnoutputMotorPower};
+        return (outputarray);
     }
 }
+
