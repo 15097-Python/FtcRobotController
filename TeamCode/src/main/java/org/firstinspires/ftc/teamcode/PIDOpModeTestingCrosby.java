@@ -23,8 +23,7 @@ public class PIDOpModeTestingCrosby extends LinearOpMode {
     private double R;
     @Override
     public void runOpMode() {
-        timeBetweenLoops = timer.seconds();  // seconds since last reset
-        timer.reset();
+       double timeBetweenLoops = 0;  // seconds since last reset
 
         BR = hardwareMap.get(DcMotor.class, "BR");
         BL = hardwareMap.get(DcMotor.class, "BL");
@@ -42,6 +41,8 @@ public class PIDOpModeTestingCrosby extends LinearOpMode {
         waitForStart();
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
+            timeBetweenLoops = timer.seconds();  // seconds since last reset
+            timer.reset();
             double targetdrivey = PIDCrosby.settingMotorPIDPower(xTargetCoordinate,xTargetCoordinate,null,null,null,null,timeBetweenLoops)[0];
             double targetdrivex = PIDCrosby.settingMotorPIDPower(null,null,yTargetCoordinate,yCurrentCoordinate,null,null,timeBetweenLoops)[1];
             double targetturn = PIDCrosby.settingMotorPIDPower(null,null,null,null,turnTargetRadian,turnCurrentRadian,timeBetweenLoops)[2];
