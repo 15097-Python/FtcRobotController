@@ -52,7 +52,6 @@ public class VariablePowerLauncherTellyOP extends LinearOpMode {
             FR.setVelocity(-motortargetspeedradians,AngleUnit.RADIANS);//6.5 radians pwer second
 
             currentleftmotorvelocity = FL.getVelocity(AngleUnit.RADIANS);
-
             currentrightmotorvelocity = FR.getVelocity(AngleUnit.RADIANS);
 
 

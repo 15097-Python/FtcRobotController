@@ -35,13 +35,13 @@ public class DirectionalMekaniumTestOpModeCrosby extends LinearOpMode {
         waitForStart();
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-            double targetdrivey = -gamepad1.left_stick_y; // Forward/backward negative because it's naturally inverted
+            double targetdrivey = gamepad1.left_stick_y; // Forward/backward negative because it's naturally inverted
             double targetdrivex = gamepad1.left_stick_x; // side to side
             double targetturn  = gamepad1.right_stick_x/2; // Turning
             double BRmotorpower = targetdrivey+targetdrivex-targetturn;
             double BLmotorpower = targetdrivey-targetdrivex+targetturn;
-            double FRmotorpower = -((targetdrivey-targetdrivex)-targetturn);
-            double FLmotorpower = -(targetdrivey+targetdrivex+targetturn);
+            double FRmotorpower = (targetdrivey-targetdrivex)-targetturn;
+            double FLmotorpower = targetdrivey+targetdrivex+targetturn;
             telemetry.addData("targetdrivex",targetdrivex);
             telemetry.addData("Back Right Motor Power is", BRmotorpower);
             telemetry.addData("Back Left Motor Power is", BLmotorpower);
