@@ -66,8 +66,9 @@ public final class TuningOpModes {
                 .setGroup(GROUP)
                 .setFlavor(OpModeMeta.Flavor.TELEOP)
                 .build();
+        }
     }
-
+    /*
     private static PinpointView makePinpointView(PinpointLocalizer pl) {
         return new PinpointView() {
             GoBildaPinpointDriver.EncoderDirection parDirection = pl.initialParDirection;
@@ -319,3 +320,4 @@ public final class TuningOpModes {
         });
     }
 }
+*/
