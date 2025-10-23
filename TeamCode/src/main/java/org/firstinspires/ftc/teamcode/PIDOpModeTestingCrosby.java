@@ -15,6 +15,12 @@ public class PIDOpModeTestingCrosby extends LinearOpMode {
     private DcMotor FR;
 
     ElapsedTime timer = new ElapsedTime();
+    double xTargetCoordinate = 0;
+    double xCurrentCoordinate = 0;
+    double yTargetCoordinate = 0;
+    double yCurrentCoordinate = 0;
+    double turnTargetRadian = 0;
+    double turnCurrentRadian = 0;
 
 
     private double V;
