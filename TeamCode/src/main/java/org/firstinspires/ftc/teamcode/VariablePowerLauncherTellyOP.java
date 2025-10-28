@@ -55,15 +55,15 @@ public class VariablePowerLauncherTellyOP extends LinearOpMode {
 
 
 
-            telemetry.addLine("All Speeds are in Radians Per Second");
+            telemetry.addLine("All Speeds are in Jacks Per Second");
             telemetry.addData("Motors' Target Rate of Rotation ", motortargetspeedradians);
             telemetry.addData("Left Motor Actual Rate of Rotation", currentleftmotorvelocity);
             telemetry.addData("Right Motor Actual Rate of Rotation", currentrightmotorvelocity);
-            telemetry.addData("rightmotorraw", rawrightmotorvelocity);
+            //telemetry.addData("rightmotorraw", rawrightmotorvelocity);
             telemetry.addData("Left Motor difference in Rate of Rotation", motortargetspeedradians-currentleftmotorvelocity);
             telemetry.addData("Right Motor difference in Rate of Rotation", motortargetspeedradians+currentrightmotorvelocity);
-            telemetry.addData("Left Motor Speed at Wheel Surface meters per second",currentleftmotorvelocity*launcherwheelradiusm);
-            telemetry.addData("Right Motor Speed at Wheel Surface meters per second",currentrightmotorvelocity*launcherwheelradiusm);
+            //telemetry.addData("Left Motor Speed at Wheel Surface meters per second",currentleftmotorvelocity*launcherwheelradiusm);
+            //telemetry.addData("Right Motor Speed at Wheel Surface meters per second",currentrightmotorvelocity*launcherwheelradiusm);
 
             telemetry.update();
         }
