@@ -1,14 +1,20 @@
 package org.firstinspires.ftc.teamcode.Util;
 
+import androidx.annotation.NonNull;
 import com.acmerobotics.roadrunner.Pose2d;
 
 public enum AllianceEnumerations {
     RED,
     BLUE;
-    public static final double FIELD_LENGTH = 3.6576;
-    public static final double FIELD_WIDTH = 3.6576;
 
-    // Flip a Pose2d based on the alliance color
+    public static final double FIELD_SIZE = 3.6576; // Same for length/width in FRC/FTC fields
+
+    /** Whether this alliance should flip coordinates */
+    public boolean shouldFlip() {
+        return this == BLUE;
+    }
+
+    /**Flip a Pose2d based on the alliance color */
     public Pose2d flipPose(Pose2d pose) {
 
         if (this == BLUE) {
@@ -17,21 +23,24 @@ public enum AllianceEnumerations {
             double origY = pose.position.y;
             double origHeading = pose.heading.toDouble();
 
-            double flippedX = FIELD_LENGTH - origX;
-            double flippedY = FIELD_WIDTH - origY;
+            double flippedX = FIELD_SIZE - origX;
+            //double flippedY = FIELD_SIZE - origY;
             double flippedHeading = origHeading + Math.toRadians(180);
 
-            return new Pose2d(flippedX, flippedY, flippedHeading);
+            return new Pose2d(flippedX, origY, flippedHeading);
         } else {
             return pose; // No flip for RED alliance
         }
     }
 
-    // Convert a string to the corresponding AllianceEnumerations value
+    /** Flip a single 1D coordinate (for odometry or line mapping) */
+    public double flip1D(double positionX) {
+        return shouldFlip() ? FIELD_SIZE - positionX : positionX;
+    }
+
+    /** Parse a string to an alliance enum */
     public static AllianceEnumerations fromString(String s) {
-        if (s == null) {
-            throw new IllegalArgumentException("Alliance string is null");
-        }
+        if (s == null) throw new IllegalArgumentException("Alliance string is null");
         switch (s.toUpperCase()) {
             case "RED": return RED;
             case "BLUE": return BLUE;
@@ -39,8 +48,9 @@ public enum AllianceEnumerations {
         }
     }
 
+    @NonNull
     @Override
     public String toString() {
-        return this.name().toLowerCase();
+        return name().toLowerCase();
     }
 }

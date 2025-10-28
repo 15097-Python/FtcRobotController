@@ -19,10 +19,10 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.7.1'
     implementation 'edu.wpi.first.ntcore:ntcore-java:2025.3.1'
     // Road Runner dependencies
-    implementation 'com.acmerobotics.roadrunner:ftc:0.1.23'
+    implementation 'com.acmerobotics.roadrunner:ftc:0.1.25'
     implementation 'com.acmerobotics.roadrunner:core:1.0.1'
     implementation 'com.acmerobotics.roadrunner:actions:1.0.1'
-    implementation 'com.acmerobotics.dashboard:dashboard:0.4.17'
+    implementation 'com.acmerobotics.dashboard:dashboard:0.5.0'
 }
 
 configurations.configureEach {
