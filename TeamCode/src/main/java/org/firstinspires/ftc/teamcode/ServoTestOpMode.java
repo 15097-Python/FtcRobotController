@@ -14,15 +14,24 @@ public class ServoTestOpMode extends LinearOpMode {
     public void runOpMode() {
 
     servo = hardwareMap.get(Servo.class, "servo");
+    double servoangle = 0;
+    int incramentor = 0;
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
-
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
-            servo.setPosition(.75);
 
-            telemetry.addData(  "Status", "Running");
+            incramentor++;
+            servo.setPosition(servoangle);
+
+            if (servoangle > 1){
+                servoangle = 0;
+            }
+            servoangle += .33;
+            sleep(1000);
+            telemetry.addData(  "servoangle", servoangle);
+            telemetry.addData("coutning", incramentor);
             telemetry.update();
         }
     }
