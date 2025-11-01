@@ -43,8 +43,8 @@ public abstract class VariablePowerLauncherAbstract extends LinearOpMode {
             motortargetspeedradians -= gamepad1.dpadLeftWasPressed() ? .1 : 0;
 
 
-            LauncherFL.setVelocity(motortargetspeedradians,AngleUnit.RADIANS);// 32.67 radians per second is the max calculated
-            LauncherFR.setVelocity(-motortargetspeedradians,AngleUnit.RADIANS);//6.5 radians pwer second
+            LauncherFL.setVelocity(motortargetspeedradians,AngleUnit.RADIANS);
+            LauncherFR.setVelocity(-motortargetspeedradians,AngleUnit.RADIANS);
 
             currentleftmotorvelocity = LauncherFL.getVelocity(AngleUnit.RADIANS);
             currentrightmotorvelocity = LauncherFR.getVelocity(AngleUnit.RADIANS);

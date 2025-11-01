@@ -16,9 +16,9 @@ public class VariablePowerLauncherTellyOP extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        DcMotorEx FL = hardwareMap.get(DcMotorEx.class, "FL");
+        DcMotorEx launcherFL = hardwareMap.get(DcMotorEx.class, "FL");
 
-        DcMotorEx FR = hardwareMap.get(DcMotorEx.class, "FR");
+        DcMotorEx launcherFR = hardwareMap.get(DcMotorEx.class, "FR");
 
         double motortargetspeedradians = 0;
 
@@ -27,10 +27,10 @@ public class VariablePowerLauncherTellyOP extends LinearOpMode {
         double currentrightmotorvelocity = 3;
 
         //zeros the encoders and sets the run using encoder mode
-        FL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        FL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        FR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        FR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        launcherFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        launcherFL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        launcherFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        launcherFR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
         telemetry.addData("Status", "Initialized");
@@ -46,12 +46,12 @@ public class VariablePowerLauncherTellyOP extends LinearOpMode {
             motortargetspeedradians -= gamepad1.dpadLeftWasPressed() ? .1 : 0;
 
 
-            FL.setVelocity(motortargetspeedradians,AngleUnit.RADIANS);// 32.67 radians per second is the max calculated
-            FR.setVelocity(-motortargetspeedradians,AngleUnit.RADIANS);//6.5 radians pwer second
+            launcherFL.setVelocity(motortargetspeedradians,AngleUnit.RADIANS);// 32.67 radians per second is the max calculated
+            launcherFR.setVelocity(-motortargetspeedradians,AngleUnit.RADIANS);//6.5 radians pwer second
 
-            currentleftmotorvelocity = FL.getVelocity(AngleUnit.RADIANS);
-            currentrightmotorvelocity = FR.getVelocity(AngleUnit.RADIANS);
-            double rawrightmotorvelocity = FR.getVelocity();
+            currentleftmotorvelocity = launcherFL.getVelocity(AngleUnit.RADIANS);
+            currentrightmotorvelocity = launcherFR.getVelocity(AngleUnit.RADIANS);
+            double rawrightmotorvelocity = launcherFR.getVelocity();
 
 
 
@@ -59,7 +59,7 @@ public class VariablePowerLauncherTellyOP extends LinearOpMode {
             telemetry.addData("Motors' Target Rate of Rotation ", motortargetspeedradians);
             telemetry.addData("Left Motor Actual Rate of Rotation", currentleftmotorvelocity);
             telemetry.addData("Right Motor Actual Rate of Rotation", currentrightmotorvelocity);
-            //telemetry.addData("rightmotorraw", rawrightmotorvelocity);
+            telemetry.addData("right motor in ticks per second", rawrightmotorvelocity);
             telemetry.addData("Left Motor difference in Rate of Rotation", motortargetspeedradians-currentleftmotorvelocity);
             telemetry.addData("Right Motor difference in Rate of Rotation", motortargetspeedradians+currentrightmotorvelocity);
             //telemetry.addData("Left Motor Speed at Wheel Surface meters per second",currentleftmotorvelocity*launcherwheelradiusm);
