@@ -27,7 +27,7 @@ public abstract class PIDCrosby {
     static final double turnintegralConstant = 0;
     static final double turnderivativeConstant = 0;
     /**
-     * Estimates the real-world width of an object using pixel width, camera FOV, resolution, and distance.
+     * Makes the robot run
      *
      * @param xTargetCoordinate   Target coordinate in meters
      * @param xCurrentCoordinate   Current coordinate in meters
