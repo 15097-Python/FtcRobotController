@@ -74,7 +74,7 @@ public class LauncherDriverOPModeCrosby extends LinearOpMode {
 
             double currentrelativeheading = odomhub.getHeading(AngleUnit.RADIANS);
             //Calls FieldOrientedDriving function and sets motor power
-            double motorpowerarray[] = FieldOrientedDriving.fieldOrientedMath(leftstickinputy, leftstickinputx, targetturn, currentrelativeheading);
+            double[] motorpowerarray = FieldOrientedDriving.fieldOrientedMath(leftstickinputy, leftstickinputx, targetturn, currentrelativeheading);
 
             double BRmotorpower = motorpowerarray[0];
             double BLmotorpower = motorpowerarray[1];
@@ -82,8 +82,7 @@ public class LauncherDriverOPModeCrosby extends LinearOpMode {
             double FLmotorpower = motorpowerarray[3];
 
             // sets the velocity of the motors
-            LauncherFL.setVelocity(motortargetspeedradians);
-
+            LauncherFL.setVelocity(motortargetspeedradians,AngleUnit.RADIANS);
             currentleftmotorvelocity = LauncherFL.getVelocity(AngleUnit.RADIANS);
             //currentrightmotorvelocity = LauncherFR.getVelocity(AngleUnit.RADIANS);
             double rawrightmotorvelocity = LauncherFL.getVelocity();
