@@ -7,6 +7,8 @@ import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+
 import org.firstinspires.ftc.teamcode.positioning.odometry.FieldOrientedDriving;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -15,7 +17,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 public class SCooperTest extends LinearOpMode {
     private GoBildaPinpointDriver odomhub;
-    private DcMotor Scooper;
+    private DcMotorEx Scooper;
     private DcMotor BR;
     private DcMotor BL;
     private DcMotor FL;
@@ -27,7 +29,9 @@ public class SCooperTest extends LinearOpMode {
 
         odomhub = hardwareMap.get(GoBildaPinpointDriver.class,"odomhub");
 
-        Scooper = hardwareMap.get(DcMotor.class,"Scooper");
+        Scooper = hardwareMap.get(DcMotorEx.class,"Scooper");
+        Scooper.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Scooper.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         BR = hardwareMap.get(DcMotor.class, "BR");
         BL = hardwareMap.get(DcMotor.class, "BL");
@@ -69,7 +73,8 @@ public class SCooperTest extends LinearOpMode {
             FR.setPower(FRmotorpower);
             FL.setPower(FLmotorpower);
 
-            Scooper.setPower(1);
+            if (gamepad1.left_bumper) Scooper.setVelocity(1);
+            if (gamepad1.right_bumper) Scooper.setVelocity(1);
 
             telemetry.addData(  "Status", "Running");
             telemetry.addData("rotation perceived",currentrelativeheading);
