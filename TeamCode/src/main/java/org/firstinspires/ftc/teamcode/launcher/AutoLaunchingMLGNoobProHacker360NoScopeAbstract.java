@@ -1,4 +1,10 @@
 package org.firstinspires.ftc.teamcode.launcher;
+import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.TeamColorRED;
+import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.robottranslationx;
+import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.robottranslationy;
+import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.robotyaw;
+
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -35,20 +41,30 @@ public abstract class AutoLaunchingMLGNoobProHacker360NoScopeAbstract extends Li
 
 
         public static void  AutoLaunch(double motortargetspeedradians, double currentleftmotorvelocity, DcMotorEx LauncherFL, Servo DrumServo, Servo FiringPinServo, double TargetBallColor, double AprilTagDistance, double[] drumBallColors){
+            double ShootTargetX = 0;
+            double ShootTargetY = 3.5;
+            if(TeamColorRED == false) {
+                ShootTargetX = 3.5;
+            } else{
+                ShootTargetX = -3.5;
+            }
+            double shootingangle = Math.atan2(ShootTargetY - robottranslationy, ShootTargetX - robottranslationx);
+
+
             double[] drumLocations = {0.2, 0.5, 0.8};
             int i = 0;
-            for (double drumSlot: drumBallColors){
-                if(drumSlot == TargetBallColor){
+            for (double drumSlot: drumBallColors) {
+                if (drumSlot == TargetBallColor) {
                     DrumServo.setPosition(drumLocations[i]);
                     break;
-
-
                 }
-                if (i>2){
+                if (i > 2) {
                     return;
                 }
                 i++;
             }
+
+
 
 
 

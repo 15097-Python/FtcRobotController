@@ -1,4 +1,10 @@
 package org.firstinspires.ftc.teamcode.NonOpModes.PID;
+import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.robottranslationx;
+import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.robottranslationy;
+import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.robotyaw;
+import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.robottargetx;
+import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.robottargety;
+import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.robottargetyaw;
 
 
 public abstract class PIDCrosby {
@@ -6,61 +12,54 @@ public abstract class PIDCrosby {
 
     //defining variables for pid
     static double xoutputMotorPower = 0;
-    static final double xproportionalConstant = 0;
+    static final double xproportionalConstant = 0.005;
     static double xcurrentError = 0;
     static double xtotalError = 0;
     static double xlastError = 0;
     static final double xintegralConstant = 0;
-    static final double xderivativeConstant = 0;
+    static final double xderivativeConstant = 0.001;
     static double youtputMotorPower = 0;
-    static final double yproportionalConstant = 0;
+    static final double yproportionalConstant = 0.005;
     static double ycurrentError = 0;
     static double ytotalError = 0;
     static double ylastError = 0;
     static final double yintegralConstant = 0;
-    static final double yderivativeConstant = 0;
+    static final double yderivativeConstant = 0.001;
     static double turnoutputMotorPower = 0;
-    static final double turnproportionalConstant = 0;
+    static final double turnproportionalConstant = 0.005;
     static double turncurrentError = 0;
     static double turntotalError = 0;
     static double turnlastError = 0;
     static final double turnintegralConstant = 0;
-    static final double turnderivativeConstant = 0;
+    static final double turnderivativeConstant = 0.001;
     /**
      * Makes the robot run
-     *
-     * @param xTargetCoordinate   Target coordinate in meters
-     * @param xCurrentCoordinate   Current coordinate in meters
-     * @param yTargetCoordinate Target coordinate in meters
-     * @param yCurrentCoordinate    Current Coordinate in meters
-     * @param turnTargetRadian Target angle in radians
-     * @param turnCurrentRadian Current angle in radians
      * @param timeBetweenLoops Time between opmodeloops
      * @return output x, y, and turn motor power values
      */
-        public static double[] settingMotorPIDPower(Double xTargetCoordinate, Double xCurrentCoordinate, Double yTargetCoordinate, Double yCurrentCoordinate, Double turnCurrentRadian, Double turnTargetRadian, Double timeBetweenLoops){
-        if (xTargetCoordinate == null) xTargetCoordinate = 0.0;
-        if (xCurrentCoordinate == null) xCurrentCoordinate = 0.0;
-        if (yTargetCoordinate == null) yTargetCoordinate = 0.0;
-        if (yCurrentCoordinate == null) yCurrentCoordinate = 0.0;
-        if (turnTargetRadian == null) turnTargetRadian = 0.0;
-        if (turnCurrentRadian == null) turnCurrentRadian = 0.0;
+    public static double settingMotorPIDPowerX(Double timeBetweenLoops){
 
-        xcurrentError = xTargetCoordinate-xCurrentCoordinate;
-        ycurrentError = yTargetCoordinate-yCurrentCoordinate;
-        turncurrentError = turnTargetRadian-turnCurrentRadian;
+        xcurrentError = robottargetx-robottranslationx;
         xtotalError+=xcurrentError;
-        ytotalError+=ycurrentError;
-        turntotalError+=turncurrentError;
 
         xoutputMotorPower = (xproportionalConstant * xcurrentError) + (xintegralConstant * xtotalError) + (xderivativeConstant * (xcurrentError - xlastError)/timeBetweenLoops);
-        youtputMotorPower = (yproportionalConstant * ycurrentError) + (yintegralConstant * ytotalError) + (yderivativeConstant * (ycurrentError - ylastError)/timeBetweenLoops);
-        turnoutputMotorPower = (turnproportionalConstant * turncurrentError) + (turnintegralConstant * turntotalError) + (turnderivativeConstant * (turncurrentError - turnlastError)/timeBetweenLoops);
         xlastError=xcurrentError;
+        return xoutputMotorPower;
+    }
+    public static double settingMotorPIDPowerY(Double timeBetweenLoops){
+        ycurrentError = robottargety-robottranslationy;
+        ytotalError+=ycurrentError;
+        youtputMotorPower = (yproportionalConstant * ycurrentError) + (yintegralConstant * ytotalError) + (yderivativeConstant * (ycurrentError - ylastError)/timeBetweenLoops);
         ylastError=ycurrentError;
+        return youtputMotorPower;
+    }
+    public static double settingMotorPIDPowerTurn(Double timeBetweenLoops){
+        turncurrentError = robottargetyaw-robotyaw;
+        turntotalError+=turncurrentError;
+        turnoutputMotorPower = (turnproportionalConstant * turncurrentError) + (turnintegralConstant * turntotalError) + (turnderivativeConstant * (turncurrentError - turnlastError)/timeBetweenLoops);
         turnlastError=turncurrentError;
-        double[] outputarray = {xoutputMotorPower,youtputMotorPower,turnoutputMotorPower};
-        return (outputarray);
+        return turnoutputMotorPower;
     }
 }
+
 

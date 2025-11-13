@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+/*package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -13,8 +13,8 @@ public class ServoTestOpMode extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-    drumservo = hardwareMap.get(Servo.class, "servo");
-    firingpinservo = hardwareMap.get(SErvo.class, "servo");
+    Servo DrumServo = hardwareMap.get(Servo.class, "servo");
+    Servo FiringPinServo = hardwareMap.get(Servo.class, "servo");
     double targetdrumangle = 0;
     double targetfiringpinangle = 0;
     boolean firing = false;
@@ -31,10 +31,10 @@ public class ServoTestOpMode extends LinearOpMode {
             }
 
             // prevents the firing pin and drum from getting stuck on eachother
-            if (firingpinservo.getPosition <= 0.01) drumservo.setPosition(targetdrumangle)// this likely doesn't actually work to prevent errors and we need to use the voltage retuned from the servo
+            if (FiringPinServo.getPosition <= 0.01) DrumServo.setPosition(targetdrumangle)// this likely doesn't actually work to prevent errors and we need to use the voltage retuned from the servo
 
-            if (drumservo.getPosition >= (targetdrumangle - .01) && drumservo.getPosition <= (targetdrumangle + .01)){
-                firingpinservo.setPosition(1);
+            if (DrumServo.getPosition >= (targetdrumangle - .01) && DrumServo.getPosition <= (targetdrumangle + .01)){
+                FiringPinServo.setPosition(1);
             }
             
             telemetry.addData("servoangle", servoangle);
@@ -42,3 +42,4 @@ public class ServoTestOpMode extends LinearOpMode {
         }
     }
 }
+*/

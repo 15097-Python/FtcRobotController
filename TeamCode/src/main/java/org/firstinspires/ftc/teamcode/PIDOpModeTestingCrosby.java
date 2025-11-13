@@ -49,9 +49,9 @@ public class PIDOpModeTestingCrosby extends LinearOpMode {
         while (opModeIsActive()) {
             timeBetweenLoops = timer.seconds();  // seconds since last reset
             timer.reset();
-            double targetdrivey = PIDCrosby.settingMotorPIDPower(xTargetCoordinate,xCurrentCoordinate,null,null,null,null,timeBetweenLoops)[0];
-            double targetdrivex = PIDCrosby.settingMotorPIDPower(null,null,yTargetCoordinate,yCurrentCoordinate,null,null,timeBetweenLoops)[1];
-            double targetturn = PIDCrosby.settingMotorPIDPower(null,null,null,null,turnTargetRadian,turnCurrentRadian,timeBetweenLoops)[2];
+            double targetdrivey = PIDCrosby.settingMotorPIDPowerX(timeBetweenLoops);
+            double targetdrivex = PIDCrosby.settingMotorPIDPowerY(timeBetweenLoops);
+            double targetturn = PIDCrosby.settingMotorPIDPowerTurn(timeBetweenLoops);
             double BRmotorpower = targetdrivey+targetdrivex-targetturn;
             double BLmotorpower = targetdrivey-targetdrivex+targetturn;
             double FRmotorpower = -((targetdrivey-targetdrivex)-targetturn);
