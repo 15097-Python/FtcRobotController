@@ -44,8 +44,12 @@ public abstract class AutoLaunchingMLGNoobProHacker360NoScopeAbstract extends Li
 
 
                 }
+                if (i>2){
+                    return;
+                }
                 i++;
             }
+
 
 
 

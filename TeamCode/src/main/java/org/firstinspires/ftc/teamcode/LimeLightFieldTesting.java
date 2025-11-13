@@ -38,10 +38,10 @@ public class LimeLightFieldTesting extends LinearOpMode {
                 for (LLResultTypes.FiducialResult tag : tags) {
                     int id = tag.getFiducialId();
                     if (id == 20 || id == 24){
-                        Pose3D robotpose = tag.getBotPose();
-                        if (botpose != null) {
-                            double x = botpose.getPosition().x;
-                            double y = botpose.getPosition().y;
+                        Pose3D robotpose = tag.getRobotPoseFieldSpace();
+                        if (robotpose != null) {
+                            double x = robotpose.getPosition().x;
+                            double y = robotpose.getPosition().y;
                             telemetry.addData("bot Location", "(" + x + ", " + y + ")");
                         }
                     }
