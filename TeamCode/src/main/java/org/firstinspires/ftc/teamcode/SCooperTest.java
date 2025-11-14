@@ -73,8 +73,8 @@ public class SCooperTest extends LinearOpMode {
             FR.setPower(FRmotorpower);
             FL.setPower(FLmotorpower);
 
-            if (gamepad1.left_bumper) Scooper.setVelocity(1);
-            if (gamepad1.right_bumper) Scooper.setVelocity(1);
+            if (gamepad1.left_bumper) Scooper.setVelocity(999,AngleUnit.RADIANS);
+            if (gamepad1.right_bumper) Scooper.setVelocity(999,AngleUnit.RADIANS);
 
             telemetry.addData(  "Status", "Running");
             telemetry.addData("rotation perceived",currentrelativeheading);

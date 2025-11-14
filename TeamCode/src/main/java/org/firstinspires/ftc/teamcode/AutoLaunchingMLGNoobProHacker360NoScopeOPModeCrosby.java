@@ -16,21 +16,30 @@ import org.firstinspires.ftc.teamcode.positioning.odometry.FieldOrientedDriving;
 
 import java.util.List;
 
-@TeleOp(name="LauncherDriverOPModeCrosby")
+@TeleOp(name="autholoaunchermode")
 
 public class AutoLaunchingMLGNoobProHacker360NoScopeOPModeCrosby extends LinearOpMode {
     private Servo DrumServo;
     private Servo FiringPinServo;
     private GoBildaPinpointDriver odomhub;
-    private DcMotor Scooper;
+    private DcMotorEx Scooper;
     private DcMotor BR;
     private DcMotor BL;
     private DcMotor FL;
     private DcMotor FR;
+    private DcMotorEx LauncherFL
 
 
     @Override
     public void runOpMode() {
+        double targetdrumangle = 0;
+        double targetfiringpinangle = 0;
+        boolean firing = false;
+
+        double motortargetspeedradians = 0;
+        double currentleftmotorvelocity = 0;
+        double currentrightmotorvelocity = 0;
+
         Limelight3A limelight = hardwareMap.get(Limelight3A.class, "limelight");// INitilizes the limelights
         limelight.setPollRateHz(100);
         limelight.pipelineSwitch(0);
@@ -38,7 +47,7 @@ public class AutoLaunchingMLGNoobProHacker360NoScopeOPModeCrosby extends LinearO
 
         odomhub = hardwareMap.get(GoBildaPinpointDriver.class,"odomhub");
 
-        Scooper = hardwareMap.get(DcMotor.class,"Scooper");
+        
 
         BR = hardwareMap.get(DcMotor.class, "BR");
         BL = hardwareMap.get(DcMotor.class, "BL");
@@ -49,15 +58,11 @@ public class AutoLaunchingMLGNoobProHacker360NoScopeOPModeCrosby extends LinearO
         FR.setDirection(DcMotor.Direction.FORWARD); //should generally do whenever motors
         BR.setDirection(DcMotor.Direction.FORWARD);
 
-        DcMotorEx LauncherFL = hardwareMap.get(DcMotorEx.class, "LauncherFL");
+        LauncherFL = hardwareMap.get(DcMotorEx.class, "LauncherFL");
+        Scooper = hardwareMap.get(DcMotorEx.class,"Scooper");
 
         //DcMotorEx LauncherFR = hardwareMap.get(DcMotorEx.class, "LauncherFR");
-
-        double motortargetspeedradians = 0;
-
-        double currentleftmotorvelocity = 0;
-
-        double currentrightmotorvelocity = 0;
+        
 
         limelight.setPollRateHz(100);
         limelight.pipelineSwitch(0);
@@ -67,9 +72,14 @@ public class AutoLaunchingMLGNoobProHacker360NoScopeOPModeCrosby extends LinearO
         //VariablePowerLauncherAbstract.initializeLauncher(LauncherFL,LauncherFR);
         LauncherFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         LauncherFL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        Scooper.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Scooper.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         odomhub.initialize();
         odomhub.resetPosAndIMU();   // resets encoders and IMU
+
+        FiringPinServo.setPosition(0)
+        
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -80,6 +90,8 @@ public class AutoLaunchingMLGNoobProHacker360NoScopeOPModeCrosby extends LinearO
             double leftstickinputy = gamepad1.left_stick_y; // Forward/backward negative because it's naturally inverted
             double leftstickinputx = gamepad1.left_stick_x; // side to side
             double targetturn  = gamepad1.right_stick_x/2; // Turning
+
+            double [] currentrobotlocation = getRobotCoordinates();
 
             //increments the target speed with up and right while decrementing it with left and down
             motortargetspeedradians += gamepad1.dpadUpWasPressed() ? 1 : 0;
@@ -98,26 +110,31 @@ public class AutoLaunchingMLGNoobProHacker360NoScopeOPModeCrosby extends LinearO
             // 0 is empty, 1 is green ball, 2 is purple ball
             double[] drumBallColors = {0, 0, 0};
             //Limelight stuff
-            LLResult result = limelight.getLatestResult();
+            if (gamepad1.right_trigger){
+                LLResult result = limelight.getLatestResult();
 
-            if (result != null && result.isValid()){ // checks if there is a target and if the target is an actual target
+                if (result != null && result.isValid()){ // checks if there is a target and if the target is an actual target
 
+                    List<LLResultTypes.FiducialResult> tags = result.getFiducialResults(); //get fiducial results basically just tells how many april tags it sees
+                    //List<LLResultTypes.FiducialResult>: so it makes a list at the size of the # of tags detected and has info on the id and position of the tag
 
-                List<LLResultTypes.FiducialResult> tags = result.getFiducialResults(); //get fiducial results basically just tells how many april tags it sees
-                //List<LLResultTypes.FiducialResult>: so it makes a list at the size of the # of tags detected and has info on the id and position of the tag
-
-                for (LLResultTypes.FiducialResult tag : tags) {
-                    int id = tag.getFiducialId();
-                    if (id == 20 || id == 24){
-                        Pose3D robotpose = tag.getRobotPoseFieldSpace();
-                        if (robotpose != null) {
-                            double x = robotpose.getPosition().x;
-                            double y = robotpose.getPosition().y;
-                            telemetry.addData("bot Location", "(" + x + ", " + y + ")");
+                    for (LLResultTypes.FiducialResult tag : tags) {
+                        int id = tag.getFiducialId();
+                        if (id == 20 || id == 24){
+                            Pose3D robotpose = tag.getRobotPoseFieldSpace();
+                            if (robotpose != null) {
+                                double x = robotpose.getPosition().x;
+                                double y = robotpose.getPosition().y;
+                                
+                                
+                                modifyRobotCoordinates(x,y,currentrobotlocation[2],currentrobotlocation[3],currentrobotlocation[5],currentrobotlocation[5]);
+                            }
                         }
                     }
                 }
+
             }
+            
 
 
             // sets the velocity of the motors
@@ -129,28 +146,54 @@ public class AutoLaunchingMLGNoobProHacker360NoScopeOPModeCrosby extends LinearO
 
 
 
-            telemetry.addLine("All Speeds are in Jacks Per Second");
-            telemetry.addData("Motors' Target Rate of Rotation ", motortargetspeedradians);
-            telemetry.addData("Left Motor Actual Rate of Rotation", currentleftmotorvelocity);
-            //telemetry.addData("Right Motor Actual Rate of Rotation", currentrightmotorvelocity);
-            telemetry.addData("rightmotorraw", rawrightmotorvelocity);
-            telemetry.addData("Left Motor difference in Rate of Rotation", motortargetspeedradians-currentleftmotorvelocity);
-            //telemetry.addData("Right Motor difference in Rate of Rotation", motortargetspeedradians+currentrightmotorvelocity);
-            //telemetry.addData("Left Motor Speed at Wheel Surface meters per second",currentleftmotorvelocity*launcherwheelradiusm);
-            //telemetry.addData("Right Motor Speed at Wheel Surface meters per second",currentrightmotorvelocity*launcherwheelradiusm);
+            
 
+            if (!firing){
+                targetfiringpinangle = 0;
+                targetdrumangle = gamepad1.x() ? .2 : 0;//placeholdernumbers
+                targetdrumangle = gamepad1.y() ? .5 : 0;
+                targetdrumangle = gamepad1.b() ? .8 : 0;
+            }
 
+            //waits untill the firingpinservo is at its fully retracted point
+            if (FiringPinServo.getPosition() >= -0.01 && FiringPinServo.getPosition() <= 0.01){
+                DrumServo.setPosition(targetdrumangle);
+                firing == true;
+            } 
+            //ensures the drumbservo is at its spot before moving the firing pin servo
+            // this likely doesn't actually work to prevent errors and we need to use the voltage retuned from the servo
+            if (DrumServo.getPosition() >= (targetdrumangle - .01) && DrumServo.getPosition() <= (targetdrumangle + .01)){
+                targetfiringpinangle = 1;
+                firing = false;
+            }
 
-            odomhub.update();
+            FiringPinServo.setPosition(targetfiringpinangle);
+
+            
+
+            
             //assigns power to each motor based on gamepad inputs
             BR.setPower(BRmotorpower);
             BL.setPower(BLmotorpower);
             FR.setPower(FRmotorpower);
             FL.setPower(FLmotorpower);
 
-            Scooper.setPower(1);
+            if (gamepad1.left_bumper) Scooper.setVelocity(999,AngleUnit.RADIANS);
+            if (gamepad1.right_bumper) Scooper.setVelocity(999,AngleUnit.RADIANS);
 
-            telemetry.addData(  "Status", "Running");
+            odomhub.update();
+
+            telemetry.addLine("All Speeds are in Jacks Per Second");
+            telemetry.addData("Motors' Target Rate of Rotation ", motortargetspeedradians);
+            telemetry.addData("Left Motor Actual Rate of Rotation", currentleftmotorvelocity);
+            //telemetry.addData("Right Motor Actual Rate of Rotation", currentrightmotorvelocity);
+            //telemetry.addData("rightmotorraw", rawrightmotorvelocity);
+            telemetry.addData("Left Motor difference in Rate of Rotation", motortargetspeedradians-currentleftmotorvelocity);
+            //telemetry.addData("Right Motor difference in Rate of Rotation", motortargetspeedradians+currentrightmotorvelocity);
+            //telemetry.addData("Left Motor Speed at Wheel Surface meters per second",currentleftmotorvelocity*launcherwheelradiusm);
+            //telemetry.addData("Right Motor Speed at Wheel Surface meters per second",currentrightmotorvelocity*launcherwheelradiusm);
+            telemetry.addData("drim target servoangle", targetdrumangle);
+            telemetry.addData("firingpin target servoangle", targetfiringpinangle);
             telemetry.addData("rotation perceived",currentrelativeheading);
             telemetry.update();
         }

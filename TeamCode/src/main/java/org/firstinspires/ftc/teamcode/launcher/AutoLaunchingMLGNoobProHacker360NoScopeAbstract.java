@@ -40,39 +40,48 @@ public abstract class AutoLaunchingMLGNoobProHacker360NoScopeAbstract extends Li
      */
 
 
-        public static void  AutoLaunch(double motortargetspeedradians, double currentleftmotorvelocity, DcMotorEx LauncherFL, Servo DrumServo, Servo FiringPinServo, double TargetBallColor, double AprilTagDistance, double[] drumBallColors){
-            double ShootTargetX = 0;
-            double ShootTargetY = 3.5;
-            if(TeamColorRED == false) {
-                ShootTargetX = 3.5;
-            } else{
-                ShootTargetX = -3.5;
-            }
-            double shootingangle = Math.atan2(ShootTargetY - robottranslationy, ShootTargetX - robottranslationx);
-
-
-            double[] drumLocations = {0.2, 0.5, 0.8};
-            int i = 0;
-            for (double drumSlot: drumBallColors) {
-                if (drumSlot == TargetBallColor) {
-                    DrumServo.setPosition(drumLocations[i]);
-                    break;
-                }
-                if (i > 2) {
-                    return;
-                }
-                i++;
-            }
-
-
-
-
-
-
-
-
-            LauncherFL.setVelocity(motortargetspeedradians,AngleUnit.RADIANS);
-
-
+    public static void  AutoLaunch(double motortargetspeedradians, double currentleftmotorvelocity, DcMotorEx LauncherFL, Servo DrumServo, Servo FiringPinServo, double TargetBallColor, double AprilTagDistance, double[] drumBallColors){
+        final double firingpowermultiplierconst = 2;
+        double ShootTargetX = 0;
+        double ShootTargetY = 3.5;
+        if(TeamColorRED == false) {
+            ShootTargetX = 3.5;
+        } else{
+            ShootTargetX = -3.5;
         }
+        double firingpower = (getFiringDistance(ShootTargetX,ShootTargetY) * firingpowermultiplierconst);
+        double shootingangle = Math.atan2(ShootTargetY - robottranslationy, ShootTargetX - robottranslationx);//chatgpt math
+
+
+        double[] drumLocations = {0.2, 0.5, 0.8};// should probably make the drumb slots into objects
+        int i = 0;
+        for (double drumSlot: drumBallColors) {//slot finding loop
+            if (drumSlot == TargetBallColor) {
+                DrumServo.setPosition(drumLocations[i]);
+                break;
+            }
+            if (i > 2) {
+                return;
+            }
+            i++;
+        }
+
+
+
+
+
+
+
+
+        LauncherFL.setVelocity(firingpower,AngleUnit.RADIANS);
+
+
     }
+    public static double getFiringDistance(double targetx , double targety){
+        double xdistance = Math.abs(targetx - robottranslationx);
+        double ydistance = Math.abs(targety - robottranslationy);
+        //pythangroniaun theorum to determine the distance
+        double distance = Math.sqrt((xdistance * xdistance) + (ydistance * ydistance));
+        return (distance);
+    }
+}

@@ -108,7 +108,7 @@ public class LauncherDriverOPModeCrosby extends LinearOpMode {
             FR.setPower(FRmotorpower);
             FL.setPower(FLmotorpower);
 
-            Scooper.setPower(1);
+
 
             telemetry.addData(  "Status", "Running");
             telemetry.addData("rotation perceived",currentrelativeheading);
