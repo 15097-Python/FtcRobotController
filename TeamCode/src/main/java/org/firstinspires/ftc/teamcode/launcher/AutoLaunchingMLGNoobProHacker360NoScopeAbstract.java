@@ -29,28 +29,28 @@ public abstract class AutoLaunchingMLGNoobProHacker360NoScopeAbstract extends Li
     /**
      * Estimates the real-world width of an object using pixel width, camera FOV, resolution, and distance.
      *
-     * @param motortargetspeedradians   The target motor speed in radians
-     * @param currentleftmotorvelocity   the current velocity of the left motor
-     * @param LauncherFL front left launcher
+     *
+     *
+     * @param Launcher LauncherFL
      * @param DrumServo the servo controlling the drum
      * @param FiringPinServo the servo controlling the pushing ball mechanism
      * @param TargetBallColor color of the ball that is being launched, 1 is green, 2 is purple
-     * @param AprilTagDistance distance from the april tag
+     *
      * @return output x, y, and turn motor power values
      */
 
 
-    public static void  AutoLaunch(double motortargetspeedradians, double currentleftmotorvelocity, DcMotorEx LauncherFL, Servo DrumServo, Servo FiringPinServo, double TargetBallColor, double AprilTagDistance, double[] drumBallColors){
+    public static double  autoLaunch( DcMotorEx Launcher, Servo DrumServo, Servo FiringPinServo, double TargetBallColor, double[] drumBallColors){
         final double firingpowermultiplierconst = 2;
         double ShootTargetX = 0;
         double ShootTargetY = 3.5;
-        if(TeamColorRED == false) {
+        if(!TeamColorRED) {
             ShootTargetX = 3.5;
         } else{
             ShootTargetX = -3.5;
         }
         double firingpower = (getFiringDistance(ShootTargetX,ShootTargetY) * firingpowermultiplierconst);
-        double shootingangle = Math.atan2(ShootTargetY - robottranslationy, ShootTargetX - robottranslationx);//chatgpt math
+
 
 
         double[] drumLocations = {0.2, 0.5, 0.8};// should probably make the drumb slots into objects
@@ -61,7 +61,7 @@ public abstract class AutoLaunchingMLGNoobProHacker360NoScopeAbstract extends Li
                 break;
             }
             if (i > 2) {
-                return;
+                return(0);
             }
             i++;
         }
@@ -73,15 +73,16 @@ public abstract class AutoLaunchingMLGNoobProHacker360NoScopeAbstract extends Li
 
 
 
-        LauncherFL.setVelocity(firingpower,AngleUnit.RADIANS);
-
+        return(firingpower);
 
     }
     public static double getFiringDistance(double targetx , double targety){
         double xdistance = Math.abs(targetx - robottranslationx);
         double ydistance = Math.abs(targety - robottranslationy);
         //pythangroniaun theorum to determine the distance
-        double distance = Math.sqrt((xdistance * xdistance) + (ydistance * ydistance));
-        return (distance);
+        return (Math.sqrt((xdistance * xdistance) + (ydistance * ydistance)));
+    }
+    public static void rotateToTarget(double targetx, double targety){
+        double turnangle = Math.atan2(targety - robottranslationy, targetx - robottranslationx);
     }
 }

@@ -33,31 +33,31 @@ public abstract class PIDCrosby {
     static final double turnintegralConstant = 0;
     static final double turnderivativeConstant = 0.001;
     /**
-     * Makes the robot run
+     *
      * @param timeBetweenLoops Time between opmodeloops
      * @return output x, y, and turn motor power values
      */
     public static double settingMotorPIDPowerX(Double timeBetweenLoops){
 
         xcurrentError = robottargetx-robottranslationx;
-        xtotalError+=xcurrentError;
+        xtotalError += xcurrentError;
 
         xoutputMotorPower = (xproportionalConstant * xcurrentError) + (xintegralConstant * xtotalError) + (xderivativeConstant * (xcurrentError - xlastError)/timeBetweenLoops);
-        xlastError=xcurrentError;
+        xlastError = xcurrentError;
         return xoutputMotorPower;
     }
     public static double settingMotorPIDPowerY(Double timeBetweenLoops){
         ycurrentError = robottargety-robottranslationy;
-        ytotalError+=ycurrentError;
+        ytotalError += ycurrentError;
         youtputMotorPower = (yproportionalConstant * ycurrentError) + (yintegralConstant * ytotalError) + (yderivativeConstant * (ycurrentError - ylastError)/timeBetweenLoops);
-        ylastError=ycurrentError;
+        ylastError = ycurrentError;
         return youtputMotorPower;
     }
-    public static double settingMotorPIDPowerTurn(Double timeBetweenLoops){
+    public static double settingMotorPIDPowerYaw(Double timeBetweenLoops){
         turncurrentError = robottargetyaw-robotyaw;
-        turntotalError+=turncurrentError;
+        turntotalError += turncurrentError;
         turnoutputMotorPower = (turnproportionalConstant * turncurrentError) + (turnintegralConstant * turntotalError) + (turnderivativeConstant * (turncurrentError - turnlastError)/timeBetweenLoops);
-        turnlastError=turncurrentError;
+        turnlastError = turncurrentError;
         return turnoutputMotorPower;
     }
 }
