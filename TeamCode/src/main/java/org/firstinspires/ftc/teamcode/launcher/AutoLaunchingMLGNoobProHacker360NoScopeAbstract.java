@@ -42,12 +42,12 @@ public abstract class AutoLaunchingMLGNoobProHacker360NoScopeAbstract extends Li
 
     public static double  autoLaunch(DcMotorEx Launcher, Servo DrumServo, Servo FiringPinServo, double TargetBallColor, double[] drumBallColors){
         final double firingpowermultiplierconst = 2;
-        double ShootTargetX = 0;
-        double ShootTargetY = 3.5;
+        double ShootTargetX = 3.6576/2.1;
+        double ShootTargetY = 3.6576/2.1;
         if(!TeamColorRED) {
-            ShootTargetX = 3.5;
+            ShootTargetY = -3.6576/2.1;
         } else{
-            ShootTargetX = -3.5;
+            ShootTargetY = 3.6576/2.1;
         }
         double firingpower = (getFiringDistance(ShootTargetX,ShootTargetY) * firingpowermultiplierconst);
 
