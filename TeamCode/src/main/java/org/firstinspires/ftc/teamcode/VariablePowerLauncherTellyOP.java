@@ -17,9 +17,9 @@ public class VariablePowerLauncherTellyOP extends LinearOpMode {
     public void runOpMode() {
 
 
-        DcMotorEx launcherFL = hardwareMap.get(DcMotorEx.class, "FL");
+        DcMotorEx launcherFL = hardwareMap.get(DcMotorEx.class, "launcherFL");
 
-        DcMotorEx launcherFR = hardwareMap.get(DcMotorEx.class, "FR");
+        //DcMotorEx launcherFR = hardwareMap.get(DcMotorEx.class, "FR");
 
         double motortargetspeedradians = 0;
 
@@ -30,8 +30,8 @@ public class VariablePowerLauncherTellyOP extends LinearOpMode {
         //zeros the encoders and sets the run using encoder mode
         launcherFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         launcherFL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        launcherFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        launcherFR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //launcherFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //launcherFR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
         telemetry.addData("Status", "Initialized");
@@ -48,11 +48,11 @@ public class VariablePowerLauncherTellyOP extends LinearOpMode {
 
 
             launcherFL.setVelocity(motortargetspeedradians,AngleUnit.RADIANS);// 32.67 radians per second is the max calculated
-            launcherFR.setVelocity(-motortargetspeedradians,AngleUnit.RADIANS);//6.5 radians pwer second
+            //launcherFR.setVelocity(-motortargetspeedradians,AngleUnit.RADIANS);//6.5 radians pwer second
 
             currentleftmotorvelocity = launcherFL.getVelocity(AngleUnit.RADIANS);
-            currentrightmotorvelocity = launcherFR.getVelocity(AngleUnit.RADIANS);
-            double rawrightmotorvelocity = launcherFR.getVelocity();
+            //currentrightmotorvelocity = launcherFR.getVelocity(AngleUnit.RADIANS);
+            //double rawrightmotorvelocity = launcherFR.getVelocity();
 
 
 
@@ -60,7 +60,7 @@ public class VariablePowerLauncherTellyOP extends LinearOpMode {
             telemetry.addData("Motors' Target Rate of Rotation ", motortargetspeedradians);
             telemetry.addData("Left Motor Actual Rate of Rotation", currentleftmotorvelocity);
             telemetry.addData("Right Motor Actual Rate of Rotation", currentrightmotorvelocity);
-            telemetry.addData("right motor in ticks per second", rawrightmotorvelocity);
+            //telemetry.addData("right motor in ticks per second", rawrightmotorvelocity);
             telemetry.addData("Left Motor difference in Rate of Rotation", motortargetspeedradians-currentleftmotorvelocity);
             telemetry.addData("Right Motor difference in Rate of Rotation", motortargetspeedradians+currentrightmotorvelocity);
             //telemetry.addData("Left Motor Speed at Wheel Surface meters per second",currentleftmotorvelocity*launcherwheelradiusm);

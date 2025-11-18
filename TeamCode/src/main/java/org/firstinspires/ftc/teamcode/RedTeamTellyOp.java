@@ -18,13 +18,18 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.teamcode.positioning.odometry.FieldOrientedDriving;
-import org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby;
 
 import java.util.List;
 
-@TeleOp(name="autholoaunchermode")
+import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.TeamColorRED;
 
-public class AutoLaunchingMLGNoobProHacker360NoScopeOPModeCrosby extends LinearOpMode {
+import java.util.List;
+
+@TeleOp(name="RedTellyOP")
+
+public class RedTeamTellyOp extends LinearOpMode {
+
+
     ElapsedTime timer = new ElapsedTime();
     private Servo DrumServo;
     private Servo FiringPinServo;
@@ -39,6 +44,7 @@ public class AutoLaunchingMLGNoobProHacker360NoScopeOPModeCrosby extends LinearO
 
     @Override
     public void runOpMode() {
+        TeamColorRED = true;
         double lasttime = timer.milliseconds();
 
         double[] drumBallColors = {0, 0, 0};
@@ -56,6 +62,9 @@ public class AutoLaunchingMLGNoobProHacker360NoScopeOPModeCrosby extends LinearO
         limelight.start();
 
         odomhub = hardwareMap.get(GoBildaPinpointDriver.class,"odomhub");
+
+        DrumServo = hardwareMap.get(Servo.class, "DrumServo");
+        FiringPinServo = hardwareMap.get(Servo.class, "FiringPinServo");
 
         
 
@@ -89,7 +98,9 @@ public class AutoLaunchingMLGNoobProHacker360NoScopeOPModeCrosby extends LinearO
         odomhub.resetPosAndIMU();   // resets encoders and IMU
 
         FiringPinServo.setPosition(0);
-        
+        DrumServo.setPosition(.27);
+
+        Scooper.setVelocity(-999,AngleUnit.RADIANS);
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -99,31 +110,35 @@ public class AutoLaunchingMLGNoobProHacker360NoScopeOPModeCrosby extends LinearO
         while (opModeIsActive()) {
             double leftstickinputy = gamepad1.left_stick_y; // Forward/backward negative because it's naturally inverted
             double leftstickinputx = gamepad1.left_stick_x; // side to side
-            double targetturn  = gamepad1.right_stick_x/2; // Turning
+            double targetturn  = gamepad1.right_stick_x; // Turning
+            double leftstickinputy2 = gamepad2.left_stick_y/6; // Forward/backward negative because it's naturally inverted
+            double leftstickinputx2 = gamepad2.left_stick_x/6; // side to side
+            double targetturn2  = gamepad2.right_stick_x/4; // Turning
 
             double [] currentrobotlocation = getRobotCoordinates();
 
-            /* Hopefully deprecated
+            /*// Hopefully deprecated
             //increments the target speed with up and right while decrementing it with left and down
-            motortargetspeedradians += gamepad1.dpadUpWasPressed() ? 1 : 0;
-            motortargetspeedradians -= gamepad1.dpadDownWasPressed() ? 1 : 0;
-            motortargetspeedradians += gamepad1.dpadRightWasPressed() ? .1 : 0;
-            motortargetspeedradians -= gamepad1.dpadLeftWasPressed() ? .1 : 0;*/
+            motortargetspeedradians += gamepad2.dpadUpWasPressed() ? 1 : 0;
+            motortargetspeedradians -= gamepad2.dpadDownWasPressed() ? 1 : 0;
+            motortargetspeedradians += gamepad2.dpadRightWasPressed() ? .1 : 0;
+            motortargetspeedradians -= gamepad2.dpadLeftWasPressed() ? .1 : 0;*/
 
             double currentrelativeheading = odomhub.getHeading(AngleUnit.RADIANS);
 
 
             //Calls FieldOrientedDriving function and sets motor power
-            double[] motorpowerarray = FieldOrientedDriving.fieldOrientedMath(leftstickinputy, leftstickinputx, targetturn, currentrelativeheading);
+            double[] motorpowerarray = FieldOrientedDriving.fieldOrientedMath(leftstickinputy, -leftstickinputx, targetturn, currentrelativeheading);
+            double[] smallmotorpowerarray = FieldOrientedDriving.fieldOrientedMath(leftstickinputy2, -leftstickinputx2, targetturn2, currentrelativeheading);
 
-            double BRmotorpower = motorpowerarray[0];
-            double BLmotorpower = motorpowerarray[1];
-            double FRmotorpower = motorpowerarray[2];
-            double FLmotorpower = motorpowerarray[3];
+            double BRmotorpower = motorpowerarray[0] + smallmotorpowerarray[0];
+            double BLmotorpower = motorpowerarray[1] + smallmotorpowerarray[1];
+            double FRmotorpower = motorpowerarray[2] + smallmotorpowerarray[2];
+            double FLmotorpower = motorpowerarray[3] + smallmotorpowerarray[3];
             // 0 is empty, 1 is green ball, 2 is purple ball
 
             //Limelight stuff
-            if (gamepad1.right_trigger >= 0.1){
+            if (gamepad2.right_trigger >= 0.1){
                 LLResult result = limelight.getLatestResult();
 
                 if (result != null && result.isValid()){ // checks if there is a target and if the target is an actual target
@@ -151,7 +166,7 @@ public class AutoLaunchingMLGNoobProHacker360NoScopeOPModeCrosby extends LinearO
             motortargetspeedradians = autoLaunch(LauncherFL,DrumServo,FiringPinServo,1, drumBallColors);
 
             // sets the velocity of the motors
-            LauncherFL.setVelocity(motortargetspeedradians);
+            LauncherFL.setVelocity(motortargetspeedradians,AngleUnit.RADIANS);
 
             currentleftmotorvelocity = LauncherFL.getVelocity(AngleUnit.RADIANS);
             //currentrightmotorvelocity = LauncherFR.getVelocity(AngleUnit.RADIANS);
@@ -180,14 +195,17 @@ public class AutoLaunchingMLGNoobProHacker360NoScopeOPModeCrosby extends LinearO
                 targetfiringpinangle = 1;
                 firing = false;
             }*/
-            if (gamepad1.a) {
+            if (gamepad2.a) {
                 targetfiringpinangle = 1;
             } else {
                 targetfiringpinangle = 0;// these values are all placeholders
-                targetdrumangle = gamepad1.x ? .2 :
-                                  gamepad1.y ? .5 :
-                                  gamepad1.b ? .8 :
-                                  0;
+                targetdrumangle = gamepad2.x ? .1 ://Firing angles
+                                gamepad2.y ? .42 :
+                                gamepad2.b ? .76 :
+                                gamepad1.x ? .27 ://loading angles
+                                gamepad1.y ? .6 :
+                                gamepad1.b ? .92 :
+                                targetdrumangle;
             }
             DrumServo.setPosition(targetdrumangle);
             FiringPinServo.setPosition(targetfiringpinangle);

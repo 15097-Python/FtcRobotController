@@ -57,7 +57,7 @@ public class SCooperTest extends LinearOpMode {
 
             double currentrelativeheading = odomhub.getHeading(AngleUnit.RADIANS);
             //Calls FieldOrientedDriving function and sets motor power
-            double motorpowerarray[] = FieldOrientedDriving.fieldOrientedMath(leftstickinputy, leftstickinputx, targetturn, currentrelativeheading);
+            double[] motorpowerarray = FieldOrientedDriving.fieldOrientedMath(leftstickinputy, leftstickinputx, targetturn, currentrelativeheading);
 
 
             double BRmotorpower = motorpowerarray[0];
@@ -74,9 +74,9 @@ public class SCooperTest extends LinearOpMode {
             FL.setPower(FLmotorpower);
 
             if (gamepad1.left_bumper) Scooper.setVelocity(999,AngleUnit.RADIANS);
-            if (gamepad1.right_bumper) Scooper.setVelocity(999,AngleUnit.RADIANS);
+            if (gamepad1.right_bumper) Scooper.setVelocity(-999,AngleUnit.RADIANS);
 
-            telemetry.addData(  "Status", "Running");
+            telemetry.addData("Status", "Running");
             telemetry.addData("rotation perceived",currentrelativeheading);
             telemetry.update();
         }

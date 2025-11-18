@@ -40,7 +40,7 @@ public abstract class AutoLaunchingMLGNoobProHacker360NoScopeAbstract extends Li
      */
 
 
-    public static double  autoLaunch( DcMotorEx Launcher, Servo DrumServo, Servo FiringPinServo, double TargetBallColor, double[] drumBallColors){
+    public static double  autoLaunch(DcMotorEx Launcher, Servo DrumServo, Servo FiringPinServo, double TargetBallColor, double[] drumBallColors){
         final double firingpowermultiplierconst = 2;
         double ShootTargetX = 0;
         double ShootTargetY = 3.5;

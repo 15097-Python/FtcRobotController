@@ -4,6 +4,7 @@ repositories {
     maven { url 'https://frcmaven.wpi.edu/artifactory/release' }
     maven { url = 'https://maven.brott.dev/' }
 
+
 }
 
 dependencies {
