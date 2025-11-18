@@ -150,6 +150,8 @@ public class BlueTeamTellyOP extends LinearOpMode {
                             if (robotpose != null) {
                                 double x = robotpose.getPosition().x;
                                 double y = robotpose.getPosition().y;
+                                telemetry.addData("robotx", x);
+                                telemetry.addData("roboty", y);
 
                                 modifyRobotCoordinates(x,y,currentrobotlocation[2],currentrobotlocation[3],currentrobotlocation[4],currentrobotlocation[5]);
                                 break;
@@ -230,6 +232,8 @@ public class BlueTeamTellyOP extends LinearOpMode {
             telemetry.addData("drim target servoangle", targetdrumangle);
             telemetry.addData("firingpin target servoangle", targetfiringpinangle);
             telemetry.addData("rotation perceived",currentrelativeheading);
+            telemetry.addData("robotx", currentrobotlocation[0] );
+            telemetry.addData("roboty", currentrobotlocation[1]);
             telemetry.update();
         }
     }

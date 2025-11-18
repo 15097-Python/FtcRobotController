@@ -15,6 +15,8 @@ import org.firstinspires.ftc.teamcode.Util.AllianceEnumerations;
 
 
 public abstract class AutoLaunchingMLGNoobProHacker360NoScopeAbstract extends LinearOpMode {
+
+    public static double firingpowermultiplierconst = 3;
     public static void initializeLauncher(DcMotorEx LauncherFL,DcMotorEx LauncherFR) {
 
 
@@ -41,13 +43,12 @@ public abstract class AutoLaunchingMLGNoobProHacker360NoScopeAbstract extends Li
 
 
     public static double  autoLaunch(DcMotorEx Launcher, Servo DrumServo, Servo FiringPinServo, double TargetBallColor, double[] drumBallColors){
-        final double firingpowermultiplierconst = 2;
-        double ShootTargetX = 0;
-        double ShootTargetY = 3.5;
-        if(!TeamColorRED) {
-            ShootTargetX = 3.5;
+        double ShootTargetY;
+        double ShootTargetX = -3.6576/2.1;
+        if( !TeamColorRED) {
+            ShootTargetY = -3.6576/2.1;
         } else{
-            ShootTargetX = -3.5;
+            ShootTargetY = 3.6576/2.1;
         }
         double firingpower = (getFiringDistance(ShootTargetX,ShootTargetY) * firingpowermultiplierconst);
 
@@ -73,7 +74,7 @@ public abstract class AutoLaunchingMLGNoobProHacker360NoScopeAbstract extends Li
 
 
 
-        return(firingpower);
+        return(firingpower+4);
 
     }
     public static double getFiringDistance(double targetx , double targety){
