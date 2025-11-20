@@ -1,10 +1,10 @@
 package org.firstinspires.ftc.teamcode.launcher;
+
 import static org.firstinspires.ftc.teamcode.NonOpModes.PID.PIDCrosby.settingMotorPIDPowerYaw;
 import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.TeamColorRED;
 import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.robottranslationx;
 import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.robottranslationy;
 import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.robotyaw;
-
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
-public abstract class AutoLaunchingMLGNoobProHacker360NoScopeAbstract extends LinearOpMode {
+public abstract class AutoLaunchingMLGNoobProHacker360NoScopeAbstractCrosby extends LinearOpMode {
     static ElapsedTime timer = new ElapsedTime();
 
     public static double firingpowermultiplierconst = 3;
@@ -73,8 +73,7 @@ public abstract class AutoLaunchingMLGNoobProHacker360NoScopeAbstract extends Li
 
 
 
-
-        return(firingpower+4);
+        return 0;
 
 
 
