@@ -56,6 +56,8 @@ public class RedTeamTellyOp extends LinearOpMode {
         double currentleftmotorvelocity = 0;
         double currentrightmotorvelocity = 0;
 
+        double firingpinnullposition = .98;
+
         Limelight3A limelight = hardwareMap.get(Limelight3A.class, "limelight");// INitilizes the limelights
         limelight.setPollRateHz(100);
         limelight.pipelineSwitch(0);
@@ -76,7 +78,8 @@ public class RedTeamTellyOp extends LinearOpMode {
         FR.setDirection(DcMotor.Direction.FORWARD); //should generally do whenever motors
         BR.setDirection(DcMotor.Direction.FORWARD);
 
-        //DcMotorEx LauncherFR = hardwareMap.get(DcMotorEx.class, "LauncherFR");
+        LauncherFL = hardwareMap.get(DcMotorEx.class, "LauncherFL");
+        Scooper = hardwareMap.get(DcMotorEx.class, "Scooper");
 
 
         limelight.setPollRateHz(100);
@@ -93,7 +96,7 @@ public class RedTeamTellyOp extends LinearOpMode {
         odomhub.initialize();
         odomhub.resetPosAndIMU();   // resets encoders and IMU
 
-        FiringPinServo.setPosition(0);
+        FiringPinServo.setPosition(firingpinnullposition);
         DrumServo.setPosition(.27);
 
         Scooper.setVelocity(-999, AngleUnit.RADIANS);
@@ -104,7 +107,7 @@ public class RedTeamTellyOp extends LinearOpMode {
         waitForStart();
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-            gamepad2.rumble(50);   // vibrate for 50 ms
+            gamepad2.rumble(1,1,50);   // vibrate for 50 ms
             double leftstickinputy = gamepad1.left_stick_y; // Forward/backward negative because it's naturally inverted
             double leftstickinputx = gamepad1.left_stick_x; // side to side
             double targetturn = gamepad1.right_stick_x; // Turning
@@ -198,16 +201,16 @@ public class RedTeamTellyOp extends LinearOpMode {
                 firing = false;
             }*/
                 if (gamepad2.a) {
-                    targetfiringpinangle = 0;
+                    targetfiringpinangle = firingpinnullposition - .32  ;
                 } else {
-                    targetfiringpinangle = 1;
+                    targetfiringpinangle = firingpinnullposition;
                     targetdrumangle = gamepad2.x ? .1 ://Firing angles
-                            gamepad2.y ? .42 :
+                                    gamepad2.y ? .42 :
                                     gamepad2.b ? .76 :
-                                            gamepad1.x ? .27 ://loading angles
-                                                    gamepad1.y ? .6 :
-                                                            gamepad1.b ? .92 :
-                                                                    targetdrumangle;
+                                    gamepad1.x ? .27 ://loading angles
+                                    gamepad1.y ? .6 :
+                                    gamepad1.b ? .92 :
+                                        targetdrumangle;
                 }
                 if (gamepad1.dpad_down) odomhub.resetPosAndIMU();   // resets encoders and IMU
 

@@ -51,9 +51,7 @@ public abstract class AutoLaunchingMLGNoobProHacker360NoScopeAbstract extends Li
             ShootTargetY = 3.6576/2.1;
         }
         double firingpower = (getFiringDistance(ShootTargetX,ShootTargetY) * firingpowermultiplierconst);
-
-
-
+        
         double[] drumLocations = {0.2, 0.5, 0.8};// should probably make the drumb slots into objects
         int i = 0;
         for (double drumSlot: drumBallColors) {//slot finding loop

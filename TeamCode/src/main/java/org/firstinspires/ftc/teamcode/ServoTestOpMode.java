@@ -14,6 +14,7 @@ public class ServoTestOpMode extends LinearOpMode {
     private Servo FiringPinServo;
 
     public static double servoOffSet = 0;
+    public static double firingpinmax = 0.95;
 
 
     @Override
@@ -32,9 +33,9 @@ public class ServoTestOpMode extends LinearOpMode {
         while (opModeIsActive()) {
             // sets the three angles
             if (gamepad2.a) {
-                targetfiringpinangle = 1;
+                targetfiringpinangle = firingpinmax;
             } else {
-                targetfiringpinangle = 0;// these values are all placeholders
+                targetfiringpinangle = .98;// these values are all placeholders
                 targetdrumangle = gamepad2.x ? servoOffSet+.09 ://Firing angles
                                   gamepad2.y ? servoOffSet+.42 :
                                   gamepad2.b ? servoOffSet+.76 :

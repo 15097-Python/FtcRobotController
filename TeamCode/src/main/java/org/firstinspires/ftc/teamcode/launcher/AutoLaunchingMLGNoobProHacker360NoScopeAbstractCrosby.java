@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.launcher;
 
 import static org.firstinspires.ftc.teamcode.NonOpModes.PID.PIDCrosby.settingMotorPIDPowerYaw;
 import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.TeamColorRED;
+import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.getRobotCoordinates;
+import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.modifyRobotCoordinates;
 import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.robottranslationx;
 import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.robottranslationy;
 import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.robotyaw;
@@ -85,8 +87,11 @@ public abstract class AutoLaunchingMLGNoobProHacker360NoScopeAbstractCrosby exte
         return (Math.sqrt((xdistance * xdistance) + (ydistance * ydistance)));
     }
     public static double rotateToTarget(double targetx, double targety){
+        double[] robotpos = getRobotCoordinates();
+
         double turnangle = Math.atan2(targety - robottranslationy, targetx - robottranslationx);
-        while (turnangle!=robotyaw){
+        modifyRobotCoordinates(robotpos[0],robotpos[1],robotpos[2],robotpos[3],robotpos[4],turnangle);
+        if (turnangle!=robotyaw){
             double stopwatchtimer = timer.milliseconds();
             double turnoutputMotorPower = settingMotorPIDPowerYaw(stopwatchtimer);
             return(turnoutputMotorPower);
