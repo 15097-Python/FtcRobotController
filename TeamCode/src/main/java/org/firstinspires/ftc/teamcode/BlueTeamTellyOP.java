@@ -46,7 +46,7 @@ public class BlueTeamTellyOP extends LinearOpMode {
 
         double[] drumBallColors = {0, 0, 0};
         double targetdrumangle = 0;
-        double targetfiringpinangle = 0;
+        double targetfiringpinangle = 1;
         boolean firing = false;
 
         double motortargetspeedradians = 0;
@@ -105,6 +105,7 @@ public class BlueTeamTellyOP extends LinearOpMode {
         waitForStart();
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
+            gamepad2.rumble(50);   // vibrate for 50 ms
             double leftstickinputy = gamepad1.left_stick_y; // Forward/backward negative because it's naturally inverted
             double leftstickinputx = gamepad1.left_stick_x; // side to side
             double targetturn  = gamepad1.right_stick_x; // Turning
@@ -154,6 +155,7 @@ public class BlueTeamTellyOP extends LinearOpMode {
                                 telemetry.addData("roboty", y);
 
                                 modifyRobotCoordinates(x,y,currentrobotlocation[2],currentrobotlocation[3],currentrobotlocation[4],currentrobotlocation[5]);
+
                                 break;
                             }
                         }
@@ -163,7 +165,9 @@ public class BlueTeamTellyOP extends LinearOpMode {
             }
 
             motortargetspeedradians = autoLaunch(LauncherFL,DrumServo,FiringPinServo,1, drumBallColors);
-
+            if (gamepad2.left_trigger >= 0.1) {
+                motortargetspeedradians = 0;
+            }
             // sets the velocity of the motors
             LauncherFL.setVelocity(motortargetspeedradians,AngleUnit.RADIANS);
 
@@ -195,9 +199,9 @@ public class BlueTeamTellyOP extends LinearOpMode {
                 firing = false;
             }*/
             if (gamepad2.a) {
-                targetfiringpinangle = 1;
+                targetfiringpinangle = 0;
             } else {
-                targetfiringpinangle = 0;// these values are all placeholders
+                targetfiringpinangle = 1;// these values are all placeholders
                 targetdrumangle = gamepad2.x ? .1 ://Firing angles
                                 gamepad2.y ? .42 :
                                 gamepad2.b ? .76 :
@@ -206,6 +210,8 @@ public class BlueTeamTellyOP extends LinearOpMode {
                                 gamepad1.b ? .92 :
                                 targetdrumangle;
             }
+
+            if (gamepad1.dpad_down) odomhub.resetPosAndIMU();   // resets encoders and IMU
             DrumServo.setPosition(targetdrumangle);
             FiringPinServo.setPosition(targetfiringpinangle);
 
@@ -216,7 +222,8 @@ public class BlueTeamTellyOP extends LinearOpMode {
             FL.setPower(FLmotorpower);
 
             if (gamepad1.left_bumper) Scooper.setVelocity(999,AngleUnit.RADIANS);
-            if (gamepad1.right_bumper) Scooper.setVelocity(-999,AngleUnit.RADIANS);
+            else if (gamepad1.right_bumper) Scooper.setVelocity(-999,AngleUnit.RADIANS);
+            else Scooper.setVelocity(0,AngleUnit.RADIANS);
 
             odomhub.update();
 
