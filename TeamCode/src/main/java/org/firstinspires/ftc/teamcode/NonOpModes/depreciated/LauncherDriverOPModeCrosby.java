@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.NonOpModes.depreciated;
 
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -9,7 +9,6 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.positioning.odometry.FieldOrientedDriving;
-import org.firstinspires.ftc.teamcode.launcher.VariablePowerLauncherAbstract;
 
 @TeleOp(name="LauncherDriverOPModeCrosby")
 

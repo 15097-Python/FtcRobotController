@@ -1,12 +1,12 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.NonOpModes.depreciated;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-@Autonomous(name="WaitandShortMove")
+@Autonomous(name="BackMove")
 
-public class WaitandShortmoveAuto extends LinearOpMode {
+public class BackwardsMoveAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() {
@@ -28,14 +28,12 @@ public class WaitandShortmoveAuto extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-            sleep(20000);
 
-
-            FL.setPower(-1); //tells the motors how fast to go
-            BL.setPower(1);
-            FR.setPower(1);
-            BR.setPower(-1);
-            sleep(250);
+            FL.setPower(1); //tells the motors how fast to go
+            BL.setPower(-1);
+            FR.setPower(-1);
+            BR.setPower(1);
+            sleep(500);
             FL.setPower(0); //tells the motors how fast to go
             BL.setPower(0);
             FR.setPower(0);

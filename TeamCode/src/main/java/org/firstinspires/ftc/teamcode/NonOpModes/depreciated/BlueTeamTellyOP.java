@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.NonOpModes.depreciated;
 
 import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.getRobotCoordinates;
 import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.modifyRobotCoordinates;
@@ -22,8 +22,6 @@ import org.firstinspires.ftc.teamcode.positioning.odometry.FieldOrientedDriving;
 import java.util.List;
 
 import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.TeamColorRED;
-
-import java.util.List;
 
 @TeleOp(name="BlueTellyOp")
 

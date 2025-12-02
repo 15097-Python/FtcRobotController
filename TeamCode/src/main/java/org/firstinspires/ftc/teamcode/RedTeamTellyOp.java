@@ -23,8 +23,6 @@ import java.util.List;
 
 import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.TeamColorRED;
 
-import java.util.List;
-
 @TeleOp(name="RedTellyOP")
 
 public class RedTeamTellyOp extends LinearOpMode {
