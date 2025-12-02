@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.TeamColorRED;
 import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.getRobotCoordinates;
 import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.modifyRobotCoordinates;
 import static org.firstinspires.ftc.teamcode.launcher.AutoLaunchingMLGNoobProHacker360NoScopeAbstract.autoLaunch;
@@ -22,7 +21,11 @@ import org.firstinspires.ftc.teamcode.positioning.odometry.FieldOrientedDriving;
 
 import java.util.List;
 
-@TeleOp(name="BlueTellyOP")
+import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.TeamColorRED;
+
+import java.util.List;
+
+@TeleOp(name="BlueTellyOp")
 
 public class BlueTeamTellyOP extends LinearOpMode {
 
@@ -53,17 +56,18 @@ public class BlueTeamTellyOP extends LinearOpMode {
         double currentleftmotorvelocity = 0;
         double currentrightmotorvelocity = 0;
 
+        double firingpinnullposition = .98;
+
         Limelight3A limelight = hardwareMap.get(Limelight3A.class, "limelight");// INitilizes the limelights
         limelight.setPollRateHz(100);
         limelight.pipelineSwitch(0);
         limelight.start();
 
-        odomhub = hardwareMap.get(GoBildaPinpointDriver.class,"odomhub");
+        odomhub = hardwareMap.get(GoBildaPinpointDriver.class, "odomhub");
 
         DrumServo = hardwareMap.get(Servo.class, "DrumServo");
         FiringPinServo = hardwareMap.get(Servo.class, "FiringPinServo");
 
-        
 
         BR = hardwareMap.get(DcMotor.class, "BR");
         BL = hardwareMap.get(DcMotor.class, "BL");
@@ -75,10 +79,8 @@ public class BlueTeamTellyOP extends LinearOpMode {
         BR.setDirection(DcMotor.Direction.FORWARD);
 
         LauncherFL = hardwareMap.get(DcMotorEx.class, "LauncherFL");
-        Scooper = hardwareMap.get(DcMotorEx.class,"Scooper");
+        Scooper = hardwareMap.get(DcMotorEx.class, "Scooper");
 
-        //DcMotorEx LauncherFR = hardwareMap.get(DcMotorEx.class, "LauncherFR");
-        
 
         limelight.setPollRateHz(100);
         limelight.pipelineSwitch(0);
@@ -94,10 +96,8 @@ public class BlueTeamTellyOP extends LinearOpMode {
         odomhub.initialize();
         odomhub.resetPosAndIMU();   // resets encoders and IMU
 
-        FiringPinServo.setPosition(0);
-        DrumServo.setPosition(.27);
 
-        Scooper.setVelocity(-999,AngleUnit.RADIANS);
+
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -105,15 +105,15 @@ public class BlueTeamTellyOP extends LinearOpMode {
         waitForStart();
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-            gamepad2.rumble(50);   // vibrate for 50 ms
+
             double leftstickinputy = gamepad1.left_stick_y; // Forward/backward negative because it's naturally inverted
             double leftstickinputx = gamepad1.left_stick_x; // side to side
-            double targetturn  = gamepad1.right_stick_x; // Turning
-            double leftstickinputy2 = gamepad2.left_stick_y/6; // Forward/backward negative because it's naturally inverted
-            double leftstickinputx2 = gamepad2.left_stick_x/6; // side to side
-            double targetturn2  = gamepad2.right_stick_x/4; // Turning
+            double targetturn = gamepad1.right_stick_x; // Turning
+            double leftstickinputy2 = gamepad2.left_stick_y / 6; // Forward/backward negative because it's naturally inverted
+            double leftstickinputx2 = gamepad2.left_stick_x / 6; // side to side
+            double targetturn2 = gamepad2.right_stick_x / 4; // Turning
 
-            double [] currentrobotlocation = getRobotCoordinates();
+            double[] currentrobotlocation = getRobotCoordinates();
 
             /*// Hopefully deprecated
             //increments the target speed with up and right while decrementing it with left and down
@@ -135,26 +135,27 @@ public class BlueTeamTellyOP extends LinearOpMode {
             double FLmotorpower = motorpowerarray[3] + smallmotorpowerarray[3];
             // 0 is empty, 1 is green ball, 2 is purple ball
 
-            //Limelight stuff
-            if (gamepad2.right_trigger >= 0.1){
+            //limelight
+            if (gamepad2.right_trigger >= 0.3) {
+                //telemetry.addLine("righttriggerpressed");
                 LLResult result = limelight.getLatestResult();
 
-                if (result != null && result.isValid()){ // checks if there is a target and if the target is an actual target
+                if (result != null && result.isValid()) { // checks if there is a target and if the target is an actual target
 
                     List<LLResultTypes.FiducialResult> tags = result.getFiducialResults(); //get fiducial results basically just tells how many april tags it sees
                     //List<LLResultTypes.FiducialResult>: so it makes a list at the size of the # of tags detected and has info on the id and position of the tag
 
                     for (LLResultTypes.FiducialResult tag : tags) {
                         int id = tag.getFiducialId();
-                        if (id == 20 || id == 24){
+                        if (id == 20 || id == 24) {
                             Pose3D robotpose = tag.getRobotPoseFieldSpace();
                             if (robotpose != null) {
                                 double x = robotpose.getPosition().x;
                                 double y = robotpose.getPosition().y;
                                 telemetry.addData("robotx", x);
                                 telemetry.addData("roboty", y);
-
-                                modifyRobotCoordinates(x,y,currentrobotlocation[2],currentrobotlocation[3],currentrobotlocation[4],currentrobotlocation[5]);
+                                gamepad2.rumble(1,1,50);   // vibrate for 50 ms
+                                modifyRobotCoordinates(x, y, currentrobotlocation[2], currentrobotlocation[3], currentrobotlocation[4], currentrobotlocation[5]);
 
                                 break;
                             }
@@ -164,12 +165,12 @@ public class BlueTeamTellyOP extends LinearOpMode {
 
             }
 
-            motortargetspeedradians = autoLaunch(LauncherFL,DrumServo,FiringPinServo,1, drumBallColors);
-            if (gamepad2.left_trigger >= 0.1) {
+            motortargetspeedradians = autoLaunch(LauncherFL, DrumServo, FiringPinServo, 1, drumBallColors);
+            if (gamepad2.left_trigger >= 0.3) {
                 motortargetspeedradians = 0;
             }
             // sets the velocity of the motors
-            LauncherFL.setVelocity(motortargetspeedradians,AngleUnit.RADIANS);
+            LauncherFL.setVelocity(motortargetspeedradians, AngleUnit.RADIANS);
 
             currentleftmotorvelocity = LauncherFL.getVelocity(AngleUnit.RADIANS);
             //currentrightmotorvelocity = LauncherFR.getVelocity(AngleUnit.RADIANS);
@@ -177,7 +178,7 @@ public class BlueTeamTellyOP extends LinearOpMode {
 
 
 
-            
+
 
             /*if (!firing){// This code is for when we get the voltages for now the drivers
                 targetfiringpinangle = 0; have to be carefull
@@ -191,7 +192,7 @@ public class BlueTeamTellyOP extends LinearOpMode {
             if (FiringPinServo.getPosition() >= -0.01 && FiringPinServo.getPosition() <= 0.01){
                 DrumServo.setPosition(targetdrumangle);
                 firing = true;
-            } 
+            }
             //ensures the drumbservo is at its spot before moving the firing pin servo
             // this likely doesn't actually work to prevent errors and we need to use the voltage retuned from the servo
             if (DrumServo.getPosition() >= (targetdrumangle - .01) && DrumServo.getPosition() <= (targetdrumangle + .01)){
@@ -199,19 +200,32 @@ public class BlueTeamTellyOP extends LinearOpMode {
                 firing = false;
             }*/
             if (gamepad2.a) {
-                targetfiringpinangle = 0;
+                targetfiringpinangle = firingpinnullposition - .32  ;
             } else {
-                targetfiringpinangle = 1;// these values are all placeholders
+                targetfiringpinangle = firingpinnullposition;
                 targetdrumangle = gamepad2.x ? .1 ://Firing angles
-                                gamepad2.y ? .42 :
-                                gamepad2.b ? .76 :
-                                gamepad1.x ? .27 ://loading angles
-                                gamepad1.y ? .6 :
-                                gamepad1.b ? .92 :
-                                targetdrumangle;
+                gamepad2.y ? .42 :
+                gamepad2.b ? .76 :
+                gamepad1.x ? .27 ://loading angles
+                gamepad1.y ? .6 :
+                gamepad1.b ? .92 :
+                targetdrumangle;
             }
+            double[] firingpositions = {.1,.42,.76};
+            if (gamepad2.dpad_up){//use timesrs use cancle when not held
+                for (double drumlocation : firingpositions){
+                    DrumServo.setPosition(drumlocation);
+                    sleep(500);
+                    FiringPinServo.setPosition(.98 - .32);
+                    sleep(200);
+                    FiringPinServo.setPosition(.98);
+                    sleep(200);
 
+
+                }
+            }
             if (gamepad1.dpad_down) odomhub.resetPosAndIMU();   // resets encoders and IMU
+
             DrumServo.setPosition(targetdrumangle);
             FiringPinServo.setPosition(targetfiringpinangle);
 
@@ -221,9 +235,9 @@ public class BlueTeamTellyOP extends LinearOpMode {
             FR.setPower(FRmotorpower);
             FL.setPower(FLmotorpower);
 
-            if (gamepad1.left_bumper) Scooper.setVelocity(999,AngleUnit.RADIANS);
-            else if (gamepad1.right_bumper) Scooper.setVelocity(-999,AngleUnit.RADIANS);
-            else Scooper.setVelocity(0,AngleUnit.RADIANS);
+            if (gamepad1.left_bumper) Scooper.setVelocity(999, AngleUnit.RADIANS);
+            else if (gamepad1.right_bumper) Scooper.setVelocity(-999, AngleUnit.RADIANS);
+            else Scooper.setVelocity(0, AngleUnit.RADIANS);
 
             odomhub.update();
 
@@ -232,16 +246,17 @@ public class BlueTeamTellyOP extends LinearOpMode {
             telemetry.addData("Left Motor Actual Rate of Rotation", currentleftmotorvelocity);
             //telemetry.addData("Right Motor Actual Rate of Rotation", currentrightmotorvelocity);
             //telemetry.addData("rightmotorraw", rawrightmotorvelocity);
-            telemetry.addData("Left Motor difference in Rate of Rotation", motortargetspeedradians-currentleftmotorvelocity);
+            telemetry.addData("Left Motor difference in Rate of Rotation", motortargetspeedradians - currentleftmotorvelocity);
             //telemetry.addData("Right Motor difference in Rate of Rotation", motortargetspeedradians+currentrightmotorvelocity);
             //telemetry.addData("Left Motor Speed at Wheel Surface meters per second",currentleftmotorvelocity*launcherwheelradiusm);
             //telemetry.addData("Right Motor Speed at Wheel Surface meters per second",currentrightmotorvelocity*launcherwheelradiusm);
             telemetry.addData("drim target servoangle", targetdrumangle);
             telemetry.addData("firingpin target servoangle", targetfiringpinangle);
-            telemetry.addData("rotation perceived",currentrelativeheading);
-            telemetry.addData("robotx", currentrobotlocation[0] );
+            telemetry.addData("rotation perceived", currentrelativeheading);
+            telemetry.addData("robotx", currentrobotlocation[0]);
             telemetry.addData("roboty", currentrobotlocation[1]);
             telemetry.update();
         }
     }
 }
+

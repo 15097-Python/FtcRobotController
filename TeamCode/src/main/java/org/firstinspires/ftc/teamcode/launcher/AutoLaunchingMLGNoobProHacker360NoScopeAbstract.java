@@ -52,7 +52,7 @@ public abstract class AutoLaunchingMLGNoobProHacker360NoScopeAbstract extends Li
         }
         double firingpower = (getFiringDistance(ShootTargetX,ShootTargetY) * firingpowermultiplierconst);
         
-        double[] drumLocations = {0.2, 0.5, 0.8};// should probably make the drumb slots into objects
+        /*double[] drumLocations = {0.2, 0.5, 0.8};// should probably make the drumb slots into objects
         int i = 0;
         for (double drumSlot: drumBallColors) {//slot finding loop
             if (drumSlot == TargetBallColor) {
@@ -63,16 +63,11 @@ public abstract class AutoLaunchingMLGNoobProHacker360NoScopeAbstract extends Li
                 return(0);
             }
             i++;
-        }
+        }*/
 
 
-
-
-
-
-
-
-        return(firingpower+4);
+        if (firingpower < 6) firingpower += 0.15;
+        return(firingpower + 3.25);
 
 
 
@@ -80,6 +75,7 @@ public abstract class AutoLaunchingMLGNoobProHacker360NoScopeAbstract extends Li
     public static double getFiringDistance(double targetx , double targety){
         double xdistance = Math.abs(targetx - robottranslationx);
         double ydistance = Math.abs(targety - robottranslationy);
+
         //pythangroniaun theorum to determine the distance
         return (Math.sqrt((xdistance * xdistance) + (ydistance * ydistance)));
     }

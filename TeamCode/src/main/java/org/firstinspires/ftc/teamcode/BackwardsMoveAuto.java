@@ -2,15 +2,15 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-@Autonomous(name="moveforward")
+@Autonomous(name="BackMove")
 
-public class MoveFOrwardOpmode extends LinearOpMode {
+public class BackwardsMoveAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+
         DcMotor FL = hardwareMap.get(DcMotor.class, "FL"); // local hardware mapping
         DcMotor FR = hardwareMap.get(DcMotor.class, "FR");
         DcMotor BL = hardwareMap.get(DcMotor.class, "BL");
@@ -30,10 +30,14 @@ public class MoveFOrwardOpmode extends LinearOpMode {
 
 
             FL.setPower(1); //tells the motors how fast to go
-            BL.setPower(1);
-            FR.setPower(1);
+            BL.setPower(-1);
+            FR.setPower(-1);
             BR.setPower(1);
             sleep(500);
+            FL.setPower(0); //tells the motors how fast to go
+            BL.setPower(0);
+            FR.setPower(0);
+            BR.setPower(0);
             break;
 
 

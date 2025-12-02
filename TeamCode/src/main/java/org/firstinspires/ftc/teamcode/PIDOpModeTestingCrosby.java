@@ -47,7 +47,8 @@ public class PIDOpModeTestingCrosby extends LinearOpMode {
         waitForStart();
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-            timeBetweenLoops = timer.seconds();  // seconds since last reset
+
+            timeBetweenLoops = timer.milliseconds();  // miliseconds since last reset
             timer.reset();
             double targetdrivey = PIDCrosby.settingMotorPIDPowerX(timeBetweenLoops);
             double targetdrivex = PIDCrosby.settingMotorPIDPowerY(timeBetweenLoops);

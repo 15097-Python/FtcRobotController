@@ -6,6 +6,8 @@ import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.robottarge
 import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.robottargety;
 import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.robottargetyaw;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+
 
 public abstract class PIDCrosby {
 
@@ -26,12 +28,12 @@ public abstract class PIDCrosby {
     static final double yintegralConstant = 0;
     static final double yderivativeConstant = 0.001;
     static double turnoutputMotorPower = 0;
-    static final double turnproportionalConstant = 0.005;
+    static final double turnproportionalConstant = 0.05;
     static double turncurrentError = 0;
     static double turntotalError = 0;
     static double turnlastError = 0;
     static final double turnintegralConstant = 0;
-    static final double turnderivativeConstant = 0.001;
+    static final double turnderivativeConstant = 0.5;
     /**
      *
      * @param timeBetweenLoops Time between opmodeloops
@@ -54,7 +56,7 @@ public abstract class PIDCrosby {
         return youtputMotorPower;
     }
     public static double settingMotorPIDPowerYaw(Double timeBetweenLoops){
-        turncurrentError = robottargetyaw-robotyaw;
+        turncurrentError = AngleUnit.normalizeDegrees( robottargetyaw-robotyaw);
         turntotalError += turncurrentError;
         turnoutputMotorPower = (turnproportionalConstant * turncurrentError) + (turnintegralConstant * turntotalError) + (turnderivativeConstant * (turncurrentError - turnlastError)/timeBetweenLoops);
         turnlastError = turncurrentError;

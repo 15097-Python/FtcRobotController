@@ -1,22 +1,18 @@
 package org.firstinspires.ftc.teamcode.launcher;
 
-import static org.firstinspires.ftc.teamcode.NonOpModes.PID.PIDCrosby.settingMotorPIDPowerYaw;
 import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.TeamColorRED;
-import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.getRobotCoordinates;
-import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.modifyRobotCoordinates;
 import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.robottranslationx;
 import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.robottranslationy;
-import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.robotyaw;
+import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.setRobotTargetYaw;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 
-public abstract class AutoLaunchingMLGNoobProHacker360NoScopeAbstractCrosby extends LinearOpMode {
-    static ElapsedTime timer = new ElapsedTime();
+public abstract class AutonoumusAutoLaunch extends LinearOpMode {
+
 
     public static double firingpowermultiplierconst = 3;
     public static void initializeLauncher(DcMotorEx LauncherFL,DcMotorEx LauncherFR) {
@@ -44,7 +40,7 @@ public abstract class AutoLaunchingMLGNoobProHacker360NoScopeAbstractCrosby exte
      */
 
 
-    public static double  autoLaunch(DcMotorEx Launcher, Servo DrumServo, Servo FiringPinServo, double TargetBallColor, double[] drumBallColors){
+    public static double  autoLaunchWithAim(DcMotorEx Launcher, Servo DrumServo, Servo FiringPinServo, double TargetBallColor, double[] drumBallColors){
         double ShootTargetY;
         double ShootTargetX = -3.6576/2.1;
         if( !TeamColorRED) {
@@ -52,11 +48,13 @@ public abstract class AutoLaunchingMLGNoobProHacker360NoScopeAbstractCrosby exte
         } else{
             ShootTargetY = 3.6576/2.1;
         }
-        double firingpower = (getFiringDistance(ShootTargetX,ShootTargetY) * firingpowermultiplierconst);
+        double targetturnangle = (57.29578 * ((Math.atan2(ShootTargetY - robottranslationy, ShootTargetX - robottranslationx))));
+        setRobotTargetYaw(targetturnangle);
+        double firingpower = (getFiringDistancethe(ShootTargetX,ShootTargetY) * firingpowermultiplierconst);
 
 
 
-        double[] drumLocations = {0.2, 0.5, 0.8};// should probably make the drumb slots into objects
+        /*double[] drumLocations = {0.1, 0.42, 0.76};// should probably make the drumb slots into objects
         int i = 0;
         for (double drumSlot: drumBallColors) {//slot finding loop
             if (drumSlot == TargetBallColor) {
@@ -64,10 +62,10 @@ public abstract class AutoLaunchingMLGNoobProHacker360NoScopeAbstractCrosby exte
                 break;
             }
             if (i > 2) {
-                return(0);
+                break;
             }
             i++;
-        }
+        }*/
 
 
 
@@ -75,28 +73,17 @@ public abstract class AutoLaunchingMLGNoobProHacker360NoScopeAbstractCrosby exte
 
 
 
-        return 0;
+        if (firingpower < 6) firingpower += 0.15;
+        return(firingpower + 3.25);
 
 
 
     }
-    public static double getFiringDistance(double targetx , double targety){
+    public static double getFiringDistancethe(double targetx , double targety){
         double xdistance = Math.abs(targetx - robottranslationx);
         double ydistance = Math.abs(targety - robottranslationy);
         //pythangroniaun theorum to determine the distance
         return (Math.sqrt((xdistance * xdistance) + (ydistance * ydistance)));
     }
-    public static double rotateToTarget(double targetx, double targety){
-        double[] robotpos = getRobotCoordinates();
 
-        double turnangle = Math.atan2(targety - robottranslationy, targetx - robottranslationx);
-        modifyRobotCoordinates(robotpos[0],robotpos[1],robotpos[2],robotpos[3],robotpos[4],turnangle);
-        if (turnangle!=robotyaw){
-            double stopwatchtimer = timer.milliseconds();
-            double turnoutputMotorPower = settingMotorPIDPowerYaw(stopwatchtimer);
-            return(turnoutputMotorPower);
-
-        }
-        return 0;
-    }
 }

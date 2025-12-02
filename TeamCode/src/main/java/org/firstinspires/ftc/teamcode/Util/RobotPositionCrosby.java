@@ -19,7 +19,9 @@ public class RobotPositionCrosby {
         public static double robottargetyaw = 0;
 
 
-
+        public static void setRobotTargetYaw(double newtargetyaw){
+            robottargetyaw = newtargetyaw;
+        }
         /**
          * grabs the coordinates of the robot
          * @return the orter of returned values is transx transy transz roll pitch yaw

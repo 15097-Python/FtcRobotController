@@ -31,6 +31,7 @@ public class RedTeamTellyOp extends LinearOpMode {
 
 
     ElapsedTime timer = new ElapsedTime();
+    ElapsedTime rapidtime = new ElapsedTime();
     private Servo DrumServo;
     private Servo FiringPinServo;
     private GoBildaPinpointDriver odomhub;
@@ -57,6 +58,8 @@ public class RedTeamTellyOp extends LinearOpMode {
         double currentrightmotorvelocity = 0;
 
         double firingpinnullposition = .98;
+
+        double rapidloop = 0;
 
         Limelight3A limelight = hardwareMap.get(Limelight3A.class, "limelight");// INitilizes the limelights
         limelight.setPollRateHz(100);
@@ -96,10 +99,8 @@ public class RedTeamTellyOp extends LinearOpMode {
         odomhub.initialize();
         odomhub.resetPosAndIMU();   // resets encoders and IMU
 
-        FiringPinServo.setPosition(firingpinnullposition);
-        DrumServo.setPosition(.27);
 
-        Scooper.setVelocity(-999, AngleUnit.RADIANS);
+
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -107,7 +108,7 @@ public class RedTeamTellyOp extends LinearOpMode {
         waitForStart();
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-            gamepad2.rumble(1,1,50);   // vibrate for 50 ms
+
             double leftstickinputy = gamepad1.left_stick_y; // Forward/backward negative because it's naturally inverted
             double leftstickinputx = gamepad1.left_stick_x; // side to side
             double targetturn = gamepad1.right_stick_x; // Turning
@@ -137,8 +138,9 @@ public class RedTeamTellyOp extends LinearOpMode {
             double FLmotorpower = motorpowerarray[3] + smallmotorpowerarray[3];
             // 0 is empty, 1 is green ball, 2 is purple ball
 
-
-            if (gamepad2.right_trigger >= 0.1) {
+            //limelight
+            if (gamepad2.right_trigger >= 0.3) {
+                //telemetry.addLine("righttriggerpressed");
                 LLResult result = limelight.getLatestResult();
 
                 if (result != null && result.isValid()) { // checks if there is a target and if the target is an actual target
@@ -155,7 +157,7 @@ public class RedTeamTellyOp extends LinearOpMode {
                                 double y = robotpose.getPosition().y;
                                 telemetry.addData("robotx", x);
                                 telemetry.addData("roboty", y);
-
+                                gamepad2.rumble(1,1,50);   // vibrate for 50 ms
                                 modifyRobotCoordinates(x, y, currentrobotlocation[2], currentrobotlocation[3], currentrobotlocation[4], currentrobotlocation[5]);
 
                                 break;
@@ -167,7 +169,7 @@ public class RedTeamTellyOp extends LinearOpMode {
             }
 
             motortargetspeedradians = autoLaunch(LauncherFL, DrumServo, FiringPinServo, 1, drumBallColors);
-            if (gamepad2.left_trigger >= 0.1) {
+            if (gamepad2.left_trigger >= 0.3) {
                 motortargetspeedradians = 0;
             }
                 // sets the velocity of the motors
@@ -212,6 +214,28 @@ public class RedTeamTellyOp extends LinearOpMode {
                                     gamepad1.b ? .92 :
                                         targetdrumangle;
                 }
+                double[] firingpositions = {.1,.42,.76};
+
+                rapidloop =  rapidtime.milliseconds();
+                if (gamepad2.dpad_up){//use timesrs use cancle when not held
+                    rapidtime.reset();
+                    for (double drumlocation : firingpositions){
+                        DrumServo.setPosition(drumlocation);
+                        sleep(500);
+                        FiringPinServo.setPosition(.98 - .32);
+                        sleep(200);
+                        FiringPinServo.setPosition(.98);
+                        sleep(200);
+
+
+                    }
+                }
+
+
+
+
+
+
                 if (gamepad1.dpad_down) odomhub.resetPosAndIMU();   // resets encoders and IMU
 
                 DrumServo.setPosition(targetdrumangle);
