@@ -36,9 +36,11 @@ public class RedTeamTellyOpWithAutoAim extends LinearOpMode {
     private DcMotorEx LauncherFL;
 
 
+    protected boolean isred = true;
+
     @Override
     public void runOpMode() {
-        TeamColorRED = true;
+        TeamColorRED = isred;
 
         boolean fullunloadflag = false;
         double lasttime = timer.milliseconds();

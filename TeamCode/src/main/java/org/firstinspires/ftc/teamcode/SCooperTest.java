@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import static org.firstinspires.ftc.teamcode.NonOpModes.colorsensing.ColorSensingFunctions.colorDetection;
+import static org.firstinspires.ftc.teamcode.Util.Enum.Balls.unknown;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
@@ -8,7 +10,11 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.Util.Enum.Balls;
 import org.firstinspires.ftc.teamcode.positioning.odometry.FieldOrientedDriving;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -22,10 +28,24 @@ public class SCooperTest extends LinearOpMode {
     private DcMotor BL;
     private DcMotor FL;
     private DcMotor FR;
+    private Servo DrumServo;
+    private Servo FiringPinServo;
+
+
 
 
     @Override
     public void runOpMode() {
+        double[] drumlocations = {.27,.6,.92};
+        Balls[] drumBallColors = {unknown, unknown, unknown};
+        double targetdrumangle = 0;
+        double targetfiringpinangle = 1;
+        int targetdrumslot = 0;
+
+        ElapsedTime timer = new ElapsedTime();
+
+        DrumServo = hardwareMap.get(Servo.class, "DrumServo");
+        FiringPinServo = hardwareMap.get(Servo.class, "FiringPinServo");
 
         odomhub = hardwareMap.get(GoBildaPinpointDriver.class,"odomhub");
 
@@ -42,6 +62,9 @@ public class SCooperTest extends LinearOpMode {
         FR.setDirection(DcMotor.Direction.FORWARD); //should generally do whenever motors
         BR.setDirection(DcMotor.Direction.FORWARD);
 
+        NormalizedColorSensor colorSensor1 = hardwareMap.get(NormalizedColorSensor.class, "colorSensor1");
+        NormalizedColorSensor colorSensor2 = hardwareMap.get(NormalizedColorSensor.class, "colorSensor2");
+
         odomhub.initialize();
         odomhub.resetPosAndIMU();   // resets encoders and IMU
 
@@ -51,6 +74,8 @@ public class SCooperTest extends LinearOpMode {
         waitForStart();
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
+
+
             double leftstickinputy = gamepad1.left_stick_y; // Forward/backward negative because it's naturally inverted
             double leftstickinputx = gamepad1.left_stick_x; // side to side
             double targetturn  = gamepad1.right_stick_x/2; // Turning
@@ -73,11 +98,35 @@ public class SCooperTest extends LinearOpMode {
             FR.setPower(FRmotorpower);
             FL.setPower(FLmotorpower);
 
-            if (gamepad1.left_bumper) Scooper.setVelocity(999,AngleUnit.RADIANS);
-            if (gamepad1.right_bumper) Scooper.setVelocity(-999,AngleUnit.RADIANS);
+            if (gamepad1.a){
+                targetdrumslot = 0;
+            }
+            Balls loadedcolor = colorDetection(colorSensor1, colorSensor2);
+            if (gamepad1.left_bumper){
+                Scooper.setVelocity(999, AngleUnit.RADIANS);
+            }
+            else if (gamepad1.right_bumper){
+                Scooper.setVelocity(-999, AngleUnit.RADIANS);
+                if (loadedcolor != unknown && targetdrumslot < 3 && timer.milliseconds() > 500){
+                    timer.reset();
+                    drumBallColors[targetdrumslot] = loadedcolor;
+                    telemetry.addLine("ball Detected");
+                    targetdrumslot++;
+                }
+            }
+            else Scooper.setVelocity(0, AngleUnit.RADIANS);
 
-            telemetry.addData("Status", "Running");
-            telemetry.addData("rotation perceived",currentrelativeheading);
+            targetdrumslot = Math.min(targetdrumslot,2);//clamps the target to 3
+
+            targetdrumangle = drumlocations[targetdrumslot];
+            DrumServo.setPosition(targetdrumangle);
+            FiringPinServo.setPosition(targetfiringpinangle);
+
+            telemetry.addData("loaded balls",drumBallColors[0].name());
+            telemetry.addData("loaded balls",drumBallColors[1].name());
+            telemetry.addData("loaded balls",drumBallColors[2].name());
+            telemetry.addData("selected slot",targetdrumslot);
+
             telemetry.update();
         }
     }
