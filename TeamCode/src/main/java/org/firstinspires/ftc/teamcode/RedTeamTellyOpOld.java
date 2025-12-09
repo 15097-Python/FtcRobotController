@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
-import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.getRobotCoordinates;
-import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.modifyRobotCoordinates;
-import static org.firstinspires.ftc.teamcode.launcher.AutoLaunchingMLGNoobProHacker360NoScopeAbstract.autoLaunch;
+import static org.firstinspires.ftc.teamcode.Util.RobotPosition.getRobotCoordinates;
+import static org.firstinspires.ftc.teamcode.Util.RobotPosition.modifyRobotCoordinates;
+import static org.firstinspires.ftc.teamcode.launcher.AutoFirePower.autoLaunch;
 
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.hardware.limelightvision.LLResult;
@@ -21,7 +21,7 @@ import org.firstinspires.ftc.teamcode.positioning.odometry.FieldOrientedDriving;
 
 import java.util.List;
 
-import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.TeamColorRED;
+import static org.firstinspires.ftc.teamcode.Util.RobotPosition.TeamColorRED;
 
 @TeleOp(name="RedTellyOP")
 

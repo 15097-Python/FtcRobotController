@@ -1,9 +1,9 @@
 package org.firstinspires.ftc.teamcode.launcher;
 
-import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.TeamColorRED;
-import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.robottranslationx;
-import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.robottranslationy;
-import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.setRobotTargetYaw;
+import static org.firstinspires.ftc.teamcode.Util.RobotPosition.TeamColorRED;
+import static org.firstinspires.ftc.teamcode.Util.RobotPosition.robottranslationx;
+import static org.firstinspires.ftc.teamcode.Util.RobotPosition.robottranslationy;
+import static org.firstinspires.ftc.teamcode.Util.RobotPosition.setRobotTargetYaw;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;

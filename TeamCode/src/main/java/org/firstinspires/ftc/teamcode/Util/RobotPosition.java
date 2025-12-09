@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.Util;
 
-public class RobotPositionCrosby {
+public class RobotPosition {
         // The robot's field position (x, y, z, rotation)
         //Red is True
         public static boolean TeamColorRED = true;
@@ -24,14 +24,14 @@ public class RobotPositionCrosby {
         }
         /**
          * grabs the coordinates of the robot
-         * @return the orter of returned values is transx transy transz roll pitch yaw
+         * @return the order of returned values is transx transy transz roll pitch yaw
          */
         public static double[] getRobotCoordinates() {
             return new double[] {robottranslationx,robottranslationy,robottranslationz,robotroll,robotpitch,robotyaw};
         }
 
         /**
-         * sets the robot's translations from the orogin
+         * sets the robot's translations from the origin
          *
          * @param newx   the left stick's x input
          * @param newy   the left stick's y input

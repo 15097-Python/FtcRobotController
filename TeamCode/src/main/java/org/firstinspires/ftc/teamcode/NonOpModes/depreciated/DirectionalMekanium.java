@@ -1,11 +1,12 @@
 package org.firstinspires.ftc.teamcode.NonOpModes.depreciated;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-@TeleOp(name="DirectionalMekaniumTestOpModeCrosby")
-
-public class DirectionalMekaniumTestOpModeCrosby extends LinearOpMode {
+@TeleOp(name="DirectionalMekanium")
+@Disabled
+public class DirectionalMekanium extends LinearOpMode {
 
     private DcMotor BR;
     private DcMotor BL;

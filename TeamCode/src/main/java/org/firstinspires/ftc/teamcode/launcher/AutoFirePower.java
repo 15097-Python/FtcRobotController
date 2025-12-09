@@ -1,9 +1,9 @@
 package org.firstinspires.ftc.teamcode.launcher;
-import static org.firstinspires.ftc.teamcode.NonOpModes.PID.PIDCrosby.settingMotorPIDPowerYaw;
-import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.TeamColorRED;
-import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.robottranslationx;
-import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.robottranslationy;
-import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.robotyaw;
+import static org.firstinspires.ftc.teamcode.NonOpModes.PID.PIDOld.settingMotorPIDPowerYaw;
+import static org.firstinspires.ftc.teamcode.Util.RobotPosition.TeamColorRED;
+import static org.firstinspires.ftc.teamcode.Util.RobotPosition.robottranslationx;
+import static org.firstinspires.ftc.teamcode.Util.RobotPosition.robottranslationy;
+import static org.firstinspires.ftc.teamcode.Util.RobotPosition.robotyaw;
 
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
-public abstract class AutoLaunchingMLGNoobProHacker360NoScopeAbstract extends LinearOpMode {
+public abstract class AutoFirePower extends LinearOpMode {
     static ElapsedTime timer = new ElapsedTime();
 
     public static double firingpowermultiplierconst = 3;
@@ -30,9 +30,6 @@ public abstract class AutoLaunchingMLGNoobProHacker360NoScopeAbstract extends Li
     }
     /**
      * Estimates the real-world width of an object using pixel width, camera FOV, resolution, and distance.
-     *
-     *
-     *
      * @param Launcher LauncherFL
      * @param DrumServo the servo controlling the drum
      * @param FiringPinServo the servo controlling the pushing ball mechanism

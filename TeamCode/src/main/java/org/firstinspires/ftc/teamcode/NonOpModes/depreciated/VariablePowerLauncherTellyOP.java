@@ -1,4 +1,5 @@
 package org.firstinspires.ftc.teamcode.NonOpModes.depreciated;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -7,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 @TeleOp(name="VariablePowerLauncherTellyOP")
-
+@Disabled
 public class VariablePowerLauncherTellyOP extends LinearOpMode {
      
     private static final double launcherwheelradiusm = .02;

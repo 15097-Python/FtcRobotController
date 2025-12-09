@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 @TeleOp(name="controllerTestOP")
-
+@Deprecated
 public class controllerTestingOpMode extends LinearOpMode {
 
     @Override

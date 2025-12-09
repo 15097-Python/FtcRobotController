@@ -3,6 +3,7 @@ import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -11,7 +12,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 @TeleOp(name="FieldOrientedDrivingTestOp")
-
+@Disabled
 public class FieldOrientedDrivingTestOp extends LinearOpMode {
     private GoBildaPinpointDriver odomhub;
     private DcMotor BR;

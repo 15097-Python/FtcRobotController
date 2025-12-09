@@ -40,7 +40,7 @@ public class DrumColorTest extends LinearOpMode {
         }
     }
 
-    // --- ✨ FUNCTION TO COMBINE BOTH COLOR SENSORS ✨ ---
+    /**FUNCTION TO COMBINE BOTH COLOR SENSORS*/
     private String getCombinedColor() {
 
         float[] hsv1 = new float[3];

@@ -1,13 +1,14 @@
 package org.firstinspires.ftc.teamcode.NonOpModes.depreciated;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.NonOpModes.PID.PIDCrosby;
-@TeleOp(name="DirectionalMekaniumTestOpModeCrosby")
-
-public class PIDOpModeTestingCrosby extends LinearOpMode {
+import org.firstinspires.ftc.teamcode.NonOpModes.PID.PIDOld;
+@TeleOp(name="DirectionalMekanium")
+@Disabled
+public class PIDTesting extends LinearOpMode {
 
     private DcMotor BR;
     private DcMotor BL;
@@ -50,9 +51,9 @@ public class PIDOpModeTestingCrosby extends LinearOpMode {
 
             timeBetweenLoops = timer.milliseconds();  // miliseconds since last reset
             timer.reset();
-            double targetdrivey = PIDCrosby.settingMotorPIDPowerX(timeBetweenLoops);
-            double targetdrivex = PIDCrosby.settingMotorPIDPowerY(timeBetweenLoops);
-            double targetturn = PIDCrosby.settingMotorPIDPowerYaw(timeBetweenLoops);
+            double targetdrivey = PIDOld.settingMotorPIDPowerX(timeBetweenLoops);
+            double targetdrivex = PIDOld.settingMotorPIDPowerY(timeBetweenLoops);
+            double targetturn = PIDOld.settingMotorPIDPowerYaw(timeBetweenLoops);
             double BRmotorpower = targetdrivey+targetdrivex-targetturn;
             double BLmotorpower = targetdrivey-targetdrivex+targetturn;
             double FRmotorpower = -((targetdrivey-targetdrivex)-targetturn);

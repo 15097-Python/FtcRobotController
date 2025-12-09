@@ -1,15 +1,13 @@
 package org.firstinspires.ftc.teamcode.NonOpModes.PID;
-import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.robottranslationx;
-import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.robottranslationy;
-import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.robotyaw;
-import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.robottargetx;
-import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.robottargety;
-import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.robottargetyaw;
-
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import static org.firstinspires.ftc.teamcode.Util.RobotPosition.robottranslationx;
+import static org.firstinspires.ftc.teamcode.Util.RobotPosition.robottranslationy;
+import static org.firstinspires.ftc.teamcode.Util.RobotPosition.robotyaw;
+import static org.firstinspires.ftc.teamcode.Util.RobotPosition.robottargetx;
+import static org.firstinspires.ftc.teamcode.Util.RobotPosition.robottargety;
+import static org.firstinspires.ftc.teamcode.Util.RobotPosition.robottargetyaw;
 
 
-public abstract class PIDCrosby {
+public abstract class PIDOld {
 
 
     //defining variables for pid
@@ -28,12 +26,12 @@ public abstract class PIDCrosby {
     static final double yintegralConstant = 0;
     static final double yderivativeConstant = 0.001;
     static double turnoutputMotorPower = 0;
-    static final double turnproportionalConstant = 0.05;
+    static final double turnproportionalConstant = 0.005;
     static double turncurrentError = 0;
     static double turntotalError = 0;
     static double turnlastError = 0;
     static final double turnintegralConstant = 0;
-    static final double turnderivativeConstant = 0.5;
+    static final double turnderivativeConstant = 0.001;
     /**
      *
      * @param timeBetweenLoops Time between opmodeloops
@@ -56,7 +54,7 @@ public abstract class PIDCrosby {
         return youtputMotorPower;
     }
     public static double settingMotorPIDPowerYaw(Double timeBetweenLoops){
-        turncurrentError = AngleUnit.normalizeDegrees( robottargetyaw-robotyaw);
+        turncurrentError = robottargetyaw-robotyaw;
         turntotalError += turncurrentError;
         turnoutputMotorPower = (turnproportionalConstant * turncurrentError) + (turnintegralConstant * turntotalError) + (turnderivativeConstant * (turncurrentError - turnlastError)/timeBetweenLoops);
         turnlastError = turncurrentError;

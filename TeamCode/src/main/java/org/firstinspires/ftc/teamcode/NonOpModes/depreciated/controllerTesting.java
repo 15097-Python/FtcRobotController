@@ -1,12 +1,13 @@
 package org.firstinspires.ftc.teamcode.NonOpModes.depreciated;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 @TeleOp(name="controllerTestOPCrosby")
-
-public class controllerTestingOpModeCrosby extends LinearOpMode {
+@Disabled
+public class controllerTesting extends LinearOpMode {
 
     @Override
     public void runOpMode() {

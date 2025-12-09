@@ -1,14 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
-import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.TeamColorRED;
-import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.getRobotCoordinates;
-import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.modifyRobotCoordinates;
-import static org.firstinspires.ftc.teamcode.launcher.AutoLaunchingMLGNoobProHacker360NoScopeAbstract.autoLaunch;
+import static org.firstinspires.ftc.teamcode.Util.RobotPosition.TeamColorRED;
+import static org.firstinspires.ftc.teamcode.Util.RobotPosition.getRobotCoordinates;
+import static org.firstinspires.ftc.teamcode.launcher.AutoFirePower.autoLaunch;
 import static org.firstinspires.ftc.teamcode.limelight.LimelightPosSetting.limelightposupdate;
 
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
-import com.qualcomm.hardware.limelightvision.LLResult;
-import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -18,10 +15,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.teamcode.positioning.odometry.FieldOrientedDriving;
-
-import java.util.List;
 
 @TeleOp(name="RedTellyOPSalvage")
 

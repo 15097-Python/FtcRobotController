@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.limelight;
 
-import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.getRobotCoordinates;
-import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.modifyRobotCoordinates;
+import static org.firstinspires.ftc.teamcode.Util.RobotPosition.getRobotCoordinates;
+import static org.firstinspires.ftc.teamcode.Util.RobotPosition.modifyRobotCoordinates;
 
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;

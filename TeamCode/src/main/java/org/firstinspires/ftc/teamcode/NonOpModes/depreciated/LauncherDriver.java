@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.NonOpModes.depreciated;
 
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -10,9 +11,9 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.positioning.odometry.FieldOrientedDriving;
 
-@TeleOp(name="LauncherDriverOPModeCrosby")
-
-public class LauncherDriverOPModeCrosby extends LinearOpMode {
+@TeleOp(name="LauncherDriver")
+@Disabled
+public class LauncherDriver extends LinearOpMode {
     private GoBildaPinpointDriver odomhub;
     private DcMotor Scooper;
     private DcMotor BR;

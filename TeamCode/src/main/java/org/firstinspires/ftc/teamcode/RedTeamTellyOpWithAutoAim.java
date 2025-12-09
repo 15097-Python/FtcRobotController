@@ -1,8 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
-import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.TeamColorRED;
-import static org.firstinspires.ftc.teamcode.Util.RobotPositionCrosby.getRobotCoordinates;
-import static org.firstinspires.ftc.teamcode.launcher.AutoLaunchingMLGNoobProHacker360NoScopeAbstract.autoLaunch;
+import static org.firstinspires.ftc.teamcode.Util.RobotPosition.TeamColorRED;
+import static org.firstinspires.ftc.teamcode.Util.RobotPosition.getRobotCoordinates;
 import static org.firstinspires.ftc.teamcode.launcher.SemiAutoAiming.setAimAngle;
 import static org.firstinspires.ftc.teamcode.launcher.SemiAutoAiming.siezingMotorTargetRotation;
 import static org.firstinspires.ftc.teamcode.limelight.LimelightPosSetting.limelightposupdate;
