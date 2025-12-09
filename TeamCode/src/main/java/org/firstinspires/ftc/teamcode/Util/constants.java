@@ -67,7 +67,7 @@ public final class constants {
     /**
      * eventually servo stuff IDK
      */
-    public static final class SERVO{
-        //idk what to put here ngl
+    public static final class Conversions{
+        public static final double InToM = 25.4*1000;
     }
 }

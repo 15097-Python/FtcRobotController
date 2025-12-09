@@ -1,10 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
 @Autonomous(name="RoadRunnerTest")
 
@@ -29,7 +27,7 @@ public class AutoWithRoadRunner extends LinearOpMode {
 
 
 
-        drive.setPoseEstimate(new Pose2d(0, 0, 0));
+
 
 
         waitForStart();

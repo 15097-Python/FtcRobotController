@@ -8,6 +8,7 @@ import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -24,7 +25,7 @@ import java.util.List;
 import static org.firstinspires.ftc.teamcode.Util.RobotPosition.TeamColorRED;
 
 @TeleOp(name="RedTellyOP")
-
+@Disabled
 public class RedTeamTellyOpOld extends LinearOpMode {
 
 

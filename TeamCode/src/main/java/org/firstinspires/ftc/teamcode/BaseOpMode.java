@@ -143,6 +143,7 @@ public class BaseOpMode extends LinearOpMode {
             }
             // sets the velocity of the motors
             LauncherFL.setVelocity(motortargetspeedradians, AngleUnit.RADIANS);
+            currentleftmotorvelocity = LauncherFL.getVelocity(AngleUnit.RADIANS);
 
             if (gamepad2.a) {//firing bin controls
                 targetfiringpinangle = firingpinnullposition - .32  ;

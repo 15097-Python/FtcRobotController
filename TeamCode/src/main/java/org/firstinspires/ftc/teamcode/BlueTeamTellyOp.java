@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@TeleOp(name="BlueTellyOp")
+@TeleOp(name="BlueTellyOpReal")
 
 
 public class BlueTeamTellyOp extends BaseOpMode{
