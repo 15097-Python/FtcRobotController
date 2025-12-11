@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.NonOpModes;
 
 import androidx.annotation.NonNull;
 
@@ -42,15 +42,18 @@ import com.acmerobotics.roadrunner.ftc.PositionVelocityPair;
 import com.acmerobotics.roadrunner.ftc.RawEncoder;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.teamcode.Drawing;
+import org.firstinspires.ftc.teamcode.Localizer;
+import org.firstinspires.ftc.teamcode.PinpointLocalizer;
 import org.firstinspires.ftc.teamcode.messages.DriveCommandMessage;
 import org.firstinspires.ftc.teamcode.messages.MecanumCommandMessage;
 import org.firstinspires.ftc.teamcode.messages.MecanumLocalizerInputsMessage;
@@ -61,15 +64,16 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Config
+@Deprecated
 public final class MecanumDriveCopy {
     public static class Params {
         // IMU orientation
         // TODO: fill in these values based on
         //   see https://ftc-docs.firstinspires.org/en/latest/programming_resources/imu/imu.html?highlight=imu#physical-hub-mounting
         public RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection =
-                RevHubOrientationOnRobot.LogoFacingDirection.UP;
+                RevHubOrientationOnRobot.LogoFacingDirection.LEFT;
         public RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection =
-                RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
+                RevHubOrientationOnRobot.UsbFacingDirection.UP;
 
         // drive model parameters
         public double inPerTick = 0.0239226595088;
@@ -147,9 +151,9 @@ public final class MecanumDriveCopy {
             imu = lazyImu.get();
 
             // TODO: reverse encoders if needed
-            FL.setDirection(DcMotorEx.Direction.REVERSE);
+            BL.setDirection(DcMotorEx.Direction.REVERSE);
             FR.setDirection(DcMotorEx.Direction.REVERSE);
-            BL.setDirection(DcMotorEx.Direction.FORWARD);
+            FL.setDirection(DcMotorEx.Direction.FORWARD);
             BR.setDirection(DcMotorEx.Direction.FORWARD);
 
             this.pose = pose;
@@ -247,11 +251,7 @@ public final class MecanumDriveCopy {
         BR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         FR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        // TODO: reverse motor directions if needed
-        FL.setDirection(DcMotorEx.Direction.REVERSE);
-        FR.setDirection(DcMotorEx.Direction.REVERSE);
-        BL.setDirection(DcMotorEx.Direction.FORWARD);
-        BR.setDirection(DcMotorEx.Direction.FORWARD);
+
 
         // TODO: make sure your config has an IMU with this name (can be BNO or BHI)
         //   see https://ftc-docs.firstinspires.org/en/latest/hardware_and_software_configuration/configuring/index.html
