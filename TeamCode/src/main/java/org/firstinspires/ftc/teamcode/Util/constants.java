@@ -82,5 +82,8 @@ public final class constants {
         public static final double WheelRadius = 0.03730625; //meters
         public static final double MaxRPM = 50; //confirm later
         public static final double MinRPM = 0;
+        public static final double ApriltagOffsetX = 0;
+        public static final double ApriltagOffsetY = 0;
+        public static final double ApriltagOffsetZ = 0;
     }
 }
