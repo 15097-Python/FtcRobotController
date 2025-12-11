@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Util;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 /** (import static org.firstinspires.ftc.teamcode.Util.constants.*;)
  * import it by doing this and then you can just type something like
@@ -16,10 +17,10 @@ public final class constants {
      * hardware map names
      */
     public static final class PART_NAMES{
-        public static final String FL = "FL"; //despite what you may think these are constants
-        public static final String FR = "FR"; //yes I know names are constant it's crazy
-        public static final String BL = "BL";
-        public static final String BR = "BR";
+        public static final String FL = "FrontLeft"; //despite what you may think these are constants
+        public static final String FR = "FrontRight"; //yes I know names are constant it's crazy
+        public static final String BL = "BackLeft";
+        public static final String BR = "BackRight";
         public static final String DrumServo = "DrumServo";
         public static final String FiringPinServo = "FiringPinServo";
         public static final String odomhub = "odomhub";
@@ -65,9 +66,21 @@ public final class constants {
     }
 
     /**
-     * eventually servo stuff IDK
+     * conversions for measurements
      */
     public static final class Conversions{
         public static final double InToM = 25.4*1000;
+        public static final double Gravity = 9.81; // m/s² (or 32.2 ft/s²);
+    }
+    /**
+     * hardware stuff about the robot
+     */
+    public static final class RobotStats{
+        public static final double launchAngle = 50; //find out what all of these actually are
+        public static final double limelightYOffset = 0;
+        public static final double limelightXOffset = 0;
+        public static final double WheelRadius = 0.03730625; //meters
+        public static final double MaxRPM = 50; //confirm later
+        public static final double MinRPM = 0;
     }
 }
