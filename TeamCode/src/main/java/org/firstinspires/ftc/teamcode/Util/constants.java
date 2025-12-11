@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.Util;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 /** (import static org.firstinspires.ftc.teamcode.Util.constants.*;)
  * import it by doing this and then you can just type something like
@@ -70,7 +69,6 @@ public final class constants {
      */
     public static final class Conversions{
         public static final double InToM = 25.4*1000;
-        public static final double Gravity = 9.81; // m/s² (or 32.2 ft/s²);
     }
     /**
      * hardware stuff about the robot
@@ -80,10 +78,18 @@ public final class constants {
         public static final double limelightYOffset = 0;
         public static final double limelightXOffset = 0;
         public static final double WheelRadius = 0.03730625; //meters
-        public static final double MaxRPM = 50; //confirm later
+        public static final double ShaftRadius = 0.008; //meters
+        public static final double MaxRPM = 117.0; //confirm later but this is what website said
         public static final double MinRPM = 0;
-        public static final double ApriltagOffsetX = 0;
+        public static final double ApriltagOffsetX = 0; //have jack fill these out
         public static final double ApriltagOffsetY = 0;
         public static final double ApriltagOffsetZ = 0;
+        public static final double ENCODER_TICKS_PER_OUTPUT_REV = 1425.1; // Encoder resolution obtained from website
+        public static final double GEARBOX_RATIO = 50.9; // Internal planetary reduction obtained from website
+
+    }
+    public static final class Physics{
+        public static final double GRAVITY = 9.81; // m/s² (or 32.2 ft/s²);
+        public static final double EPSILON = 1e-9; // For floating-point comparisons
     }
 }
