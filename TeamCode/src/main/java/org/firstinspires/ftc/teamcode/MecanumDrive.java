@@ -58,37 +58,37 @@ public final class MecanumDrive {
         // TODO: fill in these values based on
         //   see https://ftc-docs.firstinspires.org/en/latest/programming_resources/imu/imu.html?highlight=imu#physical-hub-mounting
         public RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection =
-                RevHubOrientationOnRobot.LogoFacingDirection.UP;
+                RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;
         public RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection =
-                RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
+                RevHubOrientationOnRobot.UsbFacingDirection.UP;
 
-        // drive model parameters
-        public double inPerTick = 1;
+        // Drive model parameters
+        public double inPerTick = (double) 1 /500; // adjust to your encoder conversion
         public double lateralInPerTick = inPerTick;
-        public double trackWidthTicks = 0;
+        public double trackWidthTicks = 16; // example: distance between left and right wheels in inches
 
-        // feedforward parameters (in tick units)
-        public double kS = 0;
-        public double kV = 0;
-        public double kA = 0;
+        // Feedforward parameters
+        public double kS = 0.5;      // voltage to overcome static friction
+        public double kV = 0.025;    // velocity-to-power scaling
+        public double kA = 0.0;      // acceleration feedforward, start at 0
 
-        // path profile parameters (in inches)
-        public double maxWheelVel = 50;
-        public double minProfileAccel = -30;
-        public double maxProfileAccel = 50;
+        // Path profile parameters (in inches/sec and inches/sec^2)
+        public double maxWheelVel = 120;      // max wheel velocity
+        public double minProfileAccel = -60;  // min acceleration
+        public double maxProfileAccel = 60;   // max acceleration
 
-        // turn profile parameters (in radians)
-        public double maxAngVel = Math.PI; // shared with path
+        // Turn profile parameters (in radians/sec and radians/sec^2)
+        public double maxAngVel = Math.PI; // radians/sec
         public double maxAngAccel = Math.PI;
 
-        // path controller gains
-        public double axialGain = 0.0;
-        public double lateralGain = 0.0;
-        public double headingGain = 0.0; // shared with turn
+        // Path controller gains
+        public double axialGain = 1.0;
+        public double lateralGain = 1.0;
+        public double headingGain = 2.0;
 
-        public double axialVelGain = 0.0;
-        public double lateralVelGain = 0.0;
-        public double headingVelGain = 0.0; // shared with turn
+        public double axialVelGain = 0.5;
+        public double lateralVelGain = 0.5;
+        public double headingVelGain = 1.0;
     }
 
     public static Params PARAMS = new Params();
