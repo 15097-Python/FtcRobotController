@@ -6,17 +6,19 @@ import static org.firstinspires.ftc.teamcode.Util.RobotPosition.robottranslation
 import static org.firstinspires.ftc.teamcode.Util.RobotPosition.robotyaw;
 
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-
+@Config
 public abstract class AutoFirePower extends LinearOpMode {
     static ElapsedTime timer = new ElapsedTime();
 
-    public static double firingpowermultiplierconst = 3;
+    public static double firingpowermultiplierconst = 1.5;
+    public static double firingpoweraddingconst = 1.9;
     public static void initializeLauncher(DcMotorEx LauncherFL,DcMotorEx LauncherFR) {
 
 
@@ -47,7 +49,7 @@ public abstract class AutoFirePower extends LinearOpMode {
         } else{
             ShootTargetY = 3.6576/2.1;
         }
-        double firingpower = (getFiringDistance(ShootTargetX,ShootTargetY) * firingpowermultiplierconst);
+        double firingpower = (getFiringDistance(ShootTargetX,ShootTargetY) * firingpowermultiplierconst) + firingpoweraddingconst;
         
         /*double[] drumLocations = {0.2, 0.5, 0.8};// should probably make the drumb slots into objects
         int i = 0;
@@ -63,8 +65,8 @@ public abstract class AutoFirePower extends LinearOpMode {
         }*/
 
 
-        if (firingpower < 6) firingpower += 0.15;
-        return(firingpower + 3.25);
+        //if (firingpower < 6) firingpower += 0.15;
+        return(firingpower);
 
 
 
