@@ -1,7 +1,14 @@
-package org.firstinspires.ftc.teamcode.util;
+package org.firstinspires.ftc.teamcode.Util;
 
 import androidx.annotation.Nullable;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+
+/*
 import com.acmerobotics.roadrunner.kinematics.Kinematics;
 
 import org.apache.commons.math3.stat.regression.SimpleRegression;
@@ -15,11 +22,11 @@ import java.util.List;
 /**
  * Various regression utilities.
  */
-public class RegressionUtil {
+//public class RegressionUtil {
 
     /**
      * Feedforward parameter estimates from the ramp regression and additional summary statistics
-     */
+     *//*
     public static class RampResult {
         public final double kV, kStatic, rSquare;
 
@@ -32,7 +39,7 @@ public class RegressionUtil {
 
     /**
      * Feedforward parameter estimates from the ramp regression and additional summary statistics
-     */
+     *//*
     public static class AccelResult {
         public final double kA, rSquare;
 
@@ -49,7 +56,7 @@ public class RegressionUtil {
      * @param x x-values
      * @param y y-values
      * @return derivative values
-     */
+     *//*
     private static List<Double> numericalDerivative(List<Double> x, List<Double> y) {
         List<Double> deriv = new ArrayList<>(x.size());
         for (int i = 1; i < x.size() - 1; i++) {
@@ -77,7 +84,7 @@ public class RegressionUtil {
      * @param powerSamples power samples
      * @param fitStatic fit kStatic
      * @param file log file
-     */
+     *//*
     public static RampResult fitRampData(List<Double> timeSamples, List<Double> positionSamples,
                                          List<Double> powerSamples, boolean fitStatic,
                                          @Nullable File file) {
@@ -117,7 +124,7 @@ public class RegressionUtil {
      * @param powerSamples power samples
      * @param rampResult ramp result
      * @param file log file
-     */
+     *//*
     public static AccelResult fitAccelData(List<Double> timeSamples, List<Double> positionSamples,
                                            List<Double> powerSamples, RampResult rampResult,
                                            @Nullable File file) {
@@ -153,4 +160,4 @@ public class RegressionUtil {
 
         return new AccelResult(Math.abs(accelReg.getSlope()), accelReg.getRSquare());
     }
-}
+}*/

@@ -25,13 +25,10 @@ public class RoadRunnerTesting extends LinearOpMode {
         if (isStopRequested()) return;
 
         // ----- First trajectory: move to (6, 0) -----
-        com.acmerobotics.roadrunner.Action traj1 =
-                drive.actionBuilder(startPose)
-                        .lineTo(new Vector2d(6, 0))
-                        .build();
+
 
 // Run first trajectory
-        Actions.runBlocking(traj1);
+
 
 // ----- Second trajectory: move to (-3, 4) -----
 
@@ -39,13 +36,10 @@ public class RoadRunnerTesting extends LinearOpMode {
 // The second trajectory should start from the robot’s current pose estimate
         Pose2d secondStart = drive.localizer.getPose();
 
-        com.acmerobotics.roadrunner.Action traj2 =
-                drive.actionBuilder(secondStart)
-                        .lineTo(new Vector2d(-3, 4))
-                        .build();
+
 
 // Run second trajectory
-        Actions.runBlocking(traj2);
+
 
 
 

@@ -6,7 +6,7 @@ import com.acmerobotics.roadrunner.Trajectory;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
+/*
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 import java.lang.Math;
@@ -47,3 +47,4 @@ public class DiagnalTwoPointAuto extends LinearOpMode {
         telemetry.update();
     }
 }
+*/
