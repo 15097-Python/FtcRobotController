@@ -26,7 +26,9 @@ import static org.firstinspires.ftc.teamcode.Util.constants.RobotStats.*;
  *        implement a way to check pattern status in gate
  *        check all odom locations
  *        check all motor powers
- *        check how to implement motor built in PID using set velocity */
+ *        check how to implement motor built in PID using set velocity
+ *        check how to use PID to make this better
+ *        make it shoot all three balls and then get more balls */
 
 @Autonomous(name="AutoOdomBased", group="Auto")
 public class AutoOdomBased extends LinearOpMode {
@@ -76,7 +78,7 @@ public class AutoOdomBased extends LinearOpMode {
     public void runOpMode() {
         initializeHardware();
 
-        // ===== ALLIANCE SELECTION (INTEGRATED) =====
+        // ALLIANCE SELECTION
         telemetry.addLine("SELECT ALLIANCE");
         telemetry.addLine("Press X for BLUE, B for RED");
         telemetry.addLine("Current: RED (default)");
@@ -256,7 +258,7 @@ public class AutoOdomBased extends LinearOpMode {
                 if (found) {
                     currentState = AutoState.AIM_AND_FIRE;
                 } else {
-                    telemetry.addData("ERROR", "Ball not found");
+                    telemetry.addData("ERROR", "Ball not found");//the color sensors misses sometimes
                 }
                 telemetry.update();
                 break;
@@ -319,10 +321,10 @@ public class AutoOdomBased extends LinearOpMode {
             double br = vy_rotated - vx_rotated;
             double fr = vy_rotated + vx_rotated;
 
-            double max = Math.max(1.0, Math.abs(fl));
+            double max = Math.max(1.0, Math.abs(fl));//probably is just a floor
             max = Math.max(max, Math.abs(bl));
             max = Math.max(max, Math.abs(br));
-            max = Math.max(max, Math.abs(fr));
+            max = Math.max(max, Math.abs(fr));//max is overridden a million times
 
             setMotorPowers(fl/max, bl/max, br/max, fr/max);
         }
