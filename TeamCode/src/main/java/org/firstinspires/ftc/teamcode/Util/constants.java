@@ -81,12 +81,13 @@ public final class constants {
         public static final double ShaftRadius = 0.008; //meters
         public static final double MaxRPM = 117.0; //confirm later but this is what website said
         public static final double MinRPM = 0;
-        public static final double ApriltagOffsetX = 0; //have jack fill these out
-        public static final double ApriltagOffsetY = 0;
-        public static final double ApriltagOffsetZ = 0;
+        public static final double ApriltagOffsetX = 0.1524; // meters
+        public static final double ApriltagOffsetY = 0.2032; // meters
+        public static final double ApriltagOffsetZ = 0.2794; // meters 38.5-29.5=11in
         public static final double ENCODER_TICKS_PER_OUTPUT_REV = 1425.1; // Encoder resolution obtained from website
-        public static final double GEARBOX_RATIO = 50.9; // Internal planetary reduction obtained from website
+        public static final double GEARBOX_RATIO = 50.9; // guess
         public static final double MAX_SHOOTING_RANGE = 5.173; //max distance it has to shoot diagonal of field
+        public static final double LAUNCH_HEIGHT = 0.3175; //meters
 
     }
     public static final class Physics{

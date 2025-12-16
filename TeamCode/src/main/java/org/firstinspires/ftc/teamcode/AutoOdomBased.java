@@ -35,7 +35,6 @@ public class AutoOdomBased extends LinearOpMode {
     private Limelight3A limelight;
     private GoBildaPinpointDriver odomhub;
     private DcMotorEx launcherMotor;
-    private DcMotor Scooper;
     private Servo drumServo;
     private Servo firingPinServo;
     private NormalizedColorSensor colorSensor1;
@@ -142,7 +141,7 @@ public class AutoOdomBased extends LinearOpMode {
         launcherMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
         // Scooper
-        Scooper = hardwareMap.get(DcMotorEx.class, "Scooper");
+        DcMotor scooper = hardwareMap.get(DcMotorEx.class, "Scooper");
 
         // Servos
         drumServo = hardwareMap.get(Servo.class, "DrumServo");

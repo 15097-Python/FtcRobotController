@@ -11,7 +11,7 @@ public class MotorSpeedCalibrator extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        DcMotorEx motor = hardwareMap.get(DcMotorEx.class, "launcher_motor");
+        DcMotorEx motor = hardwareMap.get(DcMotorEx.class, "LauncherFL");
         motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         telemetry.addLine("=== Motor Speed Calibration ===");
