@@ -14,7 +14,7 @@ public class MotorSpeedCalibrator extends LinearOpMode {
         DcMotorEx motor = hardwareMap.get(DcMotorEx.class, "LauncherFL");
         motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        telemetry.addLine("=== Motor Speed Calibration ===");
+        telemetry.addLine("Motor Speed Calibration");
         telemetry.addLine("1. Run motor at 100% power");
         telemetry.addLine("2. Let it stabilize for 2-3 seconds");
         telemetry.addLine("3. The 'Measured RPM' is your MaxRPM constant");
