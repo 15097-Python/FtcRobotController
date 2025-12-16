@@ -116,6 +116,7 @@ public class BaseOpMode extends LinearOpMode {
             double currentrelativeheading = odomhub.getHeading(AngleUnit.RADIANS);
 
 
+
             //Calls FieldOrientedDriving function and sets motor power
             double[] motorpowerarray = FieldOrientedDriving.fieldOrientedMath(leftstickinputy, -leftstickinputx, targetturn, currentrelativeheading);
             double[] smallmotorpowerarray = FieldOrientedDriving.fieldOrientedMath(leftstickinputy2, -leftstickinputx2, targetturn2, currentrelativeheading);

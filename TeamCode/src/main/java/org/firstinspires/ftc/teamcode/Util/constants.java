@@ -86,6 +86,7 @@ public final class constants {
         public static final double ApriltagOffsetZ = 0;
         public static final double ENCODER_TICKS_PER_OUTPUT_REV = 1425.1; // Encoder resolution obtained from website
         public static final double GEARBOX_RATIO = 50.9; // Internal planetary reduction obtained from website
+        public static final double MAX_SHOOTING_RANGE = 5.173; //max distance it has to shoot diagonal of field
 
     }
     public static final class Physics{

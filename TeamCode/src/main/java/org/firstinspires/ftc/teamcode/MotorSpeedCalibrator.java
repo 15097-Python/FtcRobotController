@@ -30,7 +30,7 @@ public class MotorSpeedCalibrator extends LinearOpMode {
 
             telemetry.addData("Measured RPM", "%.1f", measuredRPM);
             telemetry.addData("Ticks/sec", "%.0f", ticksPerSecond);
-            telemetry.addLine("\nUse this value for your MaxRPM constant!");
+            telemetry.addLine("\nUse this value for MaxRPM constant");
             telemetry.update();
 
             sleep(100);
