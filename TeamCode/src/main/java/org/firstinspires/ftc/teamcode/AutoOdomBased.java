@@ -23,7 +23,10 @@ import static org.firstinspires.ftc.teamcode.Util.constants.RobotStats.*;
 /** TODO: implement a way to tell where to hit the gate and where to do so
  *        implement a way to park near end of auto
  *        test current op mode and check for bugs or errors
- *        implement a way to check pattern status in gate */
+ *        implement a way to check pattern status in gate
+ *        check all odom locations
+ *        check all motor powers
+ *        check how to implement motor built in PID using set velocity */
 
 @Autonomous(name="AutoOdomBased", group="Auto")
 public class AutoOdomBased extends LinearOpMode {
