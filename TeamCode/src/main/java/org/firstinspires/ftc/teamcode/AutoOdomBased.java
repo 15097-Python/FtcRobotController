@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
@@ -10,13 +11,14 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.teamcode.Util.Enum.Balls;
+import org.firstinspires.ftc.teamcode.Util.Enum.PossibleStates;
+import org.firstinspires.ftc.teamcode.Util.Motion;
 import org.firstinspires.ftc.teamcode.Util.RPMEstimator;
 import org.firstinspires.ftc.teamcode.NonOpModes.colorsensing.ColorSensingFunctions;
-import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 
 import static org.firstinspires.ftc.teamcode.Util.constants.RobotStats.*;
 
@@ -26,9 +28,11 @@ import static org.firstinspires.ftc.teamcode.Util.constants.RobotStats.*;
  *        implement a way to check pattern status in gate
  *        check all odom locations
  *        check all motor powers
+ *        check all distances
  *        check how to implement motor built in PID using set velocity
  *        check how to use PID to make this better
- *        make it shoot all three balls and then get more balls */
+ *        make it get more balls after shooting the three it has
+ *        make it shoot the balls in the desired pattern instead of just in order*/
 
 @Autonomous(name="AutoOdomBased", group="Auto")
 public class AutoOdomBased extends LinearOpMode {
@@ -36,24 +40,18 @@ public class AutoOdomBased extends LinearOpMode {
     // hardware
     private Limelight3A limelight;
     private GoBildaPinpointDriver odomhub;
+    private Motion motion;
     private DcMotorEx launcherMotor;
+    private DcMotor scooperMotor;
     private Servo drumServo;
     private Servo firingPinServo;
     private NormalizedColorSensor colorSensor1;
     private NormalizedColorSensor colorSensor2;
     private DcMotor BR, BL, FR, FL;
 
-    // states
-    private enum AutoState {
-        INITIALIZE,
-        DRIVE_TO_SHOOT_POSITION,
-        DETECT_SCORING_TAG,
-        CALCULATE_AND_SPIN_UP,
-        FIND_CORRECT_BALL,
-        AIM_AND_FIRE,
-        PARK,
-        COMPLETE
-    }
+    // states - now using the enum from PossibleStates.java
+    private PossibleStates state = PossibleStates.INITIALIZE;
+    private final ElapsedTime stateTimer = new ElapsedTime();
 
     // constants
     private static final int PIPELINE_SCORING = 0;
@@ -68,11 +66,14 @@ public class AutoOdomBased extends LinearOpMode {
     private static final double FIRING_PIN_FIRE = FIRING_PIN_NULL - 0.32;
 
     // I'm storing it
-    private AutoState currentState = AutoState.INITIALIZE;
-    private final ElapsedTime stateTimer = new ElapsedTime();
     private double targetDistanceMeters = 0;
     private int targetBallSlot = 0;
     private final Balls targetBallColor = Balls.green;
+
+    // TUNING CONSTANTS - Check these values during testing
+    private static final double DRIVE_POWER = 0.45; // {check} motor power for driving
+    private static final double TURN_POWER = 0.3;   // {check} motor power for turning
+    private static final double SPINUP_TIMEOUT = 3000; // {check} max time to spin up launcher
 
     @Override
     public void runOpMode() {
@@ -113,7 +114,7 @@ public class AutoOdomBased extends LinearOpMode {
         if (isStopRequested()) return;
 
         while (opModeIsActive()) {
-            executeStateMachine(isRedAlliance); // Pass alliance to state machine
+            executeStateMachine(isRedAlliance);
         }
     }
 
@@ -131,6 +132,9 @@ public class AutoOdomBased extends LinearOpMode {
         FL.setDirection(DcMotor.Direction.REVERSE);
         BL.setDirection(DcMotor.Direction.REVERSE);
 
+        // Motion utility - now using the Motion.java class
+        motion = new Motion(this, odomhub, FL, FR, BL, BR);
+
         // Limelight
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         limelight.setPollRateHz(100);
@@ -143,7 +147,7 @@ public class AutoOdomBased extends LinearOpMode {
         launcherMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
         // Scooper
-        DcMotor scooper = hardwareMap.get(DcMotorEx.class, "Scooper");
+        scooperMotor = hardwareMap.get(DcMotorEx.class, "Scooper");
 
         // Servos
         drumServo = hardwareMap.get(Servo.class, "DrumServo");
@@ -159,19 +163,20 @@ public class AutoOdomBased extends LinearOpMode {
     }
 
     private void executeStateMachine(boolean isRedAlliance) {
-        switch (currentState) {
+        switch (state) {
             case INITIALIZE:
                 telemetry.addData("State", "INITIALIZE");
                 telemetry.update();
                 sleep(500);
-                currentState = AutoState.DRIVE_TO_SHOOT_POSITION;
+                state = PossibleStates.DRIVE_TO_SHOOT_POSITION;
                 break;
 
             case DRIVE_TO_SHOOT_POSITION:
                 telemetry.addData("State", "DRIVE TO SHOOT POSITION");
-                driveToPosition(2.0, 1.5, 0.45); // {check} if this is right
-                turnToHeading(Math.toRadians(45));
-                currentState = AutoState.DETECT_SCORING_TAG;
+                // {check} if this is right
+                motion.driveTo(2.0, 1.5, 0.05, 6.0);
+                motion.turnTo(Math.toRadians(45), Math.toRadians(3), 3.0);
+                state = PossibleStates.DETECT_SCORING_TAG;
                 break;
 
             case DETECT_SCORING_TAG:
@@ -179,31 +184,40 @@ public class AutoOdomBased extends LinearOpMode {
                 limelight.pipelineSwitch(PIPELINE_SCORING);
                 sleep(500);
 
+                // Simplified: try to find tag directly, fallback to search if needed
                 LLResult result = limelight.getLatestResult();
                 if (result != null && result.isValid() && result.getFiducialResults() != null) {
                     for (LLResultTypes.FiducialResult tag : result.getFiducialResults()) {
                         int tagId = tag.getFiducialId();
 
-                        boolean isTargetTag = (isRedAlliance && tagId == 1) ||
-                                (!isRedAlliance && tagId == 2);
+                        // {check} Update these tag IDs for your field - these are likely correct for Centerstage
+                        boolean isTargetTag = (isRedAlliance && tagId == 20) ||
+                                (!isRedAlliance && tagId == 24);
 
                         if (isTargetTag) {
                             Pose3D botpose = tag.getRobotPoseFieldSpace();
                             targetDistanceMeters = calculateDistanceToTarget(botpose);
-
                             telemetry.addData("Target Tag", tagId);
                             telemetry.addData("Distance", "%.2f m", targetDistanceMeters);
 
                             if (targetDistanceMeters > LIMELIGHT_MIN_RANGE_METERS &&
                                     targetDistanceMeters <= MAX_SHOOTING_RANGE) {
-                                currentState = AutoState.CALCULATE_AND_SPIN_UP;
-                                return;
+                                state = PossibleStates.CALCULATE_AND_SPIN_UP;
+                                return; // Exit early on success
                             }
                         }
                     }
-                    telemetry.addData("ERROR", "Target tag not found");
+                }
+
+                // If we get here, target tag wasn't found - try searching
+                telemetry.addData("WARN", "Target tag not found - searching...");
+                if (searchForScoringTag(isRedAlliance, 2.0)) {
+                    state = PossibleStates.CALCULATE_AND_SPIN_UP;
                 } else {
-                    telemetry.addData("ERROR", "No AprilTags detected");
+                    telemetry.addData("ERROR", "Tag not found after search");
+                    // TODO: Add recovery - maybe drive to default shooting position
+                    targetDistanceMeters = 2.2; // {check} if this is correct at all
+                    state = PossibleStates.CALCULATE_AND_SPIN_UP;
                 }
                 telemetry.update();
                 break;
@@ -218,20 +232,32 @@ public class AutoOdomBased extends LinearOpMode {
                     telemetry.addData("Required RPM", "%.0f", requiredRPM);
                     telemetry.addData("Command (rad/s)", "%.2f", commandRadPerSec);
 
+                    // Motor built-in PID: RUN_USING_ENCODER + setVelocity() uses hardware PID automatically
+                    // No custom PID needed for velocity control!
                     launcherMotor.setVelocity(commandRadPerSec, AngleUnit.RADIANS);
 
+                    boolean atSpeed = false;
                     stateTimer.reset();
-                    while (opModeIsActive() && stateTimer.milliseconds() < 3000) {
-                        if (isAtTargetRPM(requiredRPM)) break;
-                        telemetry.addData("Spinning up ", getCurrentRPM());
+
+                    while (opModeIsActive() && stateTimer.milliseconds() < SPINUP_TIMEOUT) {
+                        if (isAtTargetRPM(requiredRPM)) {
+                            atSpeed = true;
+                            break;
+                        }
+                        telemetry.addData("RPM", getCurrentRPM());
                         telemetry.update();
                     }
 
-                    currentState = AutoState.FIND_CORRECT_BALL;
+                    if (!atSpeed) {
+                        telemetry.addLine("WARN: Shooter didn't get to speed firing anyway");
+                    }
+
+                    state = PossibleStates.FIND_CORRECT_BALL;
                 } catch (Exception e) {
                     telemetry.addData("ERROR", e.getMessage());
                     telemetry.update();
                     sleep(2000);
+                    // TODO: Add recovery - maybe move to different position
                 }
                 break;
 
@@ -241,50 +267,49 @@ public class AutoOdomBased extends LinearOpMode {
                 sleep(500);
 
                 boolean found = false;
-                for (int slot = 0; slot < 3; slot++) {
-                    drumServo.setPosition(DRUM_LOAD_POSITIONS[slot]);
-                    sleep(300);
 
-                    Balls ball = ColorSensingFunctions.colorDetection(colorSensor1, colorSensor2);
-                    telemetry.addData("Slot " + slot, ball);
+                // Retry logic - 2 attempts to find ball
+                for (int attempt = 0; attempt < 2 && !found; attempt++) {
+                    for (int slot = 0; slot < 3; slot++) {
+                        drumServo.setPosition(DRUM_LOAD_POSITIONS[slot]);
+                        sleep(250); // {check} reduced from 300ms
 
-                    if (ball == targetBallColor) {
-                        targetBallSlot = slot;
-                        found = true;
-                        break;
+                        Balls ball = ColorSensingFunctions.colorDetection(colorSensor1, colorSensor2);
+                        telemetry.addData("Attempt " + attempt + " Slot " + slot, ball);
+
+                        if (ball == targetBallColor) {
+                            targetBallSlot = slot;
+                            found = true;
+                            break;
+                        }
                     }
                 }
 
-                if (found) {
-                    currentState = AutoState.AIM_AND_FIRE;
-                } else {
-                    telemetry.addData("ERROR", "Ball not found");//the color sensors misses sometimes
+                if (!found) {
+                    telemetry.addLine("Fallback: firing slot 0");//the color sensors misses sometimes
+                    targetBallSlot = 0; // Default to first slot
                 }
+
+                state = PossibleStates.AIM_AND_FIRE;
                 telemetry.update();
                 break;
 
             case AIM_AND_FIRE:
-                telemetry.addData("State", "AIM AND FIRE");
-                drumServo.setPosition(DRUM_FIRE_POSITIONS[targetBallSlot]);
-                sleep(500);
-
-                firingPinServo.setPosition(FIRING_PIN_FIRE);
-                telemetry.addData("Firing", "YES!");
-                telemetry.update();
-                sleep(200);
-
-                firingPinServo.setPosition(FIRING_PIN_NULL);
-                currentState = AutoState.PARK;
+                // Fire all 3 balls in sequence
+                for (int i = 0; i < 3; i++) {
+                    fireBall((targetBallSlot + i) % 3);
+                }
+                state = PossibleStates.PARK;
                 break;
 
             case PARK:
                 telemetry.addData("State", "PARK");
-                driveToPosition(0.5, 0.5, 0.3);
+                // {check} Tune this final parking position
+                motion.driveTo(0.5, 0.5, 0.05, 4.0);
                 launcherMotor.setVelocity(0);
-                setMotorPowers(0, 0, 0, 0);
                 telemetry.addData("Autonomous", "COMPLETE");
                 telemetry.update();
-                currentState = AutoState.COMPLETE;
+                state = PossibleStates.COMPLETE;
                 break;
 
             case COMPLETE:
@@ -294,70 +319,40 @@ public class AutoOdomBased extends LinearOpMode {
         telemetry.update();
     }
 
-    private void driveToPosition(double targetX, double targetY, double power) {
-        final double POSITION_TOLERANCE = 0.1;
-        while (opModeIsActive()) {
-            odomhub.update();
-            double currentX = odomhub.getPosX(DistanceUnit.METER);
-            double currentY = odomhub.getPosY(DistanceUnit.METER);
+    // Searches for scoring tag by rotating - returns true if found
+    private boolean searchForScoringTag(boolean isRedAlliance, double timeoutSec) {
+        stateTimer.reset();
+        while (opModeIsActive() && stateTimer.seconds() < timeoutSec) {
+            // Rotate 10 degrees at a time
+            motion.turnTo(odomhub.getHeading(AngleUnit.RADIANS) + Math.toRadians(10),
+                    Math.toRadians(3), 0.5);
 
-            double dx = targetX - currentX;
-            double dy = targetY - currentY;
-            double distance = Math.sqrt(dx*dx + dy*dy);
-
-            if (distance < POSITION_TOLERANCE) break;
-
-            double vx = (dx / distance) * power;
-            double vy = (dy / distance) * power;
-
-            double heading = odomhub.getHeading(AngleUnit.RADIANS);
-            double cos = Math.cos(-heading);
-            double sin = Math.sin(-heading);
-            double vx_rotated = vx * cos - vy * sin;
-            double vy_rotated = vx * sin + vy * cos;
-
-            double fl = vy_rotated + vx_rotated;
-            double bl = vy_rotated - vx_rotated;
-            double br = vy_rotated - vx_rotated;
-            double fr = vy_rotated + vx_rotated;
-
-            double max = Math.max(1.0, Math.abs(fl));//probably is just a floor
-            max = Math.max(max, Math.abs(bl));
-            max = Math.max(max, Math.abs(br));
-            max = Math.max(max, Math.abs(fr));//max is overridden a million times
-
-            setMotorPowers(fl/max, bl/max, br/max, fr/max);
+            LLResult result = limelight.getLatestResult();
+            if (result != null && result.isValid()) {
+                for (LLResultTypes.FiducialResult tag : result.getFiducialResults()) {
+                    int id = tag.getFiducialId();
+                    if ((isRedAlliance && id == 20) || (!isRedAlliance && id == 24)) {
+                        Pose3D pose = tag.getRobotPoseFieldSpace();
+                        targetDistanceMeters = calculateDistanceToTarget(pose);
+                        return true;
+                    }
+                }
+            }
         }
-        setMotorPowers(0, 0, 0, 0);
+        return false;
     }
 
-    private void turnToHeading(double targetHeading) {
-        final double HEADING_TOLERANCE = Math.toRadians(5);
-        while (opModeIsActive()) {
-            odomhub.update();
-            double currentHeading = odomhub.getHeading(AngleUnit.RADIANS);
-            double error = targetHeading - currentHeading;
-
-            while (error > Math.PI) error -= 2 * Math.PI;
-            while (error < -Math.PI) error += 2 * Math.PI;
-
-            if (Math.abs(error) < HEADING_TOLERANCE) break;
-
-            double turnPower = error * 0.5;
-            turnPower = Math.max(-0.3, Math.min(0.3, turnPower));
-
-            setMotorPowers(-turnPower, -turnPower, turnPower, turnPower);
-        }
-        setMotorPowers(0, 0, 0, 0);
+    // Helper method to fire a ball from a specific slot
+    private void fireBall(int slot) {
+        drumServo.setPosition(DRUM_FIRE_POSITIONS[slot]);
+        sleep(300);
+        firingPinServo.setPosition(FIRING_PIN_FIRE);
+        sleep(150);
+        firingPinServo.setPosition(FIRING_PIN_NULL);
+        sleep(250);
     }
 
-    private void setMotorPowers(double fl, double bl, double br, double fr) {
-        FL.setPower(fl);
-        BL.setPower(bl);
-        BR.setPower(br);
-        FR.setPower(fr);
-    }
-
+    // {check} This helper is defined but not used - kept for future reliability improvements
     private LLResult getLimelightResult() {   //if limelight doesn't have enough time for processing use this
         for (int i = 0; i < 50 && opModeIsActive(); i++) {
             LLResult result = limelight.getLatestResult();
@@ -368,7 +363,7 @@ public class AutoOdomBased extends LinearOpMode {
     }
 
     private double calculateDistanceToTarget(Pose3D botpose) {
-        if (botpose == null) return 999;
+        if (botpose == null) return 999; // Return large number if pose invalid
         double x = botpose.getPosition().x;
         double y = botpose.getPosition().y;
         return Math.sqrt(x * x + y * y);
@@ -380,6 +375,6 @@ public class AutoOdomBased extends LinearOpMode {
     }
 
     private boolean isAtTargetRPM(double targetRPM) {
-        return Math.abs(getCurrentRPM() - targetRPM) <= 5.0;
+        return Math.abs(getCurrentRPM() - targetRPM) <= 5.0; // {check} Tolerance might need adjustment
     }
 }
