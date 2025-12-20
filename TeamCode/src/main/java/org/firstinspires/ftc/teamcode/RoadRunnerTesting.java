@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
 
+import static org.firstinspires.ftc.teamcode.Util.constants.FIELD.FIELD_HALF;
+
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.PathBuilder;
 import com.acmerobotics.roadrunner.Pose2d;
@@ -27,21 +29,27 @@ public class RoadRunnerTesting extends LinearOpMode {
         waitForStart();
         if (isStopRequested()) return;
 
-        Action moveOneWay = drive.actionBuilder(new Pose2d(0, 0, 0))
-                .lineToX(12)
+        Action moveOneWay = drive.actionBuilder(new Pose2d(0,0, 0))
+                .lineToX(2)
                 .build();
-
         Actions.runBlocking(moveOneWay);
+
+
 
         Pose2d newpose = drive.localizer.getPose();
 
         Double seocndx =  newpose.position.x;
         Double secondy = newpose.position.y;
         Double secondtheta = newpose.heading.toDouble();
+        telemetry.addData("poseition",newpose);
+        telemetry.addData("moved 2",1);
+        telemetry.update();
+
+        sleep(50000);
 
 
         Action movethesecond = drive.actionBuilder(new Pose2d(seocndx,secondy,secondtheta))
-                .splineTo(new Vector2d(5,-6),Math.toRadians(180))
+                .splineTo(new Vector2d(seocndx-2,secondy),0)
                 .build();
 
         Actions.runBlocking(movethesecond);

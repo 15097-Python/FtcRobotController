@@ -30,18 +30,10 @@ public abstract class AutoFirePower extends LinearOpMode {
         //LauncherFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         //LauncherFR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
-    /**
-     * Estimates the real-world width of an object using pixel width, camera FOV, resolution, and distance.
-     * @param Launcher LauncherFL
-     * @param DrumServo the servo controlling the drum
-     * @param FiringPinServo the servo controlling the pushing ball mechanism
-     * @param TargetBallColor color of the ball that is being launched, 1 is green, 2 is purple
-     *
-     * @return output x, y, and turn motor power values
-     */
 
 
-    public static double  autoLaunch(DcMotorEx Launcher, Servo DrumServo, Servo FiringPinServo, double TargetBallColor, double[] drumBallColors){
+
+    public static double  autoLaunch(){
         double ShootTargetY;
         double ShootTargetX = -3.6576/2.1;
         if( !TeamColorRED) {

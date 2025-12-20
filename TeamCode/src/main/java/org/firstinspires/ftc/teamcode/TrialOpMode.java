@@ -46,7 +46,7 @@ public class TrialOpMode extends LinearOpMode {
 
         Balls targetballcolor = unknown;
 
-        double[] firingpositions = {.1,.42,.76};
+        double[] firingpositions = {.76,.1,.42};
 
         double[] drumlocations = {.27,.6,.92};
         Balls[] drumBallColors = {unknown, unknown, unknown};
@@ -159,7 +159,7 @@ public class TrialOpMode extends LinearOpMode {
             limelightposupdate(limelight);
 
             //auto rangeing commands
-            motortargetspeedradians = autoLaunch(LauncherFL, DrumServo, FiringPinServo, 1, drumBallColorsarray);
+            motortargetspeedradians = autoLaunch();
             if (gamepad2.left_trigger >= 0.3) {
                 motortargetspeedradians = 0;
             }
@@ -192,17 +192,12 @@ public class TrialOpMode extends LinearOpMode {
                                 targetballcolor;
 
 
-                int iballselection = 1;
-
                 for(int i = 0; i <= 2; i++){
                     if(drumBallColors[i] == targetballcolor){
+                        firingpositionstarget = i;
+                        targetdrumangle = firingpositions[i];
+                    }
 
-                        targetdrumangle = firingpositions[iballselection];
-                    }
-                    if (iballselection == 3){
-                        iballselection = 0;
-                    }
-                    iballselection++;
                 }
                 /*
                 for(Balls loadedcolor : drumBallColors){

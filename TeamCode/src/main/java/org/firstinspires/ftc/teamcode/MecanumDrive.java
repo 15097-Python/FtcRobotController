@@ -68,37 +68,37 @@ public class MecanumDrive {
         // TODO: fill in these values based on
         //   see https://ftc-docs.firstinspires.org/en/latest/programming_resources/imu/imu.html?highlight=imu#physical-hub-mounting
         public RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection =
-                RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;
+                RevHubOrientationOnRobot.LogoFacingDirection.BACKWARD;
         public RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection =
                 RevHubOrientationOnRobot.UsbFacingDirection.UP;
 
         // Drive model parameters
         public double inPerTick = (double) 1 /500; // adjust to your encoder conversion
-        public double lateralInPerTick = inPerTick;
-        public double trackWidthTicks = 16; // example: distance between left and right wheels in inches
+        public double lateralInPerTick = 1.2799548704172892;
+        public double trackWidthTicks = 5000; // example: distance between left and right wheels in inches
 
         // Feedforward parameters
-        public double kS = 0.5;      // voltage to overcome static friction
-        public double kV = 0.025;    // velocity-to-power scaling
+        public double kS = 1.9707797260108069;      // voltage to overcome static friction
+        public double kV = 0.0003724014617464652;    // velocity-to-power scaling
         public double kA = 0.0;      // acceleration feedforward, start at 0
 
         // Path profile parameters (in inches/sec and inches/sec^2)
-        public double maxWheelVel = 120;      // max wheel velocity
-        public double minProfileAccel = -60;  // min acceleration
-        public double maxProfileAccel = 60;   // max acceleration
+        public double maxWheelVel = 60;      // max wheel velocity
+        public double minProfileAccel = -20;  // min acceleration
+        public double maxProfileAccel = 20;   // max acceleration
 
         // Turn profile parameters (in radians/sec and radians/sec^2)
-        public double maxAngVel = Math.PI; // radians/sec
-        public double maxAngAccel = Math.PI;
+        public double maxAngVel = Math.PI * 5; // radians/sec
+        public double maxAngAccel = Math.PI * 1;
 
         // Path controller gains
         public double axialGain = 1.0;
         public double lateralGain = 1.0;
         public double headingGain = 2.0;
 
-        public double axialVelGain = 0.5;
-        public double lateralVelGain = 0.5;
-        public double headingVelGain = 1.0;
+        public double axialVelGain = 0;
+        public double lateralVelGain = 0;
+        public double headingVelGain = 0;
     }
 
     public static Params PARAMS = new Params();

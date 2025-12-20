@@ -153,7 +153,7 @@ public class BaseOpMode extends LinearOpMode {
             limelightposupdate(limelight);
 
             //auto rangeing commands
-            motortargetspeedradians = autoLaunch(LauncherFL, DrumServo, FiringPinServo, 1, drumBallColorsarray);
+            motortargetspeedradians = autoLaunch();
             if (gamepad2.left_trigger >= 0.3) {
                 motortargetspeedradians = 0;
             }
