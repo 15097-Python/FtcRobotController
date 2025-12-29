@@ -12,16 +12,34 @@ import org.firstinspires.ftc.teamcode.MecanumDrive;
 
 public class RRSplineToLaunchPos {
 
-    public static void splineLaunchPos(MecanumDrive drive, Pose2d pose, double angledeg) {
+    public static void splineLaunchPos(MecanumDrive drive, Pose2d pose, double angledeg, int mirrory) {
+        /*
         Action move = drive.actionBuilder(pose)
-                .splineTo(new Vector2d(-22.5, 22), Math.toRadians(angledeg))
+                .splineToConstantHeading(new Vector2d(-22.5, 22 * mirrory),0)
                 .build();
         Actions.runBlocking(move);
+        */
+        Action movedirectlybackout = drive.actionBuilder(pose)
+                .splineToConstantHeading(new Vector2d( -22.5,22* mirrory),pose.heading)
+                .build();
+        Actions.runBlocking(movedirectlybackout);
+
+        pose = drive.localizer.getPose();
+        Action rotate = drive.actionBuilder(pose)
+                .turnTo(Math.toRadians(angledeg))
+                .build();
+        Actions.runBlocking(rotate);
 
          /*
         Action move = drive.actionBuilder(pose)
                 .strafeTo(new Vector2d(-22.5,22))
                 .build();
         Actions.runBlocking(move);*/
+    }
+    public static void returnToPreLoadY(MecanumDrive drive, Pose2d pose, double preloadingy,int mirrory){
+        Action movedirectlybackout = drive.actionBuilder(pose)
+            .splineToConstantHeading(new Vector2d( pose.position.x,preloadingy * mirrory),pose.heading)
+            .build();
+        Actions.runBlocking(movedirectlybackout);
     }
 }

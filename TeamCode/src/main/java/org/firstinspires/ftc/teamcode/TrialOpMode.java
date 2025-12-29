@@ -154,6 +154,18 @@ public class TrialOpMode extends LinearOpMode {
             rightFront.setPower(FRmotorpower);
             leftFront.setPower(FLmotorpower);
 
+            if(gamepad1.right_trigger >= .5){
+                rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            }else{
+                rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+            }
+
 
             //limelight
             limelightposupdate(limelight);
@@ -166,10 +178,44 @@ public class TrialOpMode extends LinearOpMode {
             // sets the velocity of the motors
             LauncherFL.setVelocity(-motortargetspeedradians, AngleUnit.RADIANS);
             currentleftmotorvelocity = LauncherFL.getVelocity(AngleUnit.RADIANS);
-            if(gamepad1.a){
+            if( Math.abs(currentleftmotorvelocity +motortargetspeedradians) < .02){
+                gamepad2.rumble( .75,.75,50);
+            }
+            /*
+            targetdrumangle =
+                                gamepad1.x ? .27 ://loading angles
+                                gamepad1.y ? .6 :
+                                gamepad1.b ? .92 :
+                                    targetdrumangle;
+             */
+            if(gamepad1.x || gamepad1.a){
                 targetdrumangle = 0.27;
                 targetdrumslot = 0;
                 int iloadedballarray =0;
+                for (Balls loadedball : drumBallColors){
+                    if (iloadedballarray >2) {
+                        break;
+                    }
+                    drumBallColors[iloadedballarray] = unknown;
+                    iloadedballarray++;
+                }
+                iloadedballarray = 0;
+            } else if (gamepad1.y) {
+                targetdrumangle = 0.6;
+                targetdrumslot = 1;
+                int iloadedballarray =1;
+                for (Balls loadedball : drumBallColors){
+                    if (iloadedballarray >2) {
+                        break;
+                    }
+                    drumBallColors[iloadedballarray] = unknown;
+                    iloadedballarray++;
+                }
+                iloadedballarray = 0;
+            } else if (gamepad1.b) {
+                targetdrumangle = 0.9;
+                targetdrumslot = 2;
+                int iloadedballarray = 2;
                 for (Balls loadedball : drumBallColors){
                     if (iloadedballarray >2) {
                         break;
@@ -212,14 +258,8 @@ public class TrialOpMode extends LinearOpMode {
                 }*/
 
 
-                /*
-                targetdrumangle = gamepad2.x ? .1 ://Firing angles
-                                gamepad2.y ? .42 :
-                                gamepad2.b ? .76 :
-                                gamepad1.x ? .27 ://loading angles
-                                gamepad1.y ? .6 :
-                                gamepad1.b ? .92 :
-                                    targetdrumangle;*/
+
+
             }else{
                 targetfiringpinangle = firingpinnullposition;
             }
