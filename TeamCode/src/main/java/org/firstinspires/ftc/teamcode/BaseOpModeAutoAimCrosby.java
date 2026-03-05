@@ -19,6 +19,7 @@ import static org.firstinspires.ftc.teamcode.Util.constants.PART_NAMES.drumslota
 import static org.firstinspires.ftc.teamcode.launcher.AutoFirePower.autoLaunch;
 import static org.firstinspires.ftc.teamcode.limelight.LimelightMotifSetting.limelightMotifSet;
 import static org.firstinspires.ftc.teamcode.limelight.LimelightPosSetting.limelightposupdate;
+import static org.firstinspires.ftc.teamcode.limelight.LimelightPosSetting.updateOrientation;
 import static java.lang.Math.atan2;
 
 import com.acmerobotics.roadrunner.Action;
@@ -349,6 +350,8 @@ public class BaseOpModeAutoAimCrosby extends LinearOpMode {
 
 
             double[] robotcoordinates = RobotPosition.getRobotCoordinates();
+            updateOrientation(limelight,robotcoordinates[4]);
+
             telemetry.addData("robotx", robotcoordinates[0]);
             telemetry.addData("roboty", robotcoordinates[1]);
 
