@@ -81,7 +81,7 @@ public class BaseOpModeAutoAimCrosby extends LinearOpMode {
         int firingpositionstarget =0;
 
         Limelight3A limelight = hardwareMap.get(Limelight3A.class, "limelight");// INitilizes the limelights
-        limelight.setPollRateHz(100);
+        limelight.setPollRateHz(90);
         limelight.pipelineSwitch(0);
         limelight.start();
 

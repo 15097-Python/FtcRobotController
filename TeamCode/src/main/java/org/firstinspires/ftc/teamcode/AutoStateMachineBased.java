@@ -84,7 +84,7 @@ public class AutoStateMachineBased extends LinearOpMode {
     @Override
     public void runOpMode(){
         Limelight3A limelight = hardwareMap.get(Limelight3A.class, "limelight");// INitilizes the limelights
-        limelight.setPollRateHz(100);
+        limelight.setPollRateHz(90);
         limelight.pipelineSwitch(0);
         limelight.start();
 
@@ -107,7 +107,7 @@ public class AutoStateMachineBased extends LinearOpMode {
         DcMotorEx Scooper = hardwareMap.get(DcMotorEx.class, "Scooper");
 
 
-        limelight.setPollRateHz(100);
+        limelight.setPollRateHz(90);
         limelight.pipelineSwitch(0);
         limelight.start();
 
@@ -126,7 +126,7 @@ public class AutoStateMachineBased extends LinearOpMode {
 
         int mirrory = (isred) ? 1 : -1;
 
-        telemetry.addData("mirroiry",mirrory);
+        telemetry.addData("mirrory",mirrory);
         Pose2d currentpose = new Pose2d(-62, 37.5 * mirrory, 0);
         MecanumDrive drive = new MecanumDrive(  hardwareMap, currentpose);
 
