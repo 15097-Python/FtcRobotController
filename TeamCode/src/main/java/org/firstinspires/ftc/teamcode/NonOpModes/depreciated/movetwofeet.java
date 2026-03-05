@@ -1,20 +1,10 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.NonOpModes.depreciated;
 
-import static org.firstinspires.ftc.teamcode.NonOpModes.colorsensing.ColorSensingFunctions.colorDetection;
 import static org.firstinspires.ftc.teamcode.Util.Enum.Balls.green;
 import static org.firstinspires.ftc.teamcode.Util.Enum.Balls.purple;
-import static org.firstinspires.ftc.teamcode.Util.Enum.Balls.unknown;
-import static org.firstinspires.ftc.teamcode.Util.RRSplineToLaunchPos.splineLaunchPos;
-import static org.firstinspires.ftc.teamcode.Util.constants.RobotStats.firingpinfiringposition;
-import static org.firstinspires.ftc.teamcode.Util.constants.RobotStats.firingpinnullposition;
-import static org.firstinspires.ftc.teamcode.limelight.LimelightMotifSetting.limelightMotifSet;
-
-import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
-import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
@@ -26,13 +16,13 @@ import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.Util.Enum.Balls;
 
-@Autonomous(name="MoveToTwoPositiongs")
+@Autonomous(name="movetwofeet")
 @Config
 
-public class MoveToTwoPositions extends LinearOpMode {
+public class movetwofeet extends LinearOpMode {
     ElapsedTime timer = new ElapsedTime();
     private DcMotorEx Scooper;
     private Servo DrumServo;
@@ -40,7 +30,8 @@ public class MoveToTwoPositions extends LinearOpMode {
     private DcMotorEx LauncherFL;
 
     public static double xdistance = 12;
-    public static double ydistance = 12;
+    public static double ydistance = 0;
+    public static double initialdeadingdegrees = 0;
 
     @Override
     public void runOpMode() {
@@ -77,7 +68,7 @@ public class MoveToTwoPositions extends LinearOpMode {
 
         // y = x
         // x = -y
-        Pose2d startPose = new Pose2d(0, 0, 0);
+        Pose2d startPose = new Pose2d(0, 0, initialdeadingdegrees);
         MecanumDrive drive = new MecanumDrive(  hardwareMap,  startPose);
 
         waitForStart();////////////////////////////////////////////////////
@@ -89,37 +80,8 @@ public class MoveToTwoPositions extends LinearOpMode {
             Actions.runBlocking(movetoloadingone);
             startPose = drive.localizer.getPose();
 
-            Action movethree = drive.actionBuilder(startPose)
-                    .splineToConstantHeading(new Vector2d(-xdistance, -ydistance), Math.toRadians(0))
-                    .build();
-            Actions.runBlocking(movethree);
-            startPose = drive.localizer.getPose();
 
-            /*
-            Action movefour = drive.actionBuilder(startPose)
-                    .splineToConstantHeading(new Vector2d(-xdistance, -ydistance), Math.toRadians(0))
-                    .build();
-            Actions.runBlocking(movefour);
-            startPose = drive.localizer.getPose();
-
-            Action movefive = drive.actionBuilder(startPose)
-                    .splineToConstantHeading(new Vector2d(xdistance, -ydistance), Math.toRadians(0))
-                    .build();
-            Actions.runBlocking(movefive);
-            startPose = drive.localizer.getPose();
-
-            Action movesix = drive.actionBuilder(startPose)
-                    .splineToConstantHeading(new Vector2d(xdistance, -ydistance), Math.toRadians(0))
-                    .build();
-            Actions.runBlocking(movesix);
-            startPose = drive.localizer.getPose();
-
-            //splineLaunchPos(drive, startPose, 0);
-            Action movetoloadingtwo = drive.actionBuilder(startPose)
-                    .splineToConstantHeading(new Vector2d(0, 0), Math.toRadians(0))
-                    .build();
-            Actions.runBlocking(movetoloadingtwo);
-            startPose = drive.localizer.getPose();*/
+            break;
         }
     }
 }

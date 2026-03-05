@@ -17,7 +17,6 @@ public abstract class FieldOrientedDriving {
         double targetdrivey = leftstickinputx*cos(currentrelativeheading)-leftstickinputy*sin(currentrelativeheading);
         double targetdrivex = leftstickinputx*sin(currentrelativeheading)+leftstickinputy*cos(currentrelativeheading);
 
-
         double BRmotorpower = targetdrivey+targetdrivex-targetturn;
         double BLmotorpower = targetdrivey-targetdrivex+targetturn;
         double FRmotorpower = (targetdrivey-targetdrivex)-targetturn;

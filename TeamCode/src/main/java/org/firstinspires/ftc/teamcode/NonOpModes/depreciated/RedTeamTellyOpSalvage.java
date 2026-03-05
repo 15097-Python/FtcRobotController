@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.NonOpModes.depreciated;
 
 import static org.firstinspires.ftc.teamcode.Util.RobotPosition.TeamColorRED;
 import static org.firstinspires.ftc.teamcode.Util.RobotPosition.getRobotCoordinates;
@@ -7,6 +7,7 @@ import static org.firstinspires.ftc.teamcode.limelight.LimelightPosSetting.limel
 
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -18,8 +19,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.positioning.odometry.FieldOrientedDriving;
 
 @TeleOp(name="RedTellyOPSalvage")
-
-public class TapFireTest extends LinearOpMode {
+@Disabled
+public class RedTeamTellyOpSalvage extends LinearOpMode {
 
     ElapsedTime timer = new ElapsedTime();
     ElapsedTime rapidtime = new ElapsedTime();
@@ -33,15 +34,11 @@ public class TapFireTest extends LinearOpMode {
     private DcMotor FR;
     private DcMotorEx LauncherFL;
 
+    protected boolean isred = true;
 
     @Override
     public void runOpMode() {
-        TeamColorRED = true;
-        boolean lastA = false;
-        boolean firing = false;
-        long fireStartTime = 0;
-
-        final long FIRE_DURATION_MS = 200; // adjust 150–300 ms for your servo
+        TeamColorRED = isred;
 
         boolean fullunloadflag = false;
         double lasttime = timer.milliseconds();
@@ -49,7 +46,7 @@ public class TapFireTest extends LinearOpMode {
         double[] drumBallColors = {0, 0, 0};
         double targetdrumangle = 0;
         double targetfiringpinangle = 1;
-
+        boolean firing = false;
 
         double motortargetspeedradians = 0;
         double currentleftmotorvelocity = 0;
@@ -149,37 +146,18 @@ public class TapFireTest extends LinearOpMode {
             // sets the velocity of the motors
             LauncherFL.setVelocity(motortargetspeedradians, AngleUnit.RADIANS);
 
-            // Detect rising edge (A tapped)
-            boolean aTapped = gamepad2.a && !lastA;
-
-            if (aTapped) {
-                firing = true;
-                fireStartTime = System.currentTimeMillis();
-            }
-
-// Handle firing pulse
-            if (firing) {
-                targetfiringpinangle = firingpinnullposition - 0.32; // firing position
-
-                // End pulse after duration
-                if (System.currentTimeMillis() - fireStartTime >= FIRE_DURATION_MS) {
-                    firing = false;
-                }
+            if (gamepad2.a) {//firing bin controls
+                targetfiringpinangle = firingpinnullposition - .32  ;
             } else {
                 targetfiringpinangle = firingpinnullposition;
+                targetdrumangle = gamepad2.x ? .1 ://Firing angles
+                                gamepad2.y ? .42 :
+                                gamepad2.b ? .76 :
+                                gamepad1.x ? .27 ://loading angles
+                                gamepad1.y ? .6 :
+                                gamepad1.b ? .92 :
+                                    targetdrumangle;
             }
-
-            targetdrumangle = gamepad2.x ? .1 :
-                              gamepad2.y ? .42 :
-                              gamepad2.b ? .76 :
-                              gamepad1.x ? .27 :
-                              gamepad1.y ? .6 :
-                              gamepad1.b ? .92 :
-                              targetdrumangle;
-
-// Update last state
-            lastA = gamepad2.a;
-
             double[] firingpositions = {.1,.42,.76};
 
             //MAG Dump code

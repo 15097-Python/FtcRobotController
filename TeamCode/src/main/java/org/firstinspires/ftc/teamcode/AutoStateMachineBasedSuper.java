@@ -18,12 +18,12 @@ import static org.firstinspires.ftc.teamcode.limelight.LimelightMotifSetting.lim
 
 import androidx.annotation.NonNull;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
@@ -40,7 +40,7 @@ import org.firstinspires.ftc.teamcode.Util.Enum.Balls;
 import org.firstinspires.ftc.teamcode.Util.Enum.DrumSlots;
 
 
-enum AutoState{
+enum AutoStateSuper {
     Initialization,
     MoveToLaunchZone,
     GetMotif,
@@ -52,7 +52,7 @@ enum AutoState{
 }
 @Config
 
-public class AutoStateMachineBased extends LinearOpMode {
+public class AutoStateMachineBasedSuper extends LinearOpMode {
 
     public static double firsttwointakelessamountMS = 300;
     public static double movetolaunchzonetangent = 0;
@@ -85,6 +85,7 @@ public class AutoStateMachineBased extends LinearOpMode {
     private AutoState currentstate = AutoState.Initialization;
     private int loadcount = 1;
 
+
     DrumSlots targetslotforautolaunch = null;
 
     int motifcyclingautofirearray = 0;
@@ -97,7 +98,7 @@ public class AutoStateMachineBased extends LinearOpMode {
     @Override
     public void runOpMode(){
         Limelight3A limelight = hardwareMap.get(Limelight3A.class, "limelight");// INitilizes the limelights
-        limelight.setPollRateHz(90);
+        limelight.setPollRateHz(100);
         limelight.pipelineSwitch(0);
         limelight.start();
 
@@ -120,7 +121,7 @@ public class AutoStateMachineBased extends LinearOpMode {
         DcMotorEx Scooper = hardwareMap.get(DcMotorEx.class, "Scooper");
 
 
-        limelight.setPollRateHz(90);
+        limelight.setPollRateHz(100);
         limelight.pipelineSwitch(0);
         limelight.start();
 
@@ -141,8 +142,8 @@ public class AutoStateMachineBased extends LinearOpMode {
 
         telemetry.addData("mirroiry",mirrory);
         telemetry.update();
-        //-62 is what nominaly works
-        Pose2d currentpose = new Pose2d(-66, 32.5 * mirrory, 0 + Math.toRadians(universalrotationoffset));
+
+        Pose2d currentpose = new Pose2d(-62, 32.5 * mirrory, 0 + Math.toRadians(universalrotationoffset));
         MecanumDrive drive = new MecanumDrive(  hardwareMap, currentpose);
 
         DrumSlots[] drumslotarray = {SLOT_0,SLOT_1,SLOT_2};
@@ -174,30 +175,29 @@ public class AutoStateMachineBased extends LinearOpMode {
 
                 case MoveToLaunchZone:
                     telemetry.addLine("moving to launch zone");
+                    telemetry.addData("currentmotif0",motif[0]);
+                    telemetry.addData("currentmotif1",motif[1]);
+                    telemetry.addData("currentmotif2",motif[2]);
                     telemetry.update();
-
-                    if(loadcount == 3) movetolaunchzonetangent = 0;
-
-                    Action drivetolaunchzone;
-                    if(pullout){
-                        drivetolaunchzone = drive.actionBuilder(drive.localizer.getPose())
-                                .strafeTo(new Vector2d(drive.localizer.getPose().position.x, launchzonetargety * mirrory))
-                                .strafeTo(new Vector2d(launchzoneredx, launchzonetargety * mirrory))
-                                .build();
-                    }else {
-                        drivetolaunchzone = drive.actionBuilder(drive.localizer.getPose())
-                                .strafeTo(new Vector2d(launchzoneredx, launchzonetargety * mirrory))
-                                .build();
-                    }
-                    Actions.runBlocking(drivetolaunchzone);
                     currentpose = drive.localizer.getPose();
+                    double motifoffset = Math.PI;
+                    if(!isred) motifoffset = 0;
+                    double motiftargetturn = Math.atan2(predictedmotify - currentpose.position.y, predictedmotifx - currentpose.position.x);
 
-                    if (Math.abs(launchzonetargety - currentpose.position.y * mirrory) < movetolaunchzoneylimit){
-                        if(motif[0] != unknown) currentstate = AutoState.RotateToTarget;
-                        else currentstate = AutoState.GetMotif;
+                    Action moveToLaunchZone = drive.actionBuilder(drive.localizer.getPose())
+                            .strafeTo(new Vector2d(launchzoneredx, launchzonetargety * mirrory))
+                            .build();
+                    Action turnToMotif = drive.actionBuilder(drive.localizer.getPose())
+                            .turnTo(motiftargetturn + motifoffset)
+                            .build();
+                    if(motif[0] == unknown){
+                        motif = limelightMotifSet(limelight);
+                        turnToMotif.run(new TelemetryPacket());
+                    }
 
-                    }telemetry.addLine("retrying");
-                    telemetry.update();
+
+
+                    moveToLaunchZone.run(new TelemetryPacket());
                     break;
 
                 case GetMotif:
@@ -206,20 +206,7 @@ public class AutoStateMachineBased extends LinearOpMode {
 
                     ElapsedTime motiftime = new ElapsedTime();
 
-                    currentpose = drive.localizer.getPose();
-                    double motifoffset = Math.PI;
-                    if(!isred) motifoffset = 0;
-                    double motiftargetturn = Math.atan2(predictedmotify - currentpose.position.y, predictedmotifx - currentpose.position.x);
-                    Action turnTowardsMotif = drive.actionBuilder(drive.localizer.getPose())
-                            .turnTo(motiftargetturn + motifoffset)
-                            .build();
-                    Actions.runBlocking(turnTowardsMotif);
 
-                    motif = limelightMotifSet(limelight);
-                    telemetry.addData("currentmotif0",motif[0]);
-                    telemetry.addData("currentmotif1",motif[1]);
-                    telemetry.addData("currentmotif2",motif[2]);
-                    telemetry.update();
 
 
                     //TODO fix this garbage
@@ -330,21 +317,18 @@ public class AutoStateMachineBased extends LinearOpMode {
                             break;
                     }
 
-                    double turnangleforloading = 0;
-                    if(!isred) turnangleforloading = 180;
+
                     Action DriveToBeforeLoad = drive.actionBuilder(drive.localizer.getPose())
-                            .turnTo(Math.toRadians(turnangleforloading))
                             .strafeTo(new Vector2d(zonetargetx,preloadingy * mirrory))
-                            .turnTo(Math.toRadians(turnangleforloading))
                             .build();
                     Actions.runBlocking(DriveToBeforeLoad);
+                    double turnangleforloading = 0;
+                    if(!isred) turnangleforloading = 180;
 
-
-                    /*
                     Action TurnToBeforeLoad = drive.actionBuilder(drive.localizer.getPose())
                             .turnTo(Math.toRadians(turnangleforloading))
                             .build();
-                    Actions.runBlocking(TurnToBeforeLoad);*/
+                    Actions.runBlocking(TurnToBeforeLoad);
                     //if(Math.abs(drive.localizer.getPose().heading.toDouble() - Math.PI/2) >3) Actions.runBlocking(TurnToBeforeLoad);
                     telemetry.update();
                     currentstate = AutoState.LoadBalls;
@@ -365,6 +349,8 @@ public class AutoStateMachineBased extends LinearOpMode {
                     Action pickUpLoadOne = new ParallelAction(
                             drive.actionBuilder(drive.localizer.getPose())
                                     .strafeTo(new Vector2d(zonetargetx, ballpickupy * mirrory))//,new TranslationalVelConstraint(100)
+                                    .strafeTo(new Vector2d(drive.localizer.getPose().position.x, launchzonetargety * mirrory))
+                                    .strafeTo(new Vector2d(launchzoneredx, launchzonetargety * mirrory))
                                     .build(),
                             new Action() {
                                 Boolean fullyloaded = false;
@@ -435,23 +421,7 @@ public class AutoStateMachineBased extends LinearOpMode {
                     currentstate = AutoState.MoveToLaunchZone;
                     break;
             }
-            if (loadcount == 4){
-                double turntodriverangle;
-                if(isred){
-                    turntodriverangle = 3*Math.PI/2;
-                } else{
-                    turntodriverangle = Math.PI/2;
-                }
-                Action turntodriver = drive.actionBuilder(drive.localizer.getPose())
-                        .turnTo(turntodriverangle)
-                        .build();
-                Actions.runBlocking(turntodriver);
-                Action turntodriver2 = drive.actionBuilder(drive.localizer.getPose())
-                        .turnTo(turntodriverangle)
-                        .build();
-                Actions.runBlocking(turntodriver2);
-                break;
-            }
+            if (loadcount == 4) break;
         }
     }
 
