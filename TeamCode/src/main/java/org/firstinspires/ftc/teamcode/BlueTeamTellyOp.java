@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.NonOpModes.depreciated.oldBaseOpMode;
 @TeleOp(name="BlueTellyOpReal")
 
 
-public class BlueTeamTellyOp extends oldBaseOpMode {
+public class BlueTeamTellyOp extends BaseOpMode {
 
     public  BlueTeamTellyOp(){
         isred = false;

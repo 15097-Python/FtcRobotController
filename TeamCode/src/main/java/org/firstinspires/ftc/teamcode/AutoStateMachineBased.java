@@ -62,24 +62,27 @@ public class AutoStateMachineBased extends LinearOpMode {
     public static double loadtwoprex = 0;
     public static double loadthreeprex = 26;
 
-    public static double movetolaunchzonexlimit = 22.5;
+    public static double endyformovement = 60;
     public static double movetolaunchzoneylimit = 25;
-    public static double motiftimelimitms = 1000;
+    public static double motiftimelimitms = 1500;
     public static double autoaimvariancelimiter = 300000;
     public static double preloadingy = 10;
     public static double bluemodifyer = 2;
-    public static double ballpickupy = 60;
-    public static double loadonex = -12;//-12red//-16blue
+    public static double firstydiff = 14;
+    public static double ballpickupyinit = 60;
+    public static double ballpickupy = ballpickupyinit;
+    public static double loadonex = -14;//-12red//-16blue
     public static double loadtwox = 14;//14red//11blue
-    public static double loadthreex = 49;//49red//44blue
+    public static double loadthreex = 32;//49red//44blue
     public static double intaketimelinghtthree = 3000;
     public static double loadtangent = 45;
     public static double universalrotationoffset = 0;
-    public static double launchzoneredx = -30.5;
+    public static double launchzoneredx = -34.5;
     public static double launchzonetargety = 22;
-    public static double launchspeed = -3.2;
-    public static double blueadd = 4.65;
+    public static double launchspeed = -3.18;
+    public static double blueadd = 4.525;//smaller is more left
     public static Boolean pullout = false;
+    public static int motifloop= 0;
     double zonetargetx = 0;
 
     private AutoState currentstate = AutoState.Initialization;
@@ -93,9 +96,11 @@ public class AutoStateMachineBased extends LinearOpMode {
 
     double intaketimelength;
 
+    public ElapsedTime motiftime = new ElapsedTime();
 
     @Override
     public void runOpMode(){
+
         Limelight3A limelight = hardwareMap.get(Limelight3A.class, "limelight");// INitilizes the limelights
         limelight.setPollRateHz(100);
         limelight.pipelineSwitch(0);
@@ -155,8 +160,10 @@ public class AutoStateMachineBased extends LinearOpMode {
         while (opModeIsActive()){
             switch (currentstate){
                 case Initialization :
+                    if(!isred) loadtwox -= 0;
+                    ballpickupy = ballpickupyinit;
                     intaketimelength = intaketimelinghtthree;
-                    targetangnle = -45;
+                    targetangnle = -40;
                     telemetry.addLine("initilzaing");
                     telemetry.update();
                     //if(!isred)
@@ -168,8 +175,10 @@ public class AutoStateMachineBased extends LinearOpMode {
                     LauncherFL.setVelocity(launchspeed, AngleUnit.RADIANS);
                     FiringPinServo.setPosition(firingpinnullposition);
                     DrumServo.setPosition(0.1);
-
+                    sleep(1000);
                     currentstate = AutoState.MoveToLaunchZone;
+
+                    motifloop = 0;
                     break;
 
                 case MoveToLaunchZone:
@@ -204,11 +213,12 @@ public class AutoStateMachineBased extends LinearOpMode {
                     telemetry.addLine("motifing");
                     telemetry.update();
 
-                    ElapsedTime motiftime = new ElapsedTime();
+                    if (motifloop == 0) motiftime.reset();
+                    motifloop++;
 
                     currentpose = drive.localizer.getPose();
-                    double motifoffset = Math.PI;
-                    if(!isred) motifoffset = 0;
+                    double motifoffset = Math.PI-.3;
+                    if(!isred) motifoffset = -0.6;
                     double motiftargetturn = Math.atan2(predictedmotify - currentpose.position.y, predictedmotifx - currentpose.position.x);
                     Action turnTowardsMotif = drive.actionBuilder(drive.localizer.getPose())
                             .turnTo(motiftargetturn + motifoffset)
@@ -246,7 +256,7 @@ public class AutoStateMachineBased extends LinearOpMode {
 
                     arctanintermediatey = usedy - drive.localizer.getPose().position.y;
 
-                    if(loadcount > 1) targetangnle = -55;
+                    if(loadcount > 1) targetangnle = -50;
                     if(loadcount > 1 && !isred) targetangnle = -35;
                     double robotautoaimtargetangle = Math.toRadians(targetangnle);//Math.atan2(arctanintermediatey, arctanintermediatex);
 
@@ -273,9 +283,9 @@ public class AutoStateMachineBased extends LinearOpMode {
                         DrumServo.setPosition(targetslotforautolaunch.shootPosition);
                         sleep(600);
                         FiringPinServo.setPosition(firingpinfiringposition);
-                        sleep(200);
+                        sleep(150);
                         FiringPinServo.setPosition(firingpinnullposition);
-                        sleep(200);
+                        sleep(150);
                         targetslotforautolaunch.setLoadedBall(unknown);
                         targetslotforautolaunch = null;
 
@@ -332,10 +342,11 @@ public class AutoStateMachineBased extends LinearOpMode {
 
                     double turnangleforloading = 0;
                     if(!isred) turnangleforloading = 180;
+                    //sleep(5000);
                     Action DriveToBeforeLoad = drive.actionBuilder(drive.localizer.getPose())
                             .turnTo(Math.toRadians(turnangleforloading))
                             .strafeTo(new Vector2d(zonetargetx,preloadingy * mirrory))
-                            .turnTo(Math.toRadians(turnangleforloading))
+                            //.turnTo(Math.toRadians(turnangleforloading))
                             .build();
                     Actions.runBlocking(DriveToBeforeLoad);
 
@@ -361,9 +372,14 @@ public class AutoStateMachineBased extends LinearOpMode {
                     double[] drumlocations = {SLOT_0.loadPosition,SLOT_1.loadPosition, SLOT_2.loadPosition};
 
 
+                    turnangleforloading = 0;
+                    if(!isred) turnangleforloading = 180;
+                    if (loadcount == 0) ballpickupy -= firstydiff;
+                    if (loadcount == 1) ballpickupy += ballpickupyinit;
                     //.splineToConstantHeading(new Vector2d(drive.localizer.getPose().position.x, ballpickupy * mirrory),Math.toRadians(0))
                     Action pickUpLoadOne = new ParallelAction(
                             drive.actionBuilder(drive.localizer.getPose())
+                                    .turnTo(Math.toRadians(turnangleforloading))
                                     .strafeTo(new Vector2d(zonetargetx, ballpickupy * mirrory))//,new TranslationalVelConstraint(100)
                                     .build(),
                             new Action() {
@@ -449,7 +465,14 @@ public class AutoStateMachineBased extends LinearOpMode {
                 Action turntodriver2 = drive.actionBuilder(drive.localizer.getPose())
                         .turnTo(turntodriverangle)
                         .build();
-                Actions.runBlocking(turntodriver2);
+                Actions.runBlocking(turntodriver2);/*
+                Action moveteamate = drive.actionBuilder(drive.localizer.getPose())
+                        .strafeTo(new Vector2d(endyformovement,-30))
+                        .strafeTo(new Vector2d(endyformovement,-10))
+                        .strafeTo(new Vector2d(endyformovement,-30))
+                        .build();
+                Actions.runBlocking(moveteamate);*/
+
                 break;
             }
         }

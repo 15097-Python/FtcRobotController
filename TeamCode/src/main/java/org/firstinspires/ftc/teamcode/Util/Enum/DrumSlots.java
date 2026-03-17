@@ -26,6 +26,17 @@ public enum DrumSlots {
         return loadedBall;
     }
 
+    public int getNumOfSlot(){
+        switch (this){
+            case SLOT_0:
+                return(0);
+            case SLOT_1:
+                return(1);
+            case SLOT_2:
+                return(2);
+        }
+        return(-1);
+    }
     public void setLoadedBall(Balls ballColor) {
         this.loadedBall = ballColor;
     }

@@ -13,10 +13,10 @@ import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import org.firstinspires.ftc.teamcode.Util.Enum.Balls;
 @Config
 public class ColorSensingFunctions {
-    public static double plowbounds = 166;
-    public static double pupbounds = 255;
-    public static double glowbounds = 140;
-    public static double gupbounds = 165;
+    public static double plowbounds = 166;//166time tested
+    public static double pupbounds = 255;//255time tested
+    public static double glowbounds = 140;//140 time tested
+    public static double gupbounds = 165;//165time tested
 
     public static Balls colorDetection (NormalizedColorSensor colorSensor1, NormalizedColorSensor colorSensor2) {
         float[] hsv1 = new float[3];

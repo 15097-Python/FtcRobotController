@@ -91,12 +91,13 @@ public final class constants {
     /**
      * hardware stuff about the robot
      */
+    @Config
     public static final class RobotStats{
         public static final double launchAngle = 30; //find out what all of these actually are
         public static final double limelightYOffset = 0;
         public static final double limelightXOffset = 0;
-        public static final double firingpinnullposition = .98;
-        public static final double firingpinfiringposition = firingpinnullposition-.32;
+        public static double firingpinnullposition = .81;
+        public static double firingpinfiringposition = .66;
         public static final double WheelRadius = 0.03730625; //meters
         public static final double ShaftRadius = 0.008; //meters
         public static final double MaxRPM = 117.0; //confirm later but this is what website said
