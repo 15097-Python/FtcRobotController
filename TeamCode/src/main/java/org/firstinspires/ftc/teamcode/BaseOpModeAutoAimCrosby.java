@@ -14,6 +14,9 @@ import static org.firstinspires.ftc.teamcode.Util.Enum.States.None;
 import static org.firstinspires.ftc.teamcode.Util.Enum.States.TurnToBall;
 import static org.firstinspires.ftc.teamcode.Util.RobotPosition.TeamColorRED;
 import static org.firstinspires.ftc.teamcode.Util.RobotPosition.getRobotCoordinates;
+import static org.firstinspires.ftc.teamcode.Util.constants.FIELD.shoottargetx;
+import static org.firstinspires.ftc.teamcode.Util.constants.FIELD.shoottargetyblue;
+import static org.firstinspires.ftc.teamcode.Util.constants.FIELD.shoottargetyred;
 import static org.firstinspires.ftc.teamcode.Util.constants.PART_NAMES.drumslotarray;
 import static org.firstinspires.ftc.teamcode.Util.constants.RobotStats.firingpinfiringposition;
 import static org.firstinspires.ftc.teamcode.Util.constants.RobotStats.firingpinnullposition;
@@ -22,15 +25,9 @@ import static org.firstinspires.ftc.teamcode.Util.drumMeasuring.drumMeasuringFun
 import static org.firstinspires.ftc.teamcode.launcher.AutoFirePower.autoLaunch;
 import static org.firstinspires.ftc.teamcode.limelight.LimelightMotifSetting.limelightMotifSet;
 import static org.firstinspires.ftc.teamcode.limelight.LimelightPosSetting.limelightposupdate;
-import static org.firstinspires.ftc.teamcode.Util.constants.FIELD.shoottargetx;
-import static org.firstinspires.ftc.teamcode.Util.constants.FIELD.shoottargetyblue;
-import static org.firstinspires.ftc.teamcode.Util.constants.FIELD.shoottargetyred;
 import static org.firstinspires.ftc.teamcode.limelight.LimelightPosSetting.roadrunnerupdatevialimelight;
-
 import static java.lang.Math.atan2;
 
-import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
@@ -40,8 +37,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
-import com.qualcomm.robotcore.hardware.PIDCoefficients;
-import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -53,19 +48,11 @@ import org.firstinspires.ftc.teamcode.Util.RobotPosition;
 import org.firstinspires.ftc.teamcode.positioning.odometry.FieldOrientedDriving;
 
 
-@Config
 public class BaseOpModeAutoAimCrosby extends LinearOpMode {
 
-    public static double P = 0.005;
-    public static double I = 0.0001;
-    public static double D = 0.001;
-    public static double F = 4;
-    public static double firingPinTime = 85;
-    public static double motorspeedvaraiancelimitor = .5;
     ElapsedTime timer = new ElapsedTime();
     ElapsedTime rapidtime = new ElapsedTime();
     ElapsedTime autoaimthing = new ElapsedTime();
-    ElapsedTime firingpinstarttime = new ElapsedTime();
 
     protected boolean isred;
 
@@ -80,16 +67,12 @@ public class BaseOpModeAutoAimCrosby extends LinearOpMode {
 
         TeamColorRED = isred;
 
-        int numtimeoffiringpin = 0;
-
         int motifcyclingautofirearray = 0;
 
         Balls[] motif = {purple, green, purple};
         double[] firingpositions = {.76,.1,.42};
 
         DrumSlots targetslotforautolaunch = null;
-
-        double drumTurnSleepTime = 600;
 
         double autoaimleft = 0;
         boolean autoAimLast = false;
@@ -165,7 +148,6 @@ public class BaseOpModeAutoAimCrosby extends LinearOpMode {
         while (opModeIsActive()) {
 
 
-            //launcherFL.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER,new PIDFCoefficients(P,I,D,F));
 
             double leftstickinputy = gamepad1.left_stick_y; // Forward/backward negative because it's naturally inverted
             double leftstickinputx = gamepad1.left_stick_x; // side to side
@@ -218,12 +200,10 @@ public class BaseOpModeAutoAimCrosby extends LinearOpMode {
 
             //sets motor speeds
             motortargetspeedradians = autoLaunch();
-            if(gamepad2.dpad_up) motortargetspeedradians = 4.4;
-            if(gamepad2.dpad_left) motortargetspeedradians = 4;
-            if(gamepad2.dpad_right) motortargetspeedradians = 3.6;
 
             launcherFL.setVelocity(-motortargetspeedradians, AngleUnit.RADIANS);
             currentleftmotorvelocity = launcherFL.getVelocity(AngleUnit.RADIANS);
+
 
 
 
@@ -243,7 +223,7 @@ public class BaseOpModeAutoAimCrosby extends LinearOpMode {
 
 
             if (gamepad2.a) {//firing bin controls
-                targetfiringpinangle = firingpinfiringposition;
+                targetfiringpinangle = firingpinnullposition - .32  ;
 
             } else {
                 if(!fullunloadflag)targetfiringpinangle = firingpinnullposition;
@@ -275,7 +255,7 @@ public class BaseOpModeAutoAimCrosby extends LinearOpMode {
                     if(lookslot.getLoadedBall() == unknown){
                         break;
                     }
-                    //gamepad1.rumble(.75,.75,100);
+                    gamepad1.rumble(.75,.75,100);
                 }
                 
             }
@@ -284,10 +264,6 @@ public class BaseOpModeAutoAimCrosby extends LinearOpMode {
             if(gamepad1.right_bumper){
                 targetdrumslot = Math.min(targetdrumslot,2);
                 targetdrumangle = drumlocations[targetdrumslot];
-                if (SLOT_0.getLoadedBall() != unknown && SLOT_1.getLoadedBall() != unknown && SLOT_2.getLoadedBall() != unknown){
-                    scooper.setVelocity(999, AngleUnit.RADIANS);
-                    gamepad1.rumble(.75,.75,100);
-                }
             }else if (gamepad2.x || gamepad2.y || gamepad2.b){
                 targetdrumangle = firingpositions[firingpositionstarget];
             }
@@ -311,32 +287,21 @@ public class BaseOpModeAutoAimCrosby extends LinearOpMode {
                 if(targetslotforautolaunch != null) {
                     switch (currentstate) {
                         case TurnToBall:
-                            drumTurnSleepTime = drumMeasuringFunct(currentAngleToSlot(targetdrumangle),targetslotforautolaunch.getNumOfSlot());
                             targetdrumangle = targetslotforautolaunch.shootPosition;
-                            if (currenttime > drumTurnSleepTime) currentstate = FiringPinIn;
+                            if (currenttime > 600) currentstate = FiringPinIn;
                             break;
 
                         case FiringPinIn:
-                            if(Math.abs(Math.abs(currentleftmotorvelocity) - Math.abs(motortargetspeedradians)) > motorspeedvaraiancelimitor) break;
                             targetfiringpinangle = firingpinfiringposition;
-                            if(numtimeoffiringpin == 0){
-                                firingpinstarttime.reset();
-                                numtimeoffiringpin++;
-                            }
-                            if (firingpinstarttime.milliseconds() > firingPinTime) currentstate = FiringPinOut;
+                            if (currenttime > 800) currentstate = FiringPinOut;
                             break;
 
                         case FiringPinOut:
                             targetfiringpinangle = firingpinnullposition;
-                            if(numtimeoffiringpin == 1){
-                                firingpinstarttime.reset();
-                                numtimeoffiringpin++;
-                            }
-                            if (firingpinstarttime.milliseconds() > firingPinTime) {
+                            if (currenttime > 1000) {
                                 currentstate = TurnToBall;
                                 targetslotforautolaunch.setLoadedBall(unknown);
                                 targetslotforautolaunch = null;
-                                numtimeoffiringpin = 0;
                                 rapidtime.reset();
                             }
                             break;
@@ -425,7 +390,7 @@ public class BaseOpModeAutoAimCrosby extends LinearOpMode {
 
             drive.localizer.update();
 
-            //roadrunnerupdatevialimelight(limelight,drive);
+            roadrunnerupdatevialimelight(limelight,drive);
             Pose2d rodrunnercords = drive.localizer.getPose();
 
             telemetry.addData("rrrobotx", rodrunnercords.position.x);

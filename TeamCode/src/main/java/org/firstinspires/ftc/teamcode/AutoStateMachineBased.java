@@ -102,7 +102,7 @@ public class AutoStateMachineBased extends LinearOpMode {
     public void runOpMode(){
 
         Limelight3A limelight = hardwareMap.get(Limelight3A.class, "limelight");// INitilizes the limelights
-        limelight.setPollRateHz(100);
+        limelight.setPollRateHz(90);
         limelight.pipelineSwitch(0);
         limelight.start();
 
@@ -125,7 +125,7 @@ public class AutoStateMachineBased extends LinearOpMode {
         DcMotorEx Scooper = hardwareMap.get(DcMotorEx.class, "Scooper");
 
 
-        limelight.setPollRateHz(100);
+        limelight.setPollRateHz(90);
         limelight.pipelineSwitch(0);
         limelight.start();
 
