@@ -30,6 +30,7 @@ import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
+import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -39,10 +40,12 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.teamcode.Util.Enum.Balls;
 import org.firstinspires.ftc.teamcode.Util.Enum.DrumSlots;
 import org.firstinspires.ftc.teamcode.Util.Enum.States;
 import org.firstinspires.ftc.teamcode.Util.RobotPosition;
+import org.firstinspires.ftc.teamcode.limelight.LimelightPosSetting;
 import org.firstinspires.ftc.teamcode.positioning.odometry.FieldOrientedDriving;
 
 
@@ -175,7 +178,10 @@ public class BaseOpModeAutoAimCrosby extends LinearOpMode {
             Pose2d roadrunerlocation = drive.localizer.getPose();
             double currentrelativeheading = roadrunerlocation.heading.toDouble();
 
-
+            LimelightPosSetting.updateOrientation(
+                    limelight,
+                    Math.toDegrees(drive.localizer.getPose().heading.toDouble())
+            );
 
             //Calls FieldOrientedDriving function and sets motor power
             double[] motorpowerarray = FieldOrientedDriving.fieldOrientedMath(leftstickinputy, -leftstickinputx, targetturn, currentrelativeheading);
@@ -421,6 +427,10 @@ public class BaseOpModeAutoAimCrosby extends LinearOpMode {
             telemetry.addData("rotation from ll", currentrobotlocation[5]);
             telemetry.addData("robotx", currentrobotlocation[0]);
             telemetry.addData("roboty", currentrobotlocation[1]);
+            LLResult result = limelight.getLatestResult();
+            Pose3D robotPoseMT2 = result.getBotpose_MT2();
+            telemetry.addData("lmelight x", 39.37 * robotPoseMT2.getPosition().x);
+            telemetry.addData("lmelight y", 39.37 * robotPoseMT2.getPosition().y);
 
             telemetry.update();
 

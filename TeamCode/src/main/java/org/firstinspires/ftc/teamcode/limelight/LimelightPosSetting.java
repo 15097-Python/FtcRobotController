@@ -6,9 +6,12 @@ import static org.firstinspires.ftc.teamcode.Util.RobotPosition.modifyRobotCoord
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.hardware.limelightvision.LLResult;
+import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
+
+import java.util.List;
 
 //+X is forward, +Y is left
 public class LimelightPosSetting {
@@ -25,8 +28,8 @@ public class LimelightPosSetting {
             Pose3D robotPoseMT2 = result.getBotpose_MT2();
 
             if (robotPoseMT2 != null) {
-                double x = robotPoseMT2.getPosition().x;
-                double y = robotPoseMT2.getPosition().y;
+                double x = 39.37 * robotPoseMT2.getPosition().x;
+                double y = 39.37 * robotPoseMT2.getPosition().y;
                 double yaw = Math.toRadians(robotPoseMT2.getOrientation().getYaw());
 
                 double[] currentrobotlocation = getRobotCoordinates();
