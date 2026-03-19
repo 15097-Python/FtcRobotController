@@ -1,8 +1,5 @@
 package org.firstinspires.ftc.teamcode.limelight;
 
-import static org.firstinspires.ftc.teamcode.Util.RobotPosition.getRobotCoordinates;
-import static org.firstinspires.ftc.teamcode.Util.RobotPosition.modifyRobotCoordinates;
-
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.hardware.limelightvision.LLResult;
@@ -14,28 +11,25 @@ import org.firstinspires.ftc.teamcode.MecanumDrive;
 import java.util.List;
 
 
-//+X is forward, +Y is left
 public class LimelightPosSetting {
 
-    public static void limelightPosUpdate(Limelight3A limelight, double headingDegrees){ //this is the function used for MT2
+    public static void limelightPosUpdate(Limelight3A limelight, MecanumDrive drive, double headingDegrees) { //for MT2
         limelight.updateRobotOrientation(headingDegrees);
         LLResult result = limelight.getLatestResult();
 
-        if (result != null && result.isValid()) { // checks if there is a target and if the target is an actual target
-
+        if (result != null && result.isValid()) {
             Pose3D robotPoseMT2 = result.getBotpose_MT2();
 
             if (robotPoseMT2 != null) {
-                double x = robotPoseMT2.getPosition().x;
-                double y = robotPoseMT2.getPosition().y;
-                double yaw = robotPoseMT2.getOrientation().getYaw();
-                //yaw = -yaw;  //try this later after trying the z, roll, pitch thing since I'm not actually aware of specifically the contents of what currentrobotlocation outputs
-                double z = 0; //change these once I see what I have them set as in the limelight
-                double roll = 0; //since these chould be constant and not changing
-                double pitch = 0; //TODO fill in these constants
-                double[] currentrobotlocation = getRobotCoordinates();
-                modifyRobotCoordinates(x, y, z, roll, pitch, yaw);
-                /*, currentrobotlocation[2], currentrobotlocation[3], currentrobotlocation[4]*/ // readd this later after verifying what it outputs
+                // Convert meters to inches
+                double x = robotPoseMT2.getPosition().x * 39.37;
+                double y = robotPoseMT2.getPosition().y * 39.37;
+
+                // Convert CW degrees to CCW radians for RoadRunner
+                double yawDegrees = robotPoseMT2.getOrientation().getYaw();
+                double yawRadians = Math.toRadians(-yawDegrees);
+
+                drive.localizer.setPose(new Pose2d(new Vector2d(x, y), yawRadians));
             }
         }
     }

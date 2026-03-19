@@ -196,7 +196,7 @@ public class BaseOpModeAutoAimCrosby extends LinearOpMode {
 
 
             //limelight
-            limelightPosUpdate(limelight, Math.toDegrees(drive.localizer.getPose().heading.toDouble()));
+            limelightPosUpdate(limelight, drive, Math.toDegrees(drive.localizer.getPose().heading.toDouble()));
 
             //sets motor speeds
             motortargetspeedradians = autoLaunch();
