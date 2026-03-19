@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.NonOpModes.depreciated;
 
+import static org.firstinspires.ftc.teamcode.limelight.LimelightPosSetting.updateOrientation;
+
+import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.hardware.limelightvision.LLResult;
@@ -7,6 +10,8 @@ import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
+import org.firstinspires.ftc.teamcode.MecanumDrive;
+
 import java.util.List;
 
 @Autonomous(name="LimeLightFieldTesting", group="limelight")
@@ -23,10 +28,13 @@ public class LimeLightFieldTesting extends LinearOpMode {
         limelight.pipelineSwitch(0);
         limelight.start();
 
+        Pose2d startPose = new Pose2d(0,0,0);
+        MecanumDrive drive = new MecanumDrive(hardwareMap, startPose);
         waitForStart();
 
         while (opModeIsActive()) { // keeps the code running so it doesn't only run once
 
+            drive.localizer.update();
             LLResult result = limelight.getLatestResult(); 
 
             if (result != null && result.isValid()){ // checks if there is a target and if the target is an actual target
@@ -50,6 +58,11 @@ public class LimeLightFieldTesting extends LinearOpMode {
             else {
                 telemetry.addLine("no robot location update");
             }
+            updateOrientation(limelight,drive.localizer.getPose().heading.toDouble());
+            LLResult result2 = limelight.getLatestResult();
+            Pose3D robotPoseMT2 = result2.getBotpose_MT2();
+            telemetry.addData("MEGATAG 2 x", 39.37 * robotPoseMT2.getPosition().x);
+            telemetry.addData("MEGATAG2 y", 39.37 * robotPoseMT2.getPosition().y);
 
             telemetry.update();
         }
