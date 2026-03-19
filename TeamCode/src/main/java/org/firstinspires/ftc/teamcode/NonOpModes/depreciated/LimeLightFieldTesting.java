@@ -24,7 +24,7 @@ public class LimeLightFieldTesting extends LinearOpMode {
 
     public void runOpMode() {
 
-        Limelight3A limelight = hardwareMap.get(Limelight3A.class, "limelight");// INitilizes the limelights
+        Limelight3A limelight = hardwareMap.get(Limelight3A.class, "limelight");// Initializes the limelights
         limelight.setPollRateHz(100);
         limelight.pipelineSwitch(0);
         limelight.start();
@@ -66,7 +66,7 @@ public class LimeLightFieldTesting extends LinearOpMode {
             telemetry.addLine()
                     .addData("MT2 x: ",  robotPoseMT2.getPosition().x)
                     .addData("MT2 y: ", robotPoseMT2.getPosition().y)
-                    .addData("z? ", currentRobotLocation[2])     //TODO see what getrobotcoords think the z, pitch, and roll are
+                    .addData("z? ", currentRobotLocation[2])     //TODO see what getRobotCords think the z, pitch, and roll are
                     .addData("roll? ", currentRobotLocation[3])
                     .addData("pitch? ", currentRobotLocation[4]);
 
