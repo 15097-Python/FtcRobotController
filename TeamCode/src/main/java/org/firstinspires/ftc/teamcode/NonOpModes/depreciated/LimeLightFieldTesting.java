@@ -55,12 +55,12 @@ public class LimeLightFieldTesting extends LinearOpMode {
             else {
                 telemetry.addLine("no robot location update");
             } */
-            updateOrientation(limelight,drive.localizer.getPose().heading.toDouble());
+            updateOrientation(limelight,Math.toDegrees(drive.localizer.getPose().heading.toDouble()));
             limelightposupdate(limelight);
             LLResult result2 = limelight.getLatestResult();
             Pose3D robotPoseMT2 = result2.getBotpose_MT2();
-            telemetry.addData("MEGATAG2 x: ", 39.37 * robotPoseMT2.getPosition().x);
-            telemetry.addData("MEGATAG2 y: ", 39.37 * robotPoseMT2.getPosition().y);
+            telemetry.addData("MEGATAG2 x: ",  robotPoseMT2.getPosition().x);
+            telemetry.addData("MEGATAG2 y: ", robotPoseMT2.getPosition().y);
 
             telemetry.update();
         }
