@@ -16,12 +16,9 @@ import java.util.List;
 
 //+X is forward, +Y is left
 public class LimelightPosSetting {
-    //need to call this at loops because MT2 needs the gyro heading
-    public static void updateOrientation(Limelight3A limelight, double headingDegrees) {
-        limelight.updateRobotOrientation(headingDegrees);
-    } //this needs to be degrees as occording to MT2
 
-    public static void limelightposupdate(Limelight3A limelight){
+    public static void limelightPosUpdate(Limelight3A limelight, double headingDegrees){ //this is the function used for MT2
+        limelight.updateRobotOrientation(headingDegrees);
         LLResult result = limelight.getLatestResult();
 
         if (result != null && result.isValid()) { // checks if there is a target and if the target is an actual target
@@ -32,13 +29,17 @@ public class LimelightPosSetting {
                 double x = robotPoseMT2.getPosition().x;
                 double y = robotPoseMT2.getPosition().y;
                 double yaw = robotPoseMT2.getOrientation().getYaw();
-
+                //yaw = -yaw;  //try this later after trying the z, roll, pitch thing since I'm not actually aware of specifically the contents of what currentrobotlocation outputs
+                double z = 0; //change these once I see what I have them set as in the limelight
+                double roll = 0; //since these chould be constant and not changing
+                double pitch = 0; //TODO fill in these constants
                 double[] currentrobotlocation = getRobotCoordinates();
-                modifyRobotCoordinates(x, y, currentrobotlocation[2], currentrobotlocation[3], currentrobotlocation[4], yaw);
+                modifyRobotCoordinates(x, y, z, roll, pitch, yaw);
+                /*, currentrobotlocation[2], currentrobotlocation[3], currentrobotlocation[4]*/ // readd this later after verifying what it outputs
             }
         }
     }
-    public static void roadrunnerupdatevialimelight(Limelight3A limelight,MecanumDrive drive){
+    public static void roadrunnerupdatevialimelight(Limelight3A limelight,MecanumDrive drive){ //this is for MT1
         LLResult result = limelight.getLatestResult();
 
         if (result != null && result.isValid()) { // checks if there is a target and if the target is an actual target

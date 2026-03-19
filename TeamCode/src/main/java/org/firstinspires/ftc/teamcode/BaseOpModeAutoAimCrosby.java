@@ -22,7 +22,7 @@ import static org.firstinspires.ftc.teamcode.Util.constants.RobotStats.firingpin
 import static org.firstinspires.ftc.teamcode.Util.constants.RobotStats.firingpinnullposition;
 import static org.firstinspires.ftc.teamcode.launcher.AutoFirePower.autoLaunch;
 import static org.firstinspires.ftc.teamcode.limelight.LimelightMotifSetting.limelightMotifSet;
-import static org.firstinspires.ftc.teamcode.limelight.LimelightPosSetting.limelightposupdate;
+import static org.firstinspires.ftc.teamcode.limelight.LimelightPosSetting.limelightPosUpdate;
 import static org.firstinspires.ftc.teamcode.limelight.LimelightPosSetting.roadrunnerupdatevialimelight;
 import static java.lang.Math.atan2;
 
@@ -45,7 +45,6 @@ import org.firstinspires.ftc.teamcode.Util.Enum.Balls;
 import org.firstinspires.ftc.teamcode.Util.Enum.DrumSlots;
 import org.firstinspires.ftc.teamcode.Util.Enum.States;
 import org.firstinspires.ftc.teamcode.Util.RobotPosition;
-import org.firstinspires.ftc.teamcode.limelight.LimelightPosSetting;
 import org.firstinspires.ftc.teamcode.positioning.odometry.FieldOrientedDriving;
 
 
@@ -178,10 +177,6 @@ public class BaseOpModeAutoAimCrosby extends LinearOpMode {
             Pose2d roadrunerlocation = drive.localizer.getPose();
             double currentrelativeheading = roadrunerlocation.heading.toDouble();
 
-            LimelightPosSetting.updateOrientation(
-                    limelight,
-                    Math.toDegrees(drive.localizer.getPose().heading.toDouble())
-            );
 
             //Calls FieldOrientedDriving function and sets motor power
             double[] motorpowerarray = FieldOrientedDriving.fieldOrientedMath(leftstickinputy, -leftstickinputx, targetturn, currentrelativeheading);
@@ -201,7 +196,7 @@ public class BaseOpModeAutoAimCrosby extends LinearOpMode {
 
 
             //limelight
-            limelightposupdate(limelight);
+            limelightPosUpdate(limelight, Math.toDegrees(drive.localizer.getPose().heading.toDouble()));
 
             //sets motor speeds
             motortargetspeedradians = autoLaunch();
