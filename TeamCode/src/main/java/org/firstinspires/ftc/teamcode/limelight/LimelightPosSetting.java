@@ -28,8 +28,8 @@ public class LimelightPosSetting {
             Pose3D robotPoseMT2 = result.getBotpose_MT2();
 
             if (robotPoseMT2 != null) {
-                double x = 39.37 * robotPoseMT2.getPosition().x;
-                double y = 39.37 * robotPoseMT2.getPosition().y;
+                double x = robotPoseMT2.getPosition().x;
+                double y = robotPoseMT2.getPosition().y;
                 double yaw = Math.toRadians(robotPoseMT2.getOrientation().getYaw());
 
                 double[] currentrobotlocation = getRobotCoordinates();
