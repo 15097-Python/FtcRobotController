@@ -4,7 +4,7 @@ import static org.firstinspires.ftc.teamcode.Util.RobotPosition.TeamColorRED;
 import static org.firstinspires.ftc.teamcode.Util.RobotPosition.robottargetyaw;
 import static org.firstinspires.ftc.teamcode.Util.RobotPosition.robotyaw;
 import static org.firstinspires.ftc.teamcode.launcher.AutonoumusAutoLaunch.autoLaunchWithAim;
-import static org.firstinspires.ftc.teamcode.limelight.LimelightPosSetting.limelightposupdate;
+//import static org.firstinspires.ftc.teamcode.limelight.LimelightPosSetting.limelightposupdate;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
@@ -102,13 +102,13 @@ public class MoveShootRedGoalStart extends LinearOpMode {
             firingPinServo.setPosition(.98);
 
 
-            limelightposupdate(limelight);
+            //limelightposupdate(limelight);
 
             autoLaunchWithAim(LauncherFL,drumServo,firingPinServo,1,loadedBalls);
             //yaw align loop
             robottargetyaw = targetangle;
             while (opModeIsActive()) {
-                limelightposupdate(limelight);
+                //limelightposupdate(limelight);
                 //double headingoffset = odomhub.getHeading(AngleUnit.DEGREES) - robotyaw;
                 telemetry.addData("targetyaw", robottargetyaw);
                 telemetry.addData("robotyaw", robotyaw);

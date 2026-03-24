@@ -19,7 +19,7 @@ import static org.firstinspires.ftc.teamcode.Util.constants.RobotStats.firingpin
 import static org.firstinspires.ftc.teamcode.Util.constants.RobotStats.firingpinnullposition;
 import static org.firstinspires.ftc.teamcode.launcher.AutoFirePower.autoLaunch;
 import static org.firstinspires.ftc.teamcode.limelight.LimelightMotifSetting.limelightMotifSet;
-import static org.firstinspires.ftc.teamcode.limelight.LimelightPosSetting.limelightposupdate;
+//import static org.firstinspires.ftc.teamcode.limelight.LimelightPosSetting.limelightposupdate;
 
 import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
@@ -183,7 +183,7 @@ public class BaseOpMode extends LinearOpMode {
 
 
             //limelight
-            limelightposupdate(limelight);
+            //limelightposupdate(limelight);
 
             //sets motor speeds
             motortargetspeedradians = autoLaunch();

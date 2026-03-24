@@ -5,7 +5,7 @@ import static org.firstinspires.ftc.teamcode.Util.Enum.Balls.unknown;
 import static org.firstinspires.ftc.teamcode.Util.RobotPosition.TeamColorRED;
 import static org.firstinspires.ftc.teamcode.Util.RobotPosition.getRobotCoordinates;
 import static org.firstinspires.ftc.teamcode.launcher.AutoFirePower.autoLaunch;
-import static org.firstinspires.ftc.teamcode.limelight.LimelightPosSetting.limelightposupdate;
+//import static org.firstinspires.ftc.teamcode.limelight.LimelightPosSetting.limelightposupdate;
 
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
@@ -155,7 +155,7 @@ public class oldBaseOpMode extends LinearOpMode {
 
 
             //limelight
-            limelightposupdate(limelight);
+            //limelightposupdate(limelight);
 
             //auto rangeing commands
             motortargetspeedradians = autoLaunch();
