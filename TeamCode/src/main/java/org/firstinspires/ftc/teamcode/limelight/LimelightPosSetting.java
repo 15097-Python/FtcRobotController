@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.limelight;
 
+import static org.firstinspires.ftc.teamcode.Util.RobotPosition.modifyRobotCoordinates;
+
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.hardware.limelightvision.LLResult;
@@ -29,7 +31,7 @@ public class LimelightPosSetting {
                 double yawDegrees = robotPoseMT2.getOrientation().getYaw();
                 double yawRadians = Math.toRadians(-yawDegrees);
 
-                drive.localizer.setPose(new Pose2d(new Vector2d(x, y), yawRadians));
+                modifyRobotCoordinates(x, y, 0.0, 0.0, 0.0, yawRadians);
             }
         }
     }
@@ -53,7 +55,8 @@ public class LimelightPosSetting {
                         double y = 39.37 * robotpose.getPosition().y;
                         double yaw = Math.toRadians(robotpose.getOrientation().getYaw());
 
-                        drive.localizer.setPose(new Pose2d(new Vector2d(x,y),yaw));
+                        //drive.localizer.setPose(new Pose2d(new Vector2d(x,y),yaw));
+                        modifyRobotCoordinates(x, y, 0.0, 0.0, 0.0, yaw);
 
                         break;
                     }
