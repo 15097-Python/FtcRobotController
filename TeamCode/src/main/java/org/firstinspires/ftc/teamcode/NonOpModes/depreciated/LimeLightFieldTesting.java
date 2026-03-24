@@ -80,14 +80,16 @@ import java.util.List;
 
 public class LimeLightFieldTesting extends LinearOpMode {
 
-    // ====== TUNING CONSTANTS ======
+    //Tuning Constants
     double headingOffset = 0;     // Adjust this after testing
     boolean invertHeading = false; // Set true if direction is flipped
 
     double alpha = 0.2;           // smoothing factor (0.1–0.3 good)
     double fusionWeight = 0.1;    // how much vision corrects odometry
 
-    // ====== FILTER STATE ======
+    int crazyjump = 500;
+
+    // Filter sates
     double filteredX = 0;
     double filteredY = 0;
 
@@ -108,7 +110,7 @@ public class LimeLightFieldTesting extends LinearOpMode {
 
             drive.localizer.update();
 
-            // ====== HEADING FIX ======
+            // Heading fix
             double headingDegrees = Math.toDegrees(drive.localizer.getPose().heading.toDouble());
 
             if (invertHeading) {
@@ -148,14 +150,14 @@ public class LimeLightFieldTesting extends LinearOpMode {
                     double xIn = x * 39.37;
                     double yIn = y * 39.37;
 
-                    // ====== SANITY CHECK (reject crazy jumps) ======
-                    if (Math.abs(xIn) < 500 && Math.abs(yIn) < 500) {
+                    // reject crazy jumps
+                    if (Math.abs(xIn) < crazyjump && Math.abs(yIn) < crazyjump) {
 
-                        // ====== SMOOTHING ======
+                        // Smoothing
                         filteredX = alpha * xIn + (1 - alpha) * filteredX;
                         filteredY = alpha * yIn + (1 - alpha) * filteredY;
 
-                        // ====== FUSION ======
+                        // Fusion
                         Pose2d currentPose = drive.localizer.getPose();
 
                         double newX = currentPose.position.x * (1 - fusionWeight)
@@ -172,7 +174,7 @@ public class LimeLightFieldTesting extends LinearOpMode {
 
                         usingVision = true;
 
-                        // ====== TELEMETRY ======
+                        // telemetry
                         telemetry.addData("Vision Raw (in)", "x=%.2f y=%.2f", xIn, yIn);
                         telemetry.addData("Vision Filtered", "x=%.2f y=%.2f", filteredX, filteredY);
                         telemetry.addData("Yaw", "deg=%.1f", yawDegrees);
@@ -182,7 +184,7 @@ public class LimeLightFieldTesting extends LinearOpMode {
                 }
             }
 
-            // ====== DRIVE TELEMETRY ======
+            // drive telemetry
             Pose2d pose = drive.localizer.getPose();
 
             telemetry.addData("Using Vision", usingVision);
