@@ -48,11 +48,12 @@ public class LimeLightFieldTesting extends LinearOpMode {
                     double yawRadians = Math.toRadians(-yawDegrees);
                     drive.localizer.setPose(new Pose2d(new Vector2d(xIn, yIn), yawRadians));
 
-
+                    // Format string: inserts a value into the text with specific formatting (here, a float rounded to 1 decimal place)
                     telemetry.addLine()
                             .addData("MT2 raw (m)", "x=%.2f y=%.2f", x, y)
                             .addData("Converted (in)", "x=%.2f y=%.2f", xIn, yIn)
                             .addData("Yaw", "deg=%.1f rad=%.3f", yawDegrees, yawRadians)
+                            .addData("headingDegrees", "deg=%.1f", headingDegrees) //TODO check if this increases or decreases with CW rotation
                             .addData("Drive pose", "x=%.2f y=%.2f h=%.2f",
                                     drive.localizer.getPose().position.x,
                                     drive.localizer.getPose().position.y,
