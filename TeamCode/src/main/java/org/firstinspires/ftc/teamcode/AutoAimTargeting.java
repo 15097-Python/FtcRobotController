@@ -63,8 +63,6 @@ public class AutoAimTargeting extends LinearOpMode {
 
         LauncherFL = hardwareMap.get(DcMotorEx.class, "LauncherFL");
 
-        NormalizedColorSensor colorSensor1 = hardwareMap.get(NormalizedColorSensor.class, "colorSensor1");
-        NormalizedColorSensor colorSensor2 = hardwareMap.get(NormalizedColorSensor.class, "colorSensor2");
 
         Pose2d startPose = new Pose2d(0, 0, 0);
         MecanumDrive drive = new MecanumDrive(  hardwareMap,  startPose);
@@ -78,23 +76,22 @@ public class AutoAimTargeting extends LinearOpMode {
             RobotPosition.modifyRobotCoordinates(drive.localizer.getPose().position.x, drive.localizer.getPose().position.y, 0.0,0.0,0.0,0.0);
             double[] robotcoordinates = RobotPosition.getRobotCoordinates();
 
-            double arctanintermediatex = shoottargetx-robotcoordinates[0];
+            double arctanintermediatex = shoottargetx-robotcoordinates[0]/39.3701;
             double arctanintermediatey;
             double usedy;
 
-            telemetry.addData("robotx", robotcoordinates[0]);
-            telemetry.addData("roboty", robotcoordinates[1]);
+            telemetry.addData("robotx", robotcoordinates[0]/39.3701);
+            telemetry.addData("roboty", robotcoordinates[1]/39.3701);
             if (TeamColorRED) usedy = shoottargetyred;
             else usedy = shoottargetyblue;
-            arctanintermediatey = usedy - robotcoordinates[1];
+            arctanintermediatey = usedy - robotcoordinates[1]/39.3701;
             double robotautoaimtargetangle = atan2(arctanintermediatey, arctanintermediatex);
             telemetry.addData("rawangle",robotautoaimtargetangle);
-            if(robotautoaimtargetangle<0) robotautoaimtargetangle= Math.PI + robotautoaimtargetangle;
+            //if(robotautoaimtargetangle<0) robotautoaimtargetangle= Math.PI + robotautoaimtargetangle;
             Action movetoloadingone = drive.actionBuilder(drive.localizer.getPose())
                     .turnTo(robotautoaimtargetangle)
                     .build();
             if(gamepad1.b) {
-
                 Actions.runBlocking(movetoloadingone);
             }
 
