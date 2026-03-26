@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.MecanumDrive;
 @Autonomous(name="LimeLightFieldTesting", group="limelight")
 
 
-public class LimeLightFieldTesting extends LinearOpMode {
+public class LimeLightFieldTesting extends LinearOp++Mode {
 
     @Override
 

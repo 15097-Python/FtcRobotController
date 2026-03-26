@@ -2,9 +2,10 @@ pluginManagement {
     repositories {
         google()
         mavenCentral()
-        maven { url 'https://maven.brott.dev' }
-        maven { url 'https://jitpack.io' }
-        maven { url = 'https://frcmaven.wpi.edu/artifactory/release' }
+        maven { url 'https://maven.brott.dev'}
+        maven { url 'https://jitpack.io'}
+        maven { url = 'https://frcmaven.wpi.edu/artifactory/release'}
+        maven { url = 'https://maven.frozenmilk.dev'}
     }
 }
 dependencyResolutionManagement {
@@ -17,6 +18,7 @@ dependencyResolutionManagement {
         maven { url = 'https://frcmaven.wpi.edu/artifactory/release' }
         maven { url = 'https://repo.dairy.foundation/releases' }
         maven { url = 'https://repo.dairy.foundation/snapshots' }
+        maven { url = 'https://maven.frozenmilk.dev' }
     }
 }
 
