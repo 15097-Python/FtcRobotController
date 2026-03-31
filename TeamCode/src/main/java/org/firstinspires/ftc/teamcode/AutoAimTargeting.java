@@ -80,6 +80,7 @@ public class AutoAimTargeting extends LinearOpMode {
             double arctanintermediatey;
             double usedy;
 
+            //converts inches to meters
             telemetry.addData("robotx", robotcoordinates[0]/39.3701);
             telemetry.addData("roboty", robotcoordinates[1]/39.3701);
             if (TeamColorRED) usedy = shoottargetyred;
