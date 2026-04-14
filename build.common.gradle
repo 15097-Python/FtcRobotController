@@ -24,7 +24,7 @@ android {
     compileSdkVersion 36
 
     signingConfigs {
-        release {
+        ftcRelease {
             def apkStoreFile = System.getenv("APK_SIGNING_STORE_FILE")
             if (apkStoreFile != null) {
                 keyAlias System.getenv("APK_SIGNING_KEY_ALIAS")
@@ -34,7 +34,11 @@ android {
             } else {
                 keyAlias 'androiddebugkey'
                 keyPassword 'android'
-                storeFile rootProject.file('libs/ftc.debug.keystore')
+                def keystoreFile = rootProject.file("libs/ftc.debug.keystore")
+                if (!keystoreFile.exists()) {
+                    keystoreFile = file("../libs/ftc.debug.keystore")
+                }
+                storeFile keystoreFile
                 storePassword 'android'
             }
         }
@@ -42,7 +46,11 @@ android {
         debug {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
-            storeFile rootProject.file('libs/ftc.debug.keystore')
+            def keystoreFile = rootProject.file("libs/ftc.debug.keystore")
+            if (!keystoreFile.exists()) {
+                keystoreFile = file("../libs/ftc.debug.keystore")
+            }
+            storeFile keystoreFile
             storePassword 'android'
         }
     }
@@ -86,7 +94,7 @@ android {
     // http://google.github.io/android-gradle-dsl/current/com.android.build.gradle.internal.dsl.BuildType.html
     buildTypes {
         release {
-            signingConfig signingConfigs.release
+            signingConfig signingConfigs.ftcRelease
 
             ndk {
                 //noinspection ChromeOsAbiSupport
@@ -110,6 +118,3 @@ android {
 
     ndkVersion '21.3.6528147'
 }
-
-
-

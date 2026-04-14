@@ -2,14 +2,22 @@ pluginManagement {
     repositories {
         google()
         mavenCentral()
+        gradlePluginPortal()
         maven { url 'https://maven.brott.dev'}
         maven { url 'https://jitpack.io'}
         maven { url = 'https://frcmaven.wpi.edu/artifactory/release'}
         maven { url = 'https://maven.frozenmilk.dev'}
+        maven { url = 'https://repo.dairy.foundation/releases' }
     }
 }
+
+plugins {
+    id("dev.frozenmilk.teamcode") version "11.0.0-1.1.0" apply false
+    id("dev.frozenmilk.sinister.sloth.load") version "0.2.4" apply false
+}
+
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
     repositories {
         google()
         mavenCentral()

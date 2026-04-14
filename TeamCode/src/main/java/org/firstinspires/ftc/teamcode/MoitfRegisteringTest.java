@@ -1,12 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
-import static org.firstinspires.ftc.teamcode.NonOpModes.colorsensing.ColorSensingFunctions.colorDetection;
 import static org.firstinspires.ftc.teamcode.Util.Enum.Balls.unknown;
 import static org.firstinspires.ftc.teamcode.Util.RobotPosition.TeamColorRED;
-import static org.firstinspires.ftc.teamcode.Util.RobotPosition.getRobotCoordinates;
-import static org.firstinspires.ftc.teamcode.launcher.AutoFirePower.autoLaunch;
 import static org.firstinspires.ftc.teamcode.limelight.LimelightMotifSetting.limelightMotifSet;
-import static org.firstinspires.ftc.teamcode.limelight.LimelightPosSetting.limelightposupdate;
 
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
@@ -18,9 +14,7 @@ import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Util.Enum.Balls;
-import org.firstinspires.ftc.teamcode.positioning.odometry.FieldOrientedDriving;
 
 
 @Autonomous(name = "motif test")
