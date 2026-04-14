@@ -1,40 +1,21 @@
 package org.firstinspires.ftc.teamcode;
 
-import static org.firstinspires.ftc.teamcode.NonOpModes.colorsensing.ColorSensingFunctions.colorDetection;
-import static org.firstinspires.ftc.teamcode.Util.Enum.Balls.green;
-import static org.firstinspires.ftc.teamcode.Util.Enum.Balls.purple;
-import static org.firstinspires.ftc.teamcode.Util.Enum.Balls.unknown;
-import static org.firstinspires.ftc.teamcode.Util.RRSplineToLaunchPos.splineLaunchPos;
 import static org.firstinspires.ftc.teamcode.Util.RobotPosition.TeamColorRED;
 import static org.firstinspires.ftc.teamcode.Util.constants.FIELD.shoottargetx;
 import static org.firstinspires.ftc.teamcode.Util.constants.FIELD.shoottargetyblue;
 import static org.firstinspires.ftc.teamcode.Util.constants.FIELD.shoottargetyred;
-import static org.firstinspires.ftc.teamcode.Util.constants.RobotStats.firingpinfiringposition;
-import static org.firstinspires.ftc.teamcode.Util.constants.RobotStats.firingpinnullposition;
-import static org.firstinspires.ftc.teamcode.limelight.LimelightMotifSetting.limelightMotifSet;
-
 import static java.lang.Math.atan2;
 
-import androidx.annotation.NonNull;
-
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
-import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.Util.Enum.Balls;
-import org.firstinspires.ftc.teamcode.Util.RobotPosition;
 
 @Autonomous(name="autoaimtesting")
 @Config
@@ -72,21 +53,17 @@ public class AutoAimTargeting extends LinearOpMode {
         while(opModeIsActive()) {
             drive.localizer.update();
 
-
-            RobotPosition.modifyRobotCoordinates(drive.localizer.getPose().position.x, drive.localizer.getPose().position.y, 0.0,0.0,0.0,0.0);
-            double[] robotcoordinates = RobotPosition.getRobotCoordinates();
-
-            double arctanintermediatex = shoottargetx-robotcoordinates[0]/39.3701;
+            double arctanintermediatex = shoottargetx*39.3701-drive.localizer.getPose().position.y;
             double arctanintermediatey;
             double usedy;
 
             //converts inches to meters
-            telemetry.addData("robotx", robotcoordinates[0]/39.3701);
-            telemetry.addData("roboty", robotcoordinates[1]/39.3701);
-            if (TeamColorRED) usedy = shoottargetyred;
-            else usedy = shoottargetyblue;
-            arctanintermediatey = usedy - robotcoordinates[1]/39.3701;
-            double robotautoaimtargetangle = atan2(arctanintermediatey, arctanintermediatex);
+            telemetry.addData("robotx", drive.localizer.getPose().position.y);
+            telemetry.addData("roboty",drive.localizer.getPose().position.x);
+            if (TeamColorRED) usedy = shoottargetyred * 39.3701;
+            else usedy = shoottargetyblue * 39.3701;
+            arctanintermediatey = usedy + drive.localizer.getPose().position.x;
+            double robotautoaimtargetangle = atan2(arctanintermediatex, arctanintermediatey);
             telemetry.addData("rawangle",robotautoaimtargetangle);
             //if(robotautoaimtargetangle<0) robotautoaimtargetangle= Math.PI + robotautoaimtargetangle;
             Action movetoloadingone = drive.actionBuilder(drive.localizer.getPose())
@@ -96,10 +73,6 @@ public class AutoAimTargeting extends LinearOpMode {
                 Actions.runBlocking(movetoloadingone);
             }
 
-
-
-
-            robotcoordinates = RobotPosition.getRobotCoordinates();
 
             telemetry.addData("robotr", drive.localizer.getPose().heading.toDouble());
             telemetry.addData("robat aurot aim target angle", robotautoaimtargetangle);

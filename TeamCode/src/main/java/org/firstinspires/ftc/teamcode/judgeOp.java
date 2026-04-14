@@ -1,24 +1,15 @@
 package org.firstinspires.ftc.teamcode;
-import static org.firstinspires.ftc.teamcode.NonOpModes.colorsensing.ColorSensingFunctions.colorDetection;
+
 import static org.firstinspires.ftc.teamcode.Util.Enum.Balls.green;
 import static org.firstinspires.ftc.teamcode.Util.Enum.Balls.purple;
 import static org.firstinspires.ftc.teamcode.Util.Enum.Balls.unknown;
-import static org.firstinspires.ftc.teamcode.Util.Enum.DrumSlots.AllSlots;
 import static org.firstinspires.ftc.teamcode.Util.Enum.DrumSlots.SLOT_0;
 import static org.firstinspires.ftc.teamcode.Util.Enum.DrumSlots.SLOT_1;
 import static org.firstinspires.ftc.teamcode.Util.Enum.DrumSlots.SLOT_2;
-import static org.firstinspires.ftc.teamcode.Util.Enum.States.FiringPinIn;
-import static org.firstinspires.ftc.teamcode.Util.Enum.States.FiringPinOut;
 import static org.firstinspires.ftc.teamcode.Util.Enum.States.None;
-import static org.firstinspires.ftc.teamcode.Util.Enum.States.TurnToBall;
 import static org.firstinspires.ftc.teamcode.Util.RobotPosition.TeamColorRED;
-import static org.firstinspires.ftc.teamcode.Util.RobotPosition.getRobotCoordinates;
 import static org.firstinspires.ftc.teamcode.Util.constants.RobotStats.firingpinfiringposition;
 import static org.firstinspires.ftc.teamcode.Util.constants.RobotStats.firingpinnullposition;
-import static org.firstinspires.ftc.teamcode.Util.constants.PART_NAMES.drumslotarray;
-import static org.firstinspires.ftc.teamcode.launcher.AutoFirePower.autoLaunch;
-import static org.firstinspires.ftc.teamcode.limelight.LimelightMotifSetting.limelightMotifSet;
-import static org.firstinspires.ftc.teamcode.limelight.LimelightPosSetting.limelightposupdate;
 
 import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
@@ -27,37 +18,11 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.Util.Enum.Balls;
-import org.firstinspires.ftc.teamcode.Util.Enum.DrumSlots;
-import org.firstinspires.ftc.teamcode.Util.Enum.States;
-import org.firstinspires.ftc.teamcode.Util.RobotPosition;
-import org.firstinspires.ftc.teamcode.positioning.odometry.FieldOrientedDriving;
-
-import static org.firstinspires.ftc.teamcode.Util.Enum.Balls.green;
-import static org.firstinspires.ftc.teamcode.Util.Enum.Balls.purple;
-import static org.firstinspires.ftc.teamcode.Util.Enum.Balls.unknown;
-import static org.firstinspires.ftc.teamcode.Util.Enum.DrumSlots.SLOT_0;
-import static org.firstinspires.ftc.teamcode.Util.Enum.DrumSlots.SLOT_1;
-import static org.firstinspires.ftc.teamcode.Util.Enum.DrumSlots.SLOT_2;
-import static org.firstinspires.ftc.teamcode.Util.Enum.States.None;
-import static org.firstinspires.ftc.teamcode.Util.RobotPosition.TeamColorRED;
-import static org.firstinspires.ftc.teamcode.Util.constants.RobotStats.firingpinnullposition;
-
-import com.acmerobotics.roadrunner.Pose2d;
-import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
-import com.qualcomm.hardware.limelightvision.Limelight3A;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
-
 import org.firstinspires.ftc.teamcode.Util.Enum.Balls;
 import org.firstinspires.ftc.teamcode.Util.Enum.DrumSlots;
 import org.firstinspires.ftc.teamcode.Util.Enum.States;
