@@ -1,24 +1,24 @@
 package org.firstinspires.ftc.teamcode.launcher;
+
 import static org.firstinspires.ftc.teamcode.NonOpModes.PID.PIDOld.settingMotorPIDPowerYaw;
 import static org.firstinspires.ftc.teamcode.Util.RobotPosition.TeamColorRED;
 import static org.firstinspires.ftc.teamcode.Util.RobotPosition.robottranslationx;
 import static org.firstinspires.ftc.teamcode.Util.RobotPosition.robottranslationy;
 import static org.firstinspires.ftc.teamcode.Util.RobotPosition.robotyaw;
 
-
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Config
+
 public abstract class AutoFirePower extends LinearOpMode {
     static ElapsedTime timer = new ElapsedTime();
 
-    public static double firingpowermultiplierconst = 1.35;
-    public static double firingpoweraddingconst = 1.5;//1.575
+    public static double firingpowermultiplierconst = 1.2;
+    public static double firingpoweraddingconst = .8;//1.575
 
     public static void initializeLauncher(DcMotorEx LauncherFL,DcMotorEx LauncherFR) {
 
