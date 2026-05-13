@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.limelight;
 import static org.firstinspires.ftc.teamcode.Util.RobotPosition.modifyRobotCoordinates;
 
 import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
@@ -14,6 +13,85 @@ import java.util.List;
 
 
 public class LimelightPosSetting {
+
+    public static void positionUpdate(Limelight3A limelight, MecanumDrive drive){
+        double headingOffset = 0;     // Adjust this after testing
+        boolean invertHeading = false; // Set true if direction is flipped
+
+        double smooth = 0.2;           // smoothing factor 0.1–0.3 should be fine
+        double fusionWeight = 0.1;    // how much vision corrects odometry
+
+        int crazyjump = 50;           // restrain this more if it still gives numbers
+
+        // Filter sates
+        double filteredX = 0;
+        double filteredY = 0;
+
+        drive.localizer.update();
+
+        // Heading fix
+        double headingDegrees = Math.toDegrees(drive.localizer.getPose().heading.toDouble());
+
+        if (invertHeading) {
+            headingDegrees = -headingDegrees; //TODO: make sure this is correct by seeing is it move CCW or CW
+        }
+
+        double correctedHeading = headingDegrees + headingOffset;
+        limelight.updateRobotOrientation(correctedHeading);
+
+        LLResult result = limelight.getLatestResult();
+
+        if (result != null && result.isValid()) {
+
+            Pose3D pose = null;
+
+            List<LLResultTypes.FiducialResult> tags = result.getFiducialResults();
+            int tagCount = tags.size();
+
+            // MT2
+            if (tagCount >= 2 && result.getBotpose_MT2() != null) {
+                pose = result.getBotpose_MT2();
+            }
+            // MT1
+            else if (result.getBotpose() != null) {
+                pose = result.getBotpose();
+            }
+
+            if (pose != null) {
+
+                double x = pose.getPosition().x;
+                double y = pose.getPosition().y;
+
+                // Convert meters to inches
+                double xIn = x * 39.37;
+                double yIn = y * 39.37;
+
+                // reject crazy jumps
+                if (Math.abs(xIn) < crazyjump && Math.abs(yIn) < crazyjump) {
+
+                    // Smoothing
+                    filteredX = smooth * xIn + (1 - smooth) * filteredX;
+                    filteredY = smooth * yIn + (1 - smooth) * filteredY;
+
+                    // Fusion
+                    Pose2d currentPose = drive.localizer.getPose();
+
+                    double newX = currentPose.position.x * (1 - fusionWeight)
+                            + filteredX * fusionWeight;
+
+                    double newY = currentPose.position.y * (1 - fusionWeight)
+                            + filteredY * fusionWeight;
+
+                    drive.localizer.setPose(new Pose2d(
+                            newX,
+                            newY,
+                            currentPose.heading.toDouble() // keep odometry heading
+                    ));
+
+                }
+            }
+        }
+    }
 
     public static void limelightPosUpdate(Limelight3A limelight, MecanumDrive drive, double headingDegrees) { //for MT2
         limelight.updateRobotOrientation(headingDegrees);

@@ -84,10 +84,10 @@ public class LimeLightFieldTesting extends LinearOpMode {
     double headingOffset = 0;     // Adjust this after testing
     boolean invertHeading = false; // Set true if direction is flipped
 
-    double alpha = 0.2;           // smoothing factor (0.1–0.3 good)
+    double smooth = 0.2;           // smoothing factor 0.1–0.3 should be fine
     double fusionWeight = 0.1;    // how much vision corrects odometry
 
-    int crazyjump = 500;
+    int crazyjump = 50;           // restrain this more if it still gives numbers
 
     // Filter sates
     double filteredX = 0;
@@ -114,7 +114,7 @@ public class LimeLightFieldTesting extends LinearOpMode {
             double headingDegrees = Math.toDegrees(drive.localizer.getPose().heading.toDouble());
 
             if (invertHeading) {
-                headingDegrees = -headingDegrees;
+                headingDegrees = -headingDegrees; //TODO: make sure this is correct by seeing is it move CCW or CW
             }
 
             double correctedHeading = headingDegrees + headingOffset;
@@ -131,11 +131,11 @@ public class LimeLightFieldTesting extends LinearOpMode {
                 List<LLResultTypes.FiducialResult> tags = result.getFiducialResults();
                 int tagCount = tags.size();
 
-                // ====== USE MT2 ONLY IF MULTI-TAG ======
+                // MT2
                 if (tagCount >= 2 && result.getBotpose_MT2() != null) {
                     pose = result.getBotpose_MT2();
                 }
-                // ====== FALLBACK TO MT1 ======
+                // MT1
                 else if (result.getBotpose() != null) {
                     pose = result.getBotpose();
                 }
@@ -146,7 +146,7 @@ public class LimeLightFieldTesting extends LinearOpMode {
                     double y = pose.getPosition().y;
                     double yawDegrees = pose.getOrientation().getYaw();
 
-                    // Convert meters → inches
+                    // Convert meters to inches
                     double xIn = x * 39.37;
                     double yIn = y * 39.37;
 
@@ -154,8 +154,8 @@ public class LimeLightFieldTesting extends LinearOpMode {
                     if (Math.abs(xIn) < crazyjump && Math.abs(yIn) < crazyjump) {
 
                         // Smoothing
-                        filteredX = alpha * xIn + (1 - alpha) * filteredX;
-                        filteredY = alpha * yIn + (1 - alpha) * filteredY;
+                        filteredX = smooth * xIn + (1 - smooth) * filteredX;
+                        filteredY = smooth * yIn + (1 - smooth) * filteredY;
 
                         // Fusion
                         Pose2d currentPose = drive.localizer.getPose();
