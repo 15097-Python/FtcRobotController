@@ -27,17 +27,12 @@ public class Servo {
         double voltage = axonEncoder.getVoltage();//CHATGPT SAID THIS WOULD GET VOLTAGE TAKE WITH 3LBS OF SALT code reading the analog input from the servo
         double angle = (voltage / axonEncoder.getMaxVoltage()) * 360.0;//Note I stole this from some random person who was doing this in 2010
 
-
         double angleChange = angle - lastAngle;
         if(angleChange < -rotationDetectionValue) rotationCount++;
         if(angleChange > rotationDetectionValue) rotationCount--;
         lastAngle = angle;
 
-        servo1 = hardwareMap.get(CRServo.class, "DrumServo1");
-        servo2 = hardwareMap.get(CRServo.class, "DrumServo2");
-
         double trueAngle = rotationCount * 360 + angle;
-
 
         //Everthing below this line is only used for the laziest possible way of getting servos to the right angle. Unless this magicaly works perfectly we should probably utilize PID for this.
         if(targetAngle - trueAngle > acceptableErrorDegrees) targetServoPower = 1;

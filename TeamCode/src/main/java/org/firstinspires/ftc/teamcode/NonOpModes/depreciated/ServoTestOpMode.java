@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class ServoTestOpMode extends LinearOpMode {
 
-    private Servo DrumServo;
+    private Servo DrumServo1;
     private Servo FiringPinServo;
 
     public static double servoOffSet = 0;
@@ -19,14 +19,14 @@ public class ServoTestOpMode extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        DrumServo = hardwareMap.get(Servo.class, "DrumServo");
+        DrumServo1 = hardwareMap.get(Servo.class, "DrumServo1");
         FiringPinServo = hardwareMap.get(Servo.class, "FiringPinServo");
 
         double targetdrumangle = 0;
         double targetfiringpinangle = 0;
         boolean firing = false;
 
-        DrumServo.setPosition(0);
+        DrumServo1.setPosition(0);
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         // run until the end of the match (driver presses STOP)
@@ -48,7 +48,7 @@ public class ServoTestOpMode extends LinearOpMode {
                 //.6 - .76    1   -   2
                 //.92 - .9    2   -    0
             }
-            DrumServo.setPosition(targetdrumangle);
+            DrumServo1.setPosition(targetdrumangle);
             FiringPinServo.setPosition(targetfiringpinangle);
 
             servoOffSet += gamepad1.dpadUpWasPressed() ? .01 : 0;
