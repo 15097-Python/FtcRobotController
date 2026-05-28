@@ -5,23 +5,28 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@TeleOp(name="ServoTestOpMode")
+@TeleOp(name="ServoTestOpMode2")
 @Config
 
-public class ServoTestOpMode extends LinearOpMode {
+public class ServoTestOpMode2 extends LinearOpMode {
 
     private Servo DrumServo1;
-    private Servo DrumServo2;
     private Servo FiringPinServo;
 
     public static double servoOffSet = 0;
+    public static int servoPosition = 0;
+    public static double slot0load = 0;
+    public static double slot1load = 0;
+    public static double slot2load = 0;
+    public static double slot0shoot = 0;
+    public static double slot1shoot = 0;
+    public static double slot2shoot = 0;
     public static double firingpinmax = 0.95;
 
 
     @Override
     public void runOpMode() {
         DrumServo1 = hardwareMap.get(Servo.class, "DrumServo1");
-        DrumServo2 = hardwareMap.get(Servo.class, "DrumServo2");
         FiringPinServo = hardwareMap.get(Servo.class, "FiringPinServo");
 
         double targetdrumangle = 0;
@@ -34,24 +39,32 @@ public class ServoTestOpMode extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
             // sets the three angles
-            if (gamepad2.a) {
-                targetfiringpinangle = firingpinmax;
-            } else {
-                targetfiringpinangle = .98;// these values are all placeholders
-                targetdrumangle = gamepad2.x ? servoOffSet+.09 ://Firing angles
-                                  gamepad2.y ? servoOffSet+.42 :
-                                  gamepad2.b ? servoOffSet+.76 :
-                                  gamepad1.x ? servoOffSet+.27 ://loading angles
-                                  gamepad1.y ? servoOffSet+.6 :
-                                  gamepad1.b ? servoOffSet+.92 :
-                                  targetdrumangle;
 
-                //.27 - .42   0  -   1
-                //.6 - .76    1   -   2
-                //.92 - .9    2   -    0
+            switch (servoPosition){
+                case(0):
+                    targetdrumangle = slot0load;
+                    break;
+                case(1):
+                    targetdrumangle = slot1load;
+                    break;
+                case(2):
+                    targetdrumangle = slot2load;
+                    break;
+                case(3):
+                    targetdrumangle = slot0shoot;
+                    break;
+                case(4):
+                    targetdrumangle = slot1shoot;
+                    break;
+                case(5):
+                    targetdrumangle = slot2shoot;
+                    break;
             }
+
+
             DrumServo1.setPosition(targetdrumangle);
-            DrumServo2.setPosition(targetdrumangle);
+            FiringPinServo.setPosition(targetfiringpinangle);
+
 
 
             telemetry.addData("servo offset angle", servoOffSet);
