@@ -2,9 +2,9 @@ package org.firstinspires.ftc.teamcode.Util.Enum;
 
 public enum DrumSlots {
     AllSlots(-1,-1,null),
-    SLOT_0(0.27,0.76,Balls.unknown),
-    SLOT_1(0.6,0.1,Balls.unknown),
-    SLOT_2(0.92,0.42,Balls.unknown);
+    SLOT_0(.0975,.345 ,Balls.unknown),
+    SLOT_1(.26,.01,Balls.unknown),
+    SLOT_2(.43,.6785,Balls.unknown);
 
     public final double loadPosition;
     public final double shootPosition;

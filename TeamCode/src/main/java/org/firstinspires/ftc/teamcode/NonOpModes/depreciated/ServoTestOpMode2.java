@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class ServoTestOpMode2 extends LinearOpMode {
 
     private Servo DrumServo1;
+    private Servo DrumServo2;
     private Servo FiringPinServo;
 
     public static double servoOffSet = 0;
@@ -27,6 +28,7 @@ public class ServoTestOpMode2 extends LinearOpMode {
     @Override
     public void runOpMode() {
         DrumServo1 = hardwareMap.get(Servo.class, "DrumServo1");
+        DrumServo2 = hardwareMap.get(Servo.class, "DrumServo2");
         FiringPinServo = hardwareMap.get(Servo.class, "FiringPinServo");
 
         double targetdrumangle = 0;
@@ -63,6 +65,7 @@ public class ServoTestOpMode2 extends LinearOpMode {
 
 
             DrumServo1.setPosition(targetdrumangle);
+            DrumServo2.setPosition(targetdrumangle+servoOffSet);
             FiringPinServo.setPosition(targetfiringpinangle);
 
 

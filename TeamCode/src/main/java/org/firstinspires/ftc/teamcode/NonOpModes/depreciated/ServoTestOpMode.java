@@ -33,17 +33,18 @@ public class ServoTestOpMode extends LinearOpMode {
         waitForStart();
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
+            FiringPinServo.setPosition(0 );
             // sets the three angles
             if (gamepad2.a) {
                 targetfiringpinangle = firingpinmax;
             } else {
                 targetfiringpinangle = .98;// these values are all placeholders
-                targetdrumangle = gamepad2.x ? servoOffSet+.09 ://Firing angles
-                                  gamepad2.y ? servoOffSet+.42 :
-                                  gamepad2.b ? servoOffSet+.76 :
-                                  gamepad1.x ? servoOffSet+.27 ://loading angles
-                                  gamepad1.y ? servoOffSet+.6 :
-                                  gamepad1.b ? servoOffSet+.92 :
+                targetdrumangle = gamepad2.x ? servoOffSet+.345 ://Firing 0
+                                  gamepad2.y ? servoOffSet+.01 :
+                                  gamepad2.b ? servoOffSet+.6785 :
+                                  gamepad1.x ? servoOffSet+.0975 ://load 0
+                                  gamepad1.y ? servoOffSet+.26 :
+                                  gamepad1.b ? servoOffSet+.43 :
                                   targetdrumangle;
 
                 //.27 - .42   0  -   1
