@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.NonOpModes.depreciated;
 
+import static org.firstinspires.ftc.teamcode.Util.constants.RobotStats.firingpinnullposition;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -33,7 +35,7 @@ public class ServoTestOpMode extends LinearOpMode {
         waitForStart();
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-            FiringPinServo.setPosition(0 );
+
             // sets the three angles
             if (gamepad2.a) {
                 targetfiringpinangle = firingpinmax;
@@ -53,6 +55,7 @@ public class ServoTestOpMode extends LinearOpMode {
             }
             DrumServo1.setPosition(targetdrumangle);
             DrumServo2.setPosition(targetdrumangle);
+            FiringPinServo.setPosition(targetfiringpinangle);
 
 
             telemetry.addData("servo offset angle", servoOffSet);

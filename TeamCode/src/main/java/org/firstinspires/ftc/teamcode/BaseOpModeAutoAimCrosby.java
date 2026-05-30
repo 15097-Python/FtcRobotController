@@ -21,6 +21,7 @@ import static org.firstinspires.ftc.teamcode.launcher.AutoFirePower.autoLaunch;
 import static org.firstinspires.ftc.teamcode.limelight.LimelightMotifSetting.limelightMotifSet;
 import static org.firstinspires.ftc.teamcode.Util.constants.FIELD.mtoin;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.acmerobotics.roadrunner.Vector2d;
@@ -39,13 +40,17 @@ import org.firstinspires.ftc.teamcode.Util.Enum.DrumSlots;
 import org.firstinspires.ftc.teamcode.Util.Enum.States;
 import org.firstinspires.ftc.teamcode.positioning.odometry.FieldOrientedDriving;
 
-
+@Config
 public class BaseOpModeAutoAimCrosby extends LinearOpMode {
 
     ElapsedTime timer = new ElapsedTime();
     ElapsedTime rapidtime = new ElapsedTime();
 
     public static double HEADING_GAIN = 2.5;
+    public static double leftmotorallowance = 10;
+    public static double drumTime = 400;
+    public static double firingpinTime = 200;
+
     // Deadzone to prevent 180-degree flipping when crossing the target center
     public static double DEADZONE_INCHES = 1.0;
 
@@ -65,18 +70,18 @@ public class BaseOpModeAutoAimCrosby extends LinearOpMode {
         TeamColorRED = isred;
         int blue = isred ? 1 : -1;
 
-
+        boolean havefired = false;
 
         int motifcyclingautofirearray = 0;
 
         Balls[] motif = {purple, green, purple};
-        double[] firingpositions = {.76,.1,.42};
+        double[] firingpositions = {SLOT_0.shootPosition,SLOT_1.shootPosition,SLOT_2.shootPosition};
 
         DrumSlots targetslotforautolaunch = null;
 
         boolean autoAimLast = false;
 
-        double[] drumlocations = {.27,.6,.92};
+        double[] drumlocations = {SLOT_0.loadPosition,SLOT_1.loadPosition,SLOT_2.loadPosition};
         double targetdrumangle = .27;
         double targetfiringpinangle = firingpinnullposition;
         int targetdrumslot = 0;
@@ -90,6 +95,8 @@ public class BaseOpModeAutoAimCrosby extends LinearOpMode {
 
         int firingpositionstarget = 0;
 
+        int temptarget = 0;
+
         Limelight3A limelight = hardwareMap.get(Limelight3A.class, "limelight");// INitilizes the limelights
         limelight.setPollRateHz(100);
         limelight.pipelineSwitch(0);
@@ -97,7 +104,8 @@ public class BaseOpModeAutoAimCrosby extends LinearOpMode {
 
         GoBildaPinpointDriver pinpoint = hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");
 
-        Servo drumServo = hardwareMap.get(Servo.class, "DrumServo");
+        Servo DrumServo1 = hardwareMap.get(Servo.class, "DrumServo1");
+        Servo DrumServo2 = hardwareMap.get(Servo.class, "DrumServo2");
         Servo firingPinServo = hardwareMap.get(Servo.class, "FiringPinServo");
 
         DcMotor rightBack = hardwareMap.get(DcMotor.class, "rightBack");
@@ -200,9 +208,7 @@ public class BaseOpModeAutoAimCrosby extends LinearOpMode {
 
             //sets motor speeds
             motortargetspeedradians = autoLaunch();
-            if (gamepad1.left_trigger >= 0.3) {
-                motortargetspeedradians = 0;
-            }
+
             launcherFL.setVelocity(-motortargetspeedradians, AngleUnit.RADIANS);
             currentleftmotorvelocity = launcherFL.getVelocity(AngleUnit.RADIANS);
 
@@ -238,6 +244,7 @@ public class BaseOpModeAutoAimCrosby extends LinearOpMode {
             }
 
 
+
             if (gamepad1.left_bumper){
                 scooper.setVelocity(999, AngleUnit.RADIANS);
             }
@@ -271,11 +278,18 @@ public class BaseOpModeAutoAimCrosby extends LinearOpMode {
                 targetdrumangle = firingpositions[firingpositionstarget];
             }
 
+            if(gamepad1.a||gamepad1.y||gamepad1.b) {
 
+                temptarget = gamepad2.x ? 0 :
+                        gamepad2.y ? 1 :
+                                gamepad2.b ? 2 :
+                                        temptarget;
 
-
+                targetdrumangle = drumslotarray[temptarget].loadPosition;
+            }
             telemetry.addData("selected slot",targetdrumslot);
 
+            if(gamepad1.right_stick_button)fullunloadflag = false;
             //MAG Dump code
             //test time offsets
             if (gamepad1.right_trigger > .5 && rapidtime.milliseconds() >= 500) {//use timesrs use cancle when not held
@@ -294,17 +308,21 @@ public class BaseOpModeAutoAimCrosby extends LinearOpMode {
                     switch (currentstate) {
                         case TurnToBall:
                             targetdrumangle = targetslotforautolaunch.shootPosition;
-                            if (currenttime > 600) currentstate = FiringPinIn;
+                            if (currenttime > drumTime) currentstate = FiringPinIn;
                             break;
 
                         case FiringPinIn:
-                            targetfiringpinangle = firingpinfiringposition;
-                            if (currenttime > 800) currentstate = FiringPinOut;
+                            if(Math.abs(currentleftmotorvelocity - motortargetspeedradians) < leftmotorallowance){
+                                targetfiringpinangle = firingpinfiringposition;
+                                havefired = true;
+                            }
+
+                            if (currenttime > drumTime+firingpinTime && havefired) currentstate = FiringPinOut;
                             break;
 
                         case FiringPinOut:
                             targetfiringpinangle = firingpinnullposition;
-                            if (currenttime > 1000) {
+                            if (currenttime > drumTime+firingpinTime+firingpinTime) {
                                 currentstate = TurnToBall;
                                 targetslotforautolaunch.setLoadedBall(unknown);
                                 targetslotforautolaunch = null;
@@ -332,13 +350,17 @@ public class BaseOpModeAutoAimCrosby extends LinearOpMode {
                         fullunloadflag = false;
                         targetdrumslot = 0;
                         motifcyclingautofirearray = 0;
+                        /*SLOT_0.setLoadedBall(green);
+                        SLOT_1.setLoadedBall(purple);
+                        SLOT_2.setLoadedBall(purple);*/
                         break;
                     }
                 }
             }
 
             if(gamepad2.left_bumper) targetfiringpinangle = firingpinnullposition;
-            drumServo.setPosition(targetdrumangle);
+            DrumServo1.setPosition(targetdrumangle);
+            DrumServo2.setPosition(targetdrumangle);
             telemetry.addData("drumangle", targetdrumangle);
             firingPinServo.setPosition(targetfiringpinangle);
 
@@ -350,7 +372,7 @@ public class BaseOpModeAutoAimCrosby extends LinearOpMode {
             else if (gamepad1.right_bumper) scooper.setVelocity(-999, AngleUnit.RADIANS);
             else scooper.setVelocity(0, AngleUnit.RADIANS);
 
-            boolean autoAimPressed = gamepad1.dpad_right && !autoAimLast;
+            /*boolean autoAimPressed = gamepad1.dpad_right && !autoAimLast;
             //autoAimLast = gamepad2.right_bumper;
 
             if (autoAimPressed) {
@@ -407,6 +429,8 @@ public class BaseOpModeAutoAimCrosby extends LinearOpMode {
 
             }
 
+
+             */
             drive.localizer.update();
 
 

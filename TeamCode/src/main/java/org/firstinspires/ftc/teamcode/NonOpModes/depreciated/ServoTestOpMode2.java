@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.NonOpModes.depreciated;
 
+import static org.firstinspires.ftc.teamcode.Util.constants.RobotStats.firingpinnullposition;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -32,7 +34,7 @@ public class ServoTestOpMode2 extends LinearOpMode {
         FiringPinServo = hardwareMap.get(Servo.class, "FiringPinServo");
 
         double targetdrumangle = 0;
-        double targetfiringpinangle = 0;
+        double targetfiringpinangle = firingpinnullposition;
         boolean firing = false;
 
         DrumServo1.setPosition(0);
@@ -62,6 +64,7 @@ public class ServoTestOpMode2 extends LinearOpMode {
                     targetdrumangle = slot2shoot;
                     break;
             }
+
 
 
             DrumServo1.setPosition(targetdrumangle);
